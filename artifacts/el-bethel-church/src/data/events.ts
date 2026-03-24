@@ -21,7 +21,10 @@ export interface EventData {
   registrationRequired: boolean;
   cost: string;
   tags: string[];
+  flyer?: string;
 }
+
+const CHURCH = "El-Bethel Christian Fellowship Church";
 
 export const events: EventData[] = [
   {
@@ -36,7 +39,7 @@ export const events: EventData[] = [
     isMultiDay: false,
     location: "El-Bethel Main Sanctuary",
     address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
-    organizer: "El-Bethel Christian Fellowship",
+    organizer: CHURCH,
     excerpt: "Join us this Palm Sunday weekend for Spirit-led worship, expository preaching, and the warmth of our church family — right in the heart of Makati City.",
     description: "Every Sunday, El-Bethel gathers as a family to worship, hear the Word of God, and strengthen one another in faith. Our Sunday service is the heartbeat of everything we do — a weekly encounter with the living God designed for both long-time believers and first-time guests.\n\nWe believe Sunday worship is not a performance or a programme. It is a people gathering before their Father. You will experience authentic praise, biblically grounded preaching, and a community that is genuinely glad you came.",
     whatToExpect: [
@@ -73,7 +76,7 @@ export const events: EventData[] = [
     isMultiDay: false,
     location: "El-Bethel Main Sanctuary",
     address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
-    organizer: "El-Bethel Christian Fellowship",
+    organizer: CHURCH,
     excerpt: "Join us this Sunday for Spirit-led worship, expository preaching, and the warmth of our church family. All are welcome.",
     description: "Every Sunday, El-Bethel gathers as a family to worship, hear the Word of God, and strengthen one another in faith. Our Sunday service is the heartbeat of everything we do — a weekly encounter with the living God designed for both long-time believers and first-time guests.\n\nWe believe Sunday worship is not a performance or a programme. It is a people gathering before their Father. You will experience authentic praise, biblically grounded preaching, and a community that is genuinely glad you came.",
     whatToExpect: [
@@ -110,7 +113,7 @@ export const events: EventData[] = [
     isMultiDay: false,
     location: "El-Bethel Main Sanctuary",
     address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
-    organizer: "Ps. Rene Santos",
+    organizer: CHURCH,
     excerpt: "A solemn, Spirit-filled night of prayer and reflection as we remember the weight of the cross and the sacrifice of our Lord Jesus Christ.",
     description: "Good Friday is the most solemn night in the Christian calendar — the night we remember what love costs. El-Bethel holds a Prayer Vigil from 9 PM through midnight, creating a sacred space for reflection, repentance, and gratitude.\n\nThe service moves through seven stations corresponding to the seven last words of Christ. It is liturgical without being rigid, emotional without being manipulative — a genuine encounter with the story of the cross.",
     whatToExpect: [
@@ -147,7 +150,7 @@ export const events: EventData[] = [
     isMultiDay: false,
     location: "KMC Armstrong Rooftop Garden",
     address: "KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
-    organizer: "Ps. Rene Santos",
+    organizer: CHURCH,
     excerpt: "Celebrate the resurrection of Jesus Christ at dawn, watching the sun rise over Makati City as we declare: He is risen! Breakfast served after the service.",
     description: "There is something irreplaceable about greeting Easter at sunrise — watching the light break through darkness as we sing of a resurrection that changed everything. El-Bethel has held this sunrise tradition for over a decade, and it remains one of the most beloved gatherings of the year.\n\nWe gather on the rooftop of KMC Armstrong with the Makati City skyline as a backdrop, and worship as dawn breaks over the metro. Breakfast is served afterwards for the whole family.",
     whatToExpect: [
@@ -185,7 +188,7 @@ export const events: EventData[] = [
     isMultiDay: false,
     location: "El-Bethel Main Sanctuary",
     address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
-    organizer: "El-Bethel Christian Fellowship",
+    organizer: CHURCH,
     excerpt: "Join us the Sunday after Easter as we continue to celebrate the resurrection and carry its joy into everyday life. All are welcome.",
     description: "Every Sunday, El-Bethel gathers as a family to worship, hear the Word of God, and strengthen one another in faith. Our Sunday service is the heartbeat of everything we do — a weekly encounter with the living God designed for both long-time believers and first-time guests.\n\nThis Sunday, fresh from our Easter celebrations, we continue to press into what the resurrection means for our Monday-to-Saturday lives. All are warmly welcome.",
     whatToExpect: [
@@ -210,9 +213,45 @@ export const events: EventData[] = [
     cost: "Free — all are welcome",
     tags: ["worship", "weekly", "all-ages", "post-easter"],
   },
+  {
+    id: 6,
+    slug: "easter-celebration-2026",
+    title: "Easter Celebration 2026",
+    category: "Special Service",
+    dateISO: "2026-04-19",
+    date: "April 19, 2026",
+    time: "3:30 PM",
+    endTime: "7:00 PM",
+    isMultiDay: false,
+    location: "SMDC Grace Residences Function Hall",
+    address: "7th Floor Tower 1, SMDC Grace Residences Function Hall, Levi Mariano, Taguig City",
+    organizer: CHURCH,
+    excerpt: "\"Worthy Is The Lamb\" — Join El-Bethel for a powerful Easter Celebration as we proclaim the risen Christ and worship together in joy and reverence.",
+    description: "Easter is the cornerstone of everything we believe. On April 19, 2026, El-Bethel Christian Fellowship Church invites you to join our Easter Celebration — a joyful, Spirit-filled service built around one declaration: He is risen.\n\nThemed \"Worthy Is The Lamb\" from Revelation 5:12, this evening will be filled with corporate worship, a resurrection-centred message, and a time of response as we honour the Lamb of God who conquered death.\n\nThe service will be held at the SMDC Grace Residences Function Hall in Taguig City — a beautiful venue for our growing church family and your invited guests. Everyone is warmly welcome.",
+    whatToExpect: [
+      "Powerful corporate worship — contemporary and Spirit-led",
+      "Easter message centred on the resurrection of Jesus Christ",
+      "Special declaration: \"Worthy Is The Lamb\" — Revelation 5:12",
+      "Opportunity for response, prayer, and new commitments",
+      "A joyful community celebration with your church family",
+    ],
+    schedule: [
+      { time: "3:00 PM", item: "Doors open — welcome and registration" },
+      { time: "3:30 PM", item: "Worship begins" },
+      { time: "4:15 PM", item: "Easter message" },
+      { time: "5:15 PM", item: "Response time and prayer" },
+      { time: "5:45 PM", item: "Community celebration and fellowship" },
+      { time: "7:00 PM", item: "Service concludes" },
+    ],
+    accentColor: "bg-amber-600",
+    isFeatured: true,
+    registrationRequired: false,
+    cost: "Free — all are welcome",
+    tags: ["easter", "2026", "celebration", "resurrection", "taguig"],
+    flyer: "easter-flyer.jpg",
+  },
 ];
 
-/* ── Derived filter sets ─────────────────────────────────────────── */
 export const allCategories = Array.from(new Set(events.map((e) => e.category))).sort();
 
 export const upcomingEvents = events

@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useParams, Link } from "wouter";
 import { motion } from "framer-motion";
 import {
   Calendar, Clock, MapPin, Users, ChevronRight, ArrowLeft,
   Share2, Mail, Facebook, Twitter, Link2, Tag, BadgeCheck,
-  MessageSquareHeart, Download, CheckCircle2, Star,
+  MessageSquareHeart, Download, CheckCircle2, Star, Check,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useSEO, useJsonLd, SITE_URL, DEFAULT_OG, buildBreadcrumbItem } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
@@ -19,7 +21,6 @@ const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } }
 const fadeIn  = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } };
 
 /* ── SEO helpers ────────────────────────────────────────────────── */
-/** "4:00 PM" → "16:00" (24-hour, no seconds) */
 function to24h(t: string): string {
   const [time, period] = t.trim().split(" ");
   const [h, m] = time.split(":").map(Number);
@@ -85,6 +86,9 @@ function RelatedEventCard({ event }: { event: EventData }) {
 export default function EventDetail() {
   const { slug } = useParams<{ slug: string }>();
   const event = events.find((e) => e.slug === slug);
+
+  const [copied, setCopied]   = useState(false);
+  const [rsvpSent, setRsvpSent] = useState(false);
 
   /* ── SEO + JSON-LD — always called before any early return ── */
   useSEO(
@@ -178,16 +182,80 @@ export default function EventDetail() {
   const calDetail = encodeURIComponent(event.excerpt);
   const gcalUrl   = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calText}&dates=${calStart}/${calStart}&details=${calDetail}&location=${calLoc}`;
 
+  /* ── Share functions ──────────────────────────────────────── */
+  const pageUrl   = `${SITE_URL}/events/${event.slug}`;
+  const pageTitle = event.title;
+
+  function handleShare(platform: string) {
+    switch (platform) {
+      case "Facebook":
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`,
+          "_blank", "noopener,noreferrer",
+        );
+        break;
+      case "Twitter":
+        window.open(
+          `https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(pageTitle + " — El-Bethel Christian Fellowship Church")}`,
+          "_blank", "noopener,noreferrer",
+        );
+        break;
+      case "Copy":
+        navigator.clipboard.writeText(pageUrl).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        }).catch(() => {
+          const ta = document.createElement("textarea");
+          ta.value = pageUrl;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        });
+        break;
+      case "Email":
+        window.location.href = `mailto:?subject=${encodeURIComponent(pageTitle)}&body=${encodeURIComponent(`I'd like to invite you to this event:\n\n${pageTitle}\n📅 ${displayDate}\n⏰ ${event.time}${event.endTime ? " – " + event.endTime : ""}\n📍 ${event.location}\n\n${event.excerpt}\n\nMore info: ${pageUrl}`)}`;
+        break;
+      default:
+        if (navigator.share) {
+          navigator.share({ title: pageTitle, text: event.excerpt, url: pageUrl }).catch(() => {});
+        }
+    }
+  }
+
+  /* ── RSVP / I'll Be There ─────────────────────────────────── */
+  function handleRsvp() {
+    const subject = encodeURIComponent(`RSVP — ${event!.title} (${displayDate})`);
+    const body = encodeURIComponent(
+      `Hello El-Bethel,\n\nI would like to let you know that I'll be attending:\n\n📅 Event: ${event!.title}\n🗓️ Date: ${displayDate}\n⏰ Time: ${event!.time}${event!.endTime ? " – " + event!.endTime : ""}\n📍 Venue: ${event!.location}\n\nPlease count me in!\n\nThank you.`
+    );
+    window.location.href = `mailto:info@ebchristianfellowship.org?subject=${subject}&body=${body}`;
+    setRsvpSent(true);
+    setTimeout(() => setRsvpSent(false), 4000);
+  }
+
   return (
     <main>
 
       {/* ════════════════════════════════════════════════════════
-          1. HERO
+          1. HERO — with give-texture overlay
       ════════════════════════════════════════════════════════ */}
       <section aria-label="Event hero" className={`${event.accentColor} relative pt-36 pb-20 overflow-hidden`}>
-        <div aria-hidden="true" className="absolute inset-0 opacity-10"
+
+        {/* Give-texture background overlay */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 opacity-20"
+          style={{ backgroundImage: "url('/images/give-texture.png')", backgroundSize: "cover", backgroundPosition: "center" }}
+        />
+
+        {/* Radial gradient overlay */}
+        <div aria-hidden="true" className="absolute inset-0 opacity-20"
           style={{ backgroundImage: "radial-gradient(circle at 80% 30%, hsl(42 66% 54%), transparent 50%), radial-gradient(circle at 10% 80%, white, transparent 40%)" }}
         />
+
         <Container className="relative z-10">
           {/* Breadcrumb */}
           <motion.nav initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
@@ -255,6 +323,27 @@ export default function EventDetail() {
             {/* ── LEFT: content ─────────────────────────────── */}
             <div className="min-w-0">
 
+              {/* Flyer image — shown only when available */}
+              {event.flyer && (
+                <motion.div
+                  initial="hidden" animate="visible" variants={fadeIn}
+                  className="mb-10"
+                >
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
+                    <ImageIcon size={13} aria-hidden="true" />
+                    Event Flyer
+                  </div>
+                  <div className="rounded-2xl overflow-hidden border border-border shadow-sm bg-white inline-block max-w-sm w-full">
+                    <img
+                      src={`/images/${event.flyer}`}
+                      alt={`${event.title} — official event flyer`}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                </motion.div>
+              )}
+
               {/* Description */}
               <motion.div initial="hidden" animate="visible" variants={stagger} className="mb-10">
                 <motion.h2 variants={fadeUp} className="text-2xl font-serif font-bold text-primary mb-5">
@@ -313,14 +402,13 @@ export default function EventDetail() {
                 </motion.div>
               )}
 
-              {/* Map placeholder */}
+              {/* Map / Venue */}
               <motion.div
                 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
                 className="mb-10"
               >
                 <h3 className="text-xl font-serif font-bold text-primary mb-5">Venue & Location</h3>
                 <div className="rounded-2xl overflow-hidden border border-border bg-primary/5 aspect-[16/7] relative">
-                  {/* Map placeholder */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary/5 to-secondary/5">
                     <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
                       <MapPin size={28} className="text-primary/40" aria-hidden="true" />
@@ -364,6 +452,11 @@ export default function EventDetail() {
 
                 {/* CTA card */}
                 <div className={`${event.accentColor} rounded-2xl p-6 relative overflow-hidden`}>
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 opacity-15"
+                    style={{ backgroundImage: "url('/images/give-texture.png')", backgroundSize: "cover", backgroundPosition: "center" }}
+                  />
                   <div aria-hidden="true" className="absolute inset-0 opacity-10"
                     style={{ backgroundImage: "radial-gradient(circle at 90% 10%, white, transparent 50%)" }}
                   />
@@ -371,21 +464,41 @@ export default function EventDetail() {
                     <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{event.category}</p>
                     <p className="text-white font-serif font-bold text-xl leading-snug mb-4 line-clamp-2">{event.title}</p>
                     <div className="space-y-2">
+                      {/* RSVP / I'll Be There button */}
                       {event.registrationRequired ? (
-                        <Button className="w-full rounded-full bg-white text-primary hover:bg-white/90 gap-2 font-semibold" size="sm">
-                          <BadgeCheck size={15} /> Register / RSVP
+                        <Button
+                          onClick={handleRsvp}
+                          className={`w-full rounded-full gap-2 font-semibold transition-all ${rsvpSent ? "bg-green-500 text-white hover:bg-green-500" : "bg-white text-primary hover:bg-white/90"}`}
+                          size="sm"
+                        >
+                          {rsvpSent
+                            ? <><Check size={15} /> RSVP Sent!</>
+                            : <><BadgeCheck size={15} /> Register / RSVP</>
+                          }
                         </Button>
                       ) : (
-                        <Button className="w-full rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2 font-semibold" size="sm">
-                          <CheckCircle2 size={15} /> I'll Be There
+                        <Button
+                          onClick={handleRsvp}
+                          className={`w-full rounded-full gap-2 font-semibold transition-all ${rsvpSent ? "bg-green-500 text-white hover:bg-green-500" : "bg-secondary text-secondary-foreground hover:bg-secondary/90"}`}
+                          size="sm"
+                        >
+                          {rsvpSent
+                            ? <><Check size={15} /> RSVP Sent!</>
+                            : <><CheckCircle2 size={15} /> I'll Be There</>
+                          }
                         </Button>
                       )}
-                      <a href={gcalUrl} target="_blank" rel="noopener noreferrer">
+                      <a href={gcalUrl} target="_blank" rel="noopener noreferrer" className="block">
                         <Button variant="outline" className="w-full rounded-full border-white/30 text-white hover:bg-white/10 bg-transparent gap-2" size="sm">
                           <Download size={15} /> Add to Calendar
                         </Button>
                       </a>
                     </div>
+                    {rsvpSent && (
+                      <p className="text-white/70 text-xs mt-3 text-center">
+                        Your email client has opened — send the email to confirm your spot!
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -441,19 +554,40 @@ export default function EventDetail() {
 
                 {/* Share card */}
                 <div className="bg-white border border-border rounded-2xl p-6">
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Share This Event</p>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Share2 size={14} className="text-muted-foreground" aria-hidden="true" />
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Share This Event</p>
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { icon: Facebook, label: "Facebook",    cls: "hover:bg-blue-600 hover:text-white hover:border-blue-600" },
-                      { icon: Twitter,  label: "X / Twitter", cls: "hover:bg-black hover:text-white hover:border-black" },
-                      { icon: Link2,    label: "Copy Link",   cls: "hover:bg-primary hover:text-white hover:border-primary" },
-                      { icon: Mail,     label: "Email",       cls: "hover:bg-secondary hover:text-secondary-foreground hover:border-secondary" },
-                    ].map(({ icon: Icon, label, cls }) => (
-                      <button key={label} aria-label={`Share on ${label}`}
-                        className={`flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary ${cls}`}>
-                        <Icon size={13} aria-hidden="true" /> {label}
-                      </button>
-                    ))}
+                    <button
+                      onClick={() => handleShare("Facebook")}
+                      aria-label="Share on Facebook"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-blue-600 hover:text-white hover:border-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      <Facebook size={13} aria-hidden="true" /> Facebook
+                    </button>
+                    <button
+                      onClick={() => handleShare("Twitter")}
+                      aria-label="Share on X / Twitter"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-black hover:text-white hover:border-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      <Twitter size={13} aria-hidden="true" /> X / Twitter
+                    </button>
+                    <button
+                      onClick={() => handleShare("Copy")}
+                      aria-label="Copy link to clipboard"
+                      className={`flex items-center gap-2 text-xs font-medium border rounded-full px-3 py-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary ${copied ? "bg-green-600 text-white border-green-600" : "text-muted-foreground border-border hover:bg-primary hover:text-white hover:border-primary"}`}
+                    >
+                      {copied ? <Check size={13} /> : <Link2 size={13} aria-hidden="true" />}
+                      {copied ? "Copied!" : "Copy Link"}
+                    </button>
+                    <button
+                      onClick={() => handleShare("Email")}
+                      aria-label="Share via email"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-secondary hover:text-secondary-foreground hover:border-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      <Mail size={13} aria-hidden="true" /> Email
+                    </button>
                   </div>
                 </div>
 
@@ -517,38 +651,6 @@ export default function EventDetail() {
         </section>
       )}
 
-      {/* ════════════════════════════════════════════════════════
-          4. BOTTOM CTA
-      ════════════════════════════════════════════════════════ */}
-      <section aria-label="Sunday service CTA" className="py-24 bg-primary relative overflow-hidden">
-        <div aria-hidden="true" className="absolute inset-0 opacity-5"
-          style={{ backgroundImage: "radial-gradient(circle at 70% 50%, hsl(42 66% 54%), transparent 50%)" }}
-        />
-        <Container className="relative z-10">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-            className="max-w-2xl mx-auto text-center">
-            <motion.p variants={fadeUp} className="text-secondary text-xs font-bold uppercase tracking-widest mb-4">Every Sunday</motion.p>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold text-white mb-5 leading-tight">
-              Join Us This Sunday
-            </motion.h2>
-            <motion.p variants={fadeUp} className="text-white/65 text-lg leading-relaxed mb-10">
-              4:00 PM – 6:30 PM · El-Bethel Main Sanctuary · 7F KMC Armstrong, Makati City
-            </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="rounded-full px-10 h-14 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold gap-2">
-                  <Calendar size={18} /> Plan Your Visit
-                </Button>
-              </Link>
-              <Link href="/events">
-                <Button size="lg" variant="outline" className="rounded-full px-10 h-14 border-white/25 text-white hover:bg-white/10 bg-transparent gap-2">
-                  <ArrowLeft size={18} /> All Events
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
-        </Container>
-      </section>
     </main>
   );
 }
