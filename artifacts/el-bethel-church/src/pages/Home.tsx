@@ -945,12 +945,11 @@ export default function Home() {
                   <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                     <BookOpen size={16} />
                   </div>
-                  <h4 className="font-bold">BDO Bank Transfer</h4>
+                  <h4 className="font-bold">BPI Bank Transfer</h4>
                 </div>
                 <div className="space-y-1.5 text-sm text-muted-foreground bg-primary/5 p-4 rounded-xl">
                   <p><span className="font-semibold text-foreground">Account Name:</span> El-Bethel Christian Fellowship</p>
-                  <p><span className="font-semibold text-foreground">Account No:</span> 005-123-456-789</p>
-                  <p><span className="font-semibold text-foreground">Branch:</span> Makati City</p>
+                  <p><span className="font-semibold text-foreground">Account No:</span> 8529881394</p>
                 </div>
               </div>
 
