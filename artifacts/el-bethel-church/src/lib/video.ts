@@ -83,3 +83,19 @@ export function resolveEmbed(
 
   return { platform: "unknown", embedUrl: null, originalUrl: url };
 }
+
+// ── Thumbnail resolver ────────────────────────────────────────────────────────
+
+/**
+ * Returns the best available static thumbnail URL for a video.
+ * - YouTube: uses YouTube's CDN (maxresdefault → hqdefault fallback handled by <img>)
+ * - Facebook: no public API without a token — returns null so callers can show a branded fallback.
+ */
+export function getVideoThumbnail(url: string, platform?: VideoPlatform): string | null {
+  const p: VideoPlatform = platform ?? detectPlatform(url);
+  if (p === "youtube") {
+    const id = extractYouTubeId(url);
+    return id ? `https://img.youtube.com/vi/${id}/maxresdefault.jpg` : null;
+  }
+  return null;
+}

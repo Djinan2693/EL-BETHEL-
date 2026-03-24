@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useSEO } from "@/lib/seo";
 import { sermons } from "@/data/sermons";
+import { getVideoThumbnail, detectPlatform } from "@/lib/video";
 import { events } from "@/data/events";
 import { churchInfo, testimonials } from "@/data/church";
 
@@ -472,20 +473,50 @@ export default function Home() {
               <motion.div key={sermon.id} variants={fadeUp}>
                 <Card className="overflow-hidden group hover:shadow-xl transition-all duration-400 border-border/60 h-full flex flex-col">
                   {/* Thumbnail */}
-                  <div className="aspect-[16/9] bg-gradient-to-br from-primary via-primary/80 to-primary/60 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-primary/40 group-hover:bg-primary/60 transition-colors z-10" />
-                    <img
-                      src={`${import.meta.env.BASE_URL}images/pattern-cross.png`}
-                      alt=""
-                      className="absolute inset-0 opacity-10 mix-blend-overlay w-full h-full object-cover"
-                    />
-                    <div className="z-20 flex flex-col items-center gap-2">
-                      <div className="w-14 h-14 rounded-full border-2 border-white/50 flex items-center justify-center group-hover:border-secondary group-hover:scale-110 transition-all duration-300">
-                        <PlayCircle className="text-white w-8 h-8" />
+                  {(() => {
+                    const thumb = getVideoThumbnail(sermon.videoUrl, sermon.videoPlatform);
+                    const platform = sermon.videoPlatform ?? detectPlatform(sermon.videoUrl);
+                    return (
+                      <div className="aspect-[16/9] relative overflow-hidden bg-primary">
+                        {thumb ? (
+                          <img
+                            src={thumb}
+                            alt={sermon.title}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <img
+                            src={`${import.meta.env.BASE_URL}images/pattern-cross.png`}
+                            alt=""
+                            className="absolute inset-0 opacity-10 mix-blend-overlay w-full h-full object-cover"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-primary/50 group-hover:bg-primary/40 transition-colors duration-300" />
+                        {/* Platform badge */}
+                        <div className="absolute top-3 left-3 z-20">
+                          {platform === "youtube" ? (
+                            <span className="flex items-center gap-1 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                              <svg viewBox="0 0 24 24" className="w-3 h-3 fill-white"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+                              YouTube
+                            </span>
+                          ) : platform === "facebook" ? (
+                            <span className="flex items-center gap-1 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                              <svg viewBox="0 0 24 24" className="w-3 h-3 fill-white"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+                              Facebook
+                            </span>
+                          ) : null}
+                        </div>
+                        {/* Play button */}
+                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-2">
+                          <div className="w-14 h-14 rounded-full border-2 border-white/70 bg-black/30 flex items-center justify-center group-hover:border-secondary group-hover:scale-110 transition-all duration-300">
+                            <PlayCircle className="text-white w-8 h-8" />
+                          </div>
+                          <span className="text-white/80 text-xs font-medium bg-black/40 px-2 py-0.5 rounded">{sermon.duration}</span>
+                        </div>
                       </div>
-                      <span className="text-white/60 text-xs">{sermon.duration}</span>
-                    </div>
-                  </div>
+                    );
+                  })()}
+                
 
                   <CardContent className="p-6 flex flex-col flex-1">
                     <div className="flex justify-between items-center mb-3">
