@@ -105,7 +105,7 @@ export default function Home() {
     const id = setInterval(() => {
       setSlideDir(1);
       setHeroIndex((i) => (i + 1) % HERO_SLIDES.length);
-    }, 6000);
+    }, 35000);
     return () => clearInterval(id);
   }, [heroIndex]);
 
