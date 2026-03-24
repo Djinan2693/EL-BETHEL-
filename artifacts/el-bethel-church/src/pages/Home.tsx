@@ -692,13 +692,13 @@ export default function Home() {
           8. PRAYER REQUEST CTA
       ══════════════════════════════════════════ */}
       <section className="relative py-28 overflow-hidden">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" aria-hidden="true">
           <img
-            src={`${import.meta.env.BASE_URL}images/give-texture.png`}
+            src={`${import.meta.env.BASE_URL}images/care-bg.jpg`}
             alt=""
-            className="w-full h-full object-cover opacity-20"
+            className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary" />
+          <div className="absolute inset-0 bg-primary/90" />
         </div>
 
         <Container className="relative z-10">
