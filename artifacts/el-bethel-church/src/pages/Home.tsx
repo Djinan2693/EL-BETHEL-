@@ -200,8 +200,8 @@ export default function Home() {
           </AnimatePresence>
 
           {/* Persistent gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/88 z-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/35 via-transparent to-primary/35 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/55 via-primary/25 to-primary/80 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-transparent to-primary/30 z-10" />
         </div>
 
         {/* ── Floating cross watermark ─────────────────────────── */}
