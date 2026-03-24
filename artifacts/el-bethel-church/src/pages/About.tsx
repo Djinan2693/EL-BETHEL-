@@ -529,18 +529,22 @@ export default function About() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto"
           >
             {team.map((pastor) => (
               <motion.article
                 key={pastor.id}
                 variants={fadeUp}
-                className="group flex flex-col"
+                className="group flex flex-col items-center text-center"
                 aria-label={`${pastor.name}, ${pastor.title}`}
               >
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/10 to-primary/30 border border-border mb-5 relative">
+                <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden bg-gradient-to-b from-primary/5 to-primary/20 border border-border mb-5 relative">
                   {pastor.imageUrl ? (
-                    <img src={pastor.imageUrl} alt={pastor.name} className="w-full h-full object-cover" />
+                    <img
+                      src={`${import.meta.env.BASE_URL}${pastor.imageUrl}`}
+                      alt={pastor.name}
+                      className="w-full h-full object-contain object-bottom"
+                    />
                   ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
                       <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
@@ -549,15 +553,14 @@ export default function About() {
                       <span className="text-primary/30 text-xs font-medium">Photo coming soon</span>
                     </div>
                   )}
-                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
-                <div className="flex-1">
+                <div>
                   <p className="text-secondary text-xs font-bold uppercase tracking-widest mb-1">{pastor.title}</p>
-                  <h3 className="font-serif text-xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors">
+                  <h3 className="font-serif text-xl font-bold text-primary group-hover:text-secondary transition-colors">
                     {pastor.name}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{pastor.bio}</p>
                 </div>
               </motion.article>
             ))}
