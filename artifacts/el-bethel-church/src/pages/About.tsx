@@ -363,9 +363,9 @@ export default function About() {
             <motion.div variants={fadeIn} className="relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-primary/10 border border-border shadow-xl">
                 <img
-                  src={`${import.meta.env.BASE_URL}images/about-community.png`}
+                  src={`${import.meta.env.BASE_URL}images/community-family.jpg`}
                   alt="El-Bethel church community gathered in worship"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
               <div className="absolute -bottom-6 -right-4 md:-right-8 max-w-xs bg-white rounded-2xl shadow-2xl p-6 border border-border">
