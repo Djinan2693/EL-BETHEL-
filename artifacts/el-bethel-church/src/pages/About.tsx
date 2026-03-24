@@ -274,10 +274,6 @@ export default function About() {
                     </div>
                     {/* Content */}
                     <div className="relative z-10">
-                      {/* Icon */}
-                      <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary mb-6">
-                        <Icon size={22} aria-hidden="true" />
-                      </div>
                       {/* Title */}
                       <h3 id={`commitment-${c.number}-title`} className="font-serif text-2xl md:text-3xl font-bold text-white leading-snug mb-5">
                         {c.title}
