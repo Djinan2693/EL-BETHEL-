@@ -114,18 +114,42 @@ function TopicBadge({ topic }: { topic: string }) {
   );
 }
 
-function ThumbnailPlaceholder({ title, series }: { title: string; series: string }) {
+const BASE = import.meta.env.BASE_URL;
+
+function ThumbnailPlaceholder({
+  title, series, thumbnail,
+}: { title: string; series: string; thumbnail?: string | null }) {
+  const src = thumbnail
+    ? (thumbnail.startsWith("http") ? thumbnail : `${BASE}images/${thumbnail}`)
+    : null;
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-primary/80 via-primary to-primary/90 p-6">
-      <div className="absolute inset-0 opacity-10"
-        style={{ backgroundImage: "radial-gradient(circle at 30% 70%, hsl(42 66% 54% / 0.4), transparent 60%)" }}
-      />
-      <p className="text-secondary/60 text-[10px] font-bold uppercase tracking-widest mb-2 text-center z-10">
-        {series}
-      </p>
-      <p className="text-white font-serif font-bold text-base text-center leading-tight z-10 line-clamp-3">
-        {title}
-      </p>
+    <div className="absolute inset-0">
+      {src ? (
+        <img
+          src={src}
+          alt={title}
+          className="w-full h-full object-cover object-center"
+        />
+      ) : null}
+      <div className={`absolute inset-0 flex flex-col items-center justify-center p-6 ${
+        src
+          ? "bg-gradient-to-t from-primary/80 via-primary/30 to-transparent"
+          : "bg-gradient-to-br from-primary/80 via-primary to-primary/90"
+      }`}>
+        {!src && (
+          <>
+            <div className="absolute inset-0 opacity-10"
+              style={{ backgroundImage: "radial-gradient(circle at 30% 70%, hsl(42 66% 54% / 0.4), transparent 60%)" }}
+            />
+            <p className="text-secondary/60 text-[10px] font-bold uppercase tracking-widest mb-2 text-center z-10">
+              {series}
+            </p>
+            <p className="text-white font-serif font-bold text-base text-center leading-tight z-10 line-clamp-3">
+              {title}
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -205,7 +229,7 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
       >
         {/* Thumbnail */}
         <div className="shrink-0 w-36 sm:w-48 aspect-video relative rounded-xl overflow-hidden">
-          <ThumbnailPlaceholder title={sermon.title} series={sermon.series} />
+          <ThumbnailPlaceholder title={sermon.title} series={sermon.series} thumbnail={sermon.thumbnail} />
           <div className="absolute inset-0 flex items-center justify-center z-10">
             <div className="w-10 h-10 rounded-full bg-white/10 border border-white/30 flex items-center justify-center group-hover:bg-secondary/80 transition-all">
               <PlayCircle size={18} className="text-white" aria-hidden="true" />
@@ -263,7 +287,7 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
     >
       {/* Thumbnail */}
       <div className="aspect-video relative overflow-hidden bg-primary">
-        <ThumbnailPlaceholder title={sermon.title} series={sermon.series} />
+        <ThumbnailPlaceholder title={sermon.title} series={sermon.series} thumbnail={sermon.thumbnail} />
         <div className="absolute inset-0 flex items-center justify-center z-10 group-hover:scale-105 transition-transform duration-300">
           <div className="w-14 h-14 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center group-hover:bg-secondary/80 group-hover:border-secondary transition-all duration-300">
             <PlayCircle size={24} className="text-white" aria-hidden="true" />

@@ -88,10 +88,20 @@ export function resolveEmbed(
 
 /**
  * Returns the best available static thumbnail URL for a video.
+ * - Explicit thumbnail: always used first if provided (supports Facebook, custom images, etc.)
  * - YouTube: uses YouTube's CDN (maxresdefault → hqdefault fallback handled by <img>)
  * - Facebook: no public API without a token — returns null so callers can show a branded fallback.
+ *
+ * To set a thumbnail for a Facebook sermon, add `thumbnail: "images/my-thumb.jpg"` to the
+ * sermon object in `src/data/sermons.ts`. The value can be a full URL or a path relative
+ * to the site's BASE_URL (prefix with BASE_URL when rendering the <img>).
  */
-export function getVideoThumbnail(url: string, platform?: VideoPlatform): string | null {
+export function getVideoThumbnail(
+  url: string,
+  platform?: VideoPlatform,
+  explicitThumbnail?: string | null,
+): string | null {
+  if (explicitThumbnail) return explicitThumbnail;
   const p: VideoPlatform = platform ?? detectPlatform(url);
   if (p === "youtube") {
     const id = extractYouTubeId(url);

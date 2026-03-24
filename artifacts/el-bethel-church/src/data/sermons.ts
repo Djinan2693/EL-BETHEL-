@@ -58,7 +58,7 @@ export const sermons: SermonData[] = [
     series: "Sunday Service",
     excerpt:
       "Galatians 5 gives us one of the most practical pictures of the Spirit-filled life. Walking in the Spirit isn't a feeling — it's a direction. This message explores what it means to yield daily to the Holy Spirit and what fruit that yields in your relationships, work, and inner life.",
-    thumbnail: null,
+    thumbnail: "gallery-05.jpg",
     videoUrl: "https://www.facebook.com/61566950657090/videos/1729689948441096",
     videoPlatform: "facebook",
     transcriptExcerpt:
@@ -77,7 +77,7 @@ export const sermons: SermonData[] = [
     series: "Sunday Service",
     excerpt:
       "The Beatitudes are not a checklist of spiritual achievements — they are a portrait of kingdom character. In this message from the Sermon on the Mount, we explore what it means to have a pure heart in a world that celebrates divided loyalties and private compromises.",
-    thumbnail: null,
+    thumbnail: "gallery-08.jpg",
     videoUrl: "https://www.facebook.com/61566950657090/videos/1457367335980772",
     videoPlatform: "facebook",
     transcriptExcerpt:

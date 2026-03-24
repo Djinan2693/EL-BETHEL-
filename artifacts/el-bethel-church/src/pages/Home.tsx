@@ -633,13 +633,16 @@ export default function Home() {
                 <Card className="overflow-hidden group hover:shadow-xl transition-all duration-400 border-border/60 h-full flex flex-col">
                   {/* Thumbnail */}
                   {(() => {
-                    const thumb = getVideoThumbnail(sermon.videoUrl, sermon.videoPlatform);
+                    const thumb = getVideoThumbnail(sermon.videoUrl, sermon.videoPlatform, sermon.thumbnail);
+                    const thumbSrc = thumb
+                      ? (thumb.startsWith("http") ? thumb : `${import.meta.env.BASE_URL}images/${thumb}`)
+                      : null;
                     const platform = sermon.videoPlatform ?? detectPlatform(sermon.videoUrl);
                     return (
                       <div className="aspect-[16/9] relative overflow-hidden bg-primary">
-                        {thumb ? (
+                        {thumbSrc ? (
                           <img
-                            src={thumb}
+                            src={thumbSrc}
                             alt={sermon.title}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
