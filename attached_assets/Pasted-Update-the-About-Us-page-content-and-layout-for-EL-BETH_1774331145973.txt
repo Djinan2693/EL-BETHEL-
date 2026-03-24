@@ -1,0 +1,64 @@
+Update the “About Us” page content and layout for EL-BETHEL CHRISTIAN FELLOWSHIP CHURCH.
+
+Use the following content as the main source of truth for the About Us page, especially for the Mission section. Keep the wording intact unless light formatting adjustments are needed for readability.
+
+CONTENT TO USE:
+
+Our Mission
+
+El-Bethel Christian Fellowship Church, in partnership with El Bethel AG International Church in India, is driven by a profound calling to be a beacon of hope, faith, and transformation. In today’s ever-changing world, where people often feel isolated and in need of support, we embrace our mission to provide a spiritual refuge—a place where God’s love is not only preached but actively practiced and embodied in daily life.
+
+Our commitment extends far beyond our church doors, reaching into our local community, across nations, and into every place where God’s light can shine. We envision a vibrant, interwoven community of believers who are empowered, spiritually renewed, and equipped to serve. Our mission calls us to live authentically in faith, compassionately in service, and boldly in our proclamation of the Gospel.
+
+Our purpose is rooted in three core commitments:
+
+1- To Spread the Gospel with Purpose and Passion
+
+In a world longing for truth and purpose, we are unwavering in our dedication to sharing the message of Christ. With every word, action, and outreach, we strive to communicate the power of God’s love and grace. Using modern tools—digital media, community gatherings, and cultural events—we aim to bridge divides of culture, generation, and background, reaching people exactly where they are.
+
+Our mission is to inspire, uplift, and encourage all to embrace a life transformed by Jesus Christ. Through His love and the message of salvation, we endeavor to bring peace, unity, and renewal to the lives of everyone we encounter. Our passion is fueled by the belief that each soul touched by the Gospel can become a vessel of hope, impacting countless others. We are committed to spreading the Gospel with a purpose-driven passion that moves hearts and awakens faith, drawing people into the beauty of God’s kingdom.
+
+2- To Nurture Faith
+
+We believe in cultivating a personal, deep-rooted relationship with God through genuine worship, purposeful prayer, and a consistent commitment to studying His Word. As a section of El Bethel AG International, Bangalore, India, our mission is to foster a resilient faith that stands strong amid the world’s challenges and uncertainties.
+
+In our church community, we create spaces for spiritual growth, offering Bible studies, prayer groups, and mentorship programs that encourage each individual to deepen their understanding of God’s love and purpose. We encourage believers to discover their God-given gifts, understanding that each talent is a tool of light to be used in their families, workplaces, and communities. Through a faith that is alive and active, we seek to empower everyone to live courageously, anchored in the promises of God and motivated to share that faith with others.
+
+3- To Serve Communities with Compassion
+
+Our calling is to reflect Jesus’s compassion by serving those in need and bringing hope, aid, and dignity to every person we encounter. We are committed to addressing not only immediate needs but also fostering long-term growth and empowerment. Our efforts extend from feeding the hungry and supporting families in need, to providing a listening ear to those facing hardships.
+
+Through local and global outreach initiatives, we partner with other organizations, churches, and community leaders, creating impactful programs that respond to physical, emotional, and spiritual needs. Our projects range from food distribution and educational support to health initiatives and disaster relief, all underpinned by our belief that in serving others, we embody God’s love and fulfill His purpose for humanity. We are dedicated to lifting people up, giving them the tools and hope to transform their lives, and restoring dignity in every situation.
+
+We are not merely a church; we are a family of believers united in our desire to see lives changed by God’s love. Together, we build a community where each person is valued, each story is cherished, and each individual is encouraged to step into their God-given purpose. With each day, we move forward with faith, hope, and determination, trusting in God’s promises and ready to serve His kingdom with humility and joy.
+
+As we grow together, our church becomes more than a building—it becomes a living testament to God’s grace, a place where lives are changed, hearts are healed, and faith is strengthened. El-Bethel Christian Fellowship Church is a sanctuary, a source of strength, and a launching point for individuals committed to transforming the world for Christ. We welcome everyone to join us in this mission, as we seek to build a brighter, faith-filled future together.
+
+PAGE UPDATE REQUIREMENTS:
+- Redesign the About Us page to fit this content elegantly
+- Keep the page modern, premium, warm, and spiritual
+- Create a strong hero section for the About page
+- Add a clear “Our Mission” section title
+- Break the long content into visually readable sections
+- Turn the 3 core commitments into beautiful highlighted content blocks or cards
+- Preserve the full meaning and seriousness of the text
+- Improve readability with proper spacing, typography, section dividers, and hierarchy
+- Make the page highly responsive on mobile and desktop
+- Keep the design consistent with the rest of the site
+- Use subtle animations only if they enhance the presentation
+- Make the page feel like a real church mission page, not a plain text dump
+
+CONTENT STRUCTURE SUGGESTION:
+- Hero section
+- Introduction / mission overview
+- 3 commitments section
+- Closing faith/community section
+- Final call-to-action inviting people to join the mission or contact the church
+
+IMPORTANT:
+- Do not regenerate the whole project
+- Only update the existing About Us page cleanly
+- Preserve the existing design system and component structure
+- Reuse existing section and typography components where possible
+- Ensure heading hierarchy is SEO-friendly
+- If there is old placeholder text on the About page, replace it fully with this content
