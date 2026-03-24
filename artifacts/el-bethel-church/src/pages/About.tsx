@@ -414,7 +414,17 @@ export default function About() {
           5. STATEMENT OF FAITH
       ════════════════════════════════════════════════ */}
       <section aria-labelledby="beliefs-heading" className="py-24 bg-primary relative overflow-hidden">
-        <div aria-hidden="true" className="absolute inset-0 opacity-5">
+        {/* Photo background */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src={`${import.meta.env.BASE_URL}images/beliefs-bg.jpg`}
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-primary/90" />
+        </div>
+        {/* Cross texture on top */}
+        <div aria-hidden="true" className="absolute inset-0 opacity-5 z-[1]">
           <img src={`${import.meta.env.BASE_URL}images/pattern-cross.png`} alt="" className="w-full h-full object-cover" />
         </div>
 
