@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { AnnouncementModal } from "@/components/AnnouncementModal";
 
 // Pages
 import Home from "@/pages/Home";
@@ -39,6 +40,7 @@ function Router() {
         </Switch>
       </div>
       <Footer />
+      <AnnouncementModal />
     </div>
   );
 }
