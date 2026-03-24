@@ -272,22 +272,12 @@ export default function About() {
                     <div aria-hidden="true" className="absolute inset-0 opacity-5 z-[1]">
                       <img src={`${import.meta.env.BASE_URL}images/pattern-cross.png`} alt="" className="w-full h-full object-cover" />
                     </div>
-                    {/* Watermark number */}
-                    <p
-                      aria-hidden="true"
-                      className="absolute top-6 right-6 font-serif font-bold text-[7rem] leading-none text-white/5 select-none pointer-events-none"
-                    >
-                      {c.number}
-                    </p>
-
                     {/* Content */}
                     <div className="relative z-10">
                       {/* Icon */}
                       <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary mb-6">
                         <Icon size={22} aria-hidden="true" />
                       </div>
-                      {/* Number badge */}
-                      <p className="text-secondary text-[11px] font-bold uppercase tracking-widest mb-3">{c.number}</p>
                       {/* Title */}
                       <h3 id={`commitment-${c.number}-title`} className="font-serif text-2xl md:text-3xl font-bold text-white leading-snug mb-5">
                         {c.title}
