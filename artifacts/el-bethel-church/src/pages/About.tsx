@@ -35,6 +35,7 @@ const COMMITMENTS = [
     highlights: ["Digital & community outreach", "Bridging culture & generations", "Every soul — a vessel of hope"],
     bodyA:      "Using modern tools — digital media, community gatherings, and cultural events — we aim to bridge divides of culture, generation, and background, reaching people exactly where they are.",
     bodyB:      "Our mission is to inspire, uplift, and encourage all to embrace a life transformed by Jesus Christ. Through His love and the message of salvation, we endeavor to bring peace, unity, and renewal. Our passion is fueled by the belief that each soul touched by the Gospel can become a vessel of hope, impacting countless others.",
+    image:      "hero-slide-1.jpg",
     verse:      "Matthew 28:19–20",
   },
   {
@@ -45,6 +46,7 @@ const COMMITMENTS = [
     highlights: ["Bible studies & prayer groups", "Mentorship programs", "Discovering God-given gifts"],
     bodyA:      "In our church community, we create spaces for spiritual growth, offering Bible studies, prayer groups, and mentorship programs that encourage each individual to deepen their understanding of God's love and purpose.",
     bodyB:      "We encourage believers to discover their God-given gifts, understanding that each talent is a tool of light to be used in their families, workplaces, and communities. Through a faith that is alive and active, we seek to empower everyone to live courageously, anchored in the hope of God's promises.",
+    image:      "hero-slide-2.jpg",
     verse:      "Colossians 2:6–7",
   },
   {
@@ -55,6 +57,7 @@ const COMMITMENTS = [
     highlights: ["Feeding programs & family support", "Local & global outreach", "Physical, emotional & spiritual care"],
     bodyA:      "We are committed to addressing not only immediate needs but also fostering long-term growth and empowerment — from feeding the hungry and supporting families, to providing a listening ear to those facing hardships.",
     bodyB:      "Through local and global outreach initiatives, we partner with other organizations, churches, and community leaders to create impactful programs that respond to physical, emotional, and spiritual needs — food distribution, educational support, health initiatives, and disaster relief.",
+    image:      "hero-slide-3.jpg",
     verse:      "Matthew 25:35–36",
   },
 ];
@@ -269,9 +272,18 @@ export default function About() {
                   aria-labelledby={`commitment-${c.number}-title`}
                 >
                   {/* Accent panel */}
-                  <div className={`${isAlt ? "lg:order-2" : ""} relative bg-primary p-10 md:p-14 flex flex-col justify-end min-h-[300px] overflow-hidden`}>
+                  <div className={`${isAlt ? "lg:order-2" : ""} relative p-10 md:p-14 flex flex-col justify-end min-h-[300px] overflow-hidden`}>
+                    {/* Background photo + navy overlay */}
+                    <div className="absolute inset-0" aria-hidden="true">
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/${c.image}`}
+                        alt=""
+                        className="w-full h-full object-cover object-center"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/80 to-primary/60" />
+                    </div>
                     {/* Cross texture */}
-                    <div aria-hidden="true" className="absolute inset-0 opacity-5">
+                    <div aria-hidden="true" className="absolute inset-0 opacity-5 z-[1]">
                       <img src={`${import.meta.env.BASE_URL}images/pattern-cross.png`} alt="" className="w-full h-full object-cover" />
                     </div>
                     {/* Watermark number */}
