@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-const FROM = "El-Bethel Website <noreply@ebchristianfellowship.org>";
+const FROM = "El-Bethel Christian Fellowship <contact@ebchristianfellowship.org>";
 const ADMIN_EMAIL = "contact@ebchristianfellowship.org";
 
 /** Returns a fresh Resend client on every call (tokens must not be cached). */
