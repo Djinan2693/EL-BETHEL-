@@ -12,6 +12,7 @@ import About from "@/pages/About";
 import Sermons from "@/pages/Sermons";
 import SermonDetail from "@/pages/SermonDetail";
 import Events from "@/pages/Events";
+import EventDetail from "@/pages/EventDetail";
 import Ministries from "@/pages/Ministries";
 import Contact from "@/pages/Contact";
 import GivePage from "@/pages/GivePage";
@@ -30,6 +31,7 @@ function Router() {
           <Route path="/sermons" component={Sermons} />
           <Route path="/sermons/:slug" component={SermonDetail} />
           <Route path="/events" component={Events} />
+          <Route path="/events/:slug" component={EventDetail} />
           <Route path="/ministries" component={Ministries} />
           <Route path="/contact" component={Contact} />
           <Route path="/give" component={GivePage} />
