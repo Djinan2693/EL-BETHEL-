@@ -5,7 +5,7 @@ import {
   ArrowRight, PlayCircle, MapPin, Clock,
   Heart, Mail, Phone, BookOpen, Users, Star,
   Send, HeartHandshake, Globe, X, Loader2, CheckCircle,
-  ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight, Maximize2, Facebook,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -17,7 +17,7 @@ import { useSEO } from "@/lib/seo";
 import { sermons } from "@/data/sermons";
 import { getVideoThumbnail, detectPlatform } from "@/lib/video";
 import { events } from "@/data/events";
-import { churchInfo, testimonials } from "@/data/church";
+import { churchInfo } from "@/data/church";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -74,6 +74,170 @@ function GoldDivider() {
       <div className="w-1.5 h-1.5 rounded-full bg-secondary" />
       <div className="h-px flex-1 bg-secondary/30" />
     </div>
+  );
+}
+
+/* ── Photo gallery data ─────────────────────────────────────── */
+const GALLERY_PHOTOS = [
+  { src: "gallery-01.jpg", alt: "Worship team leading in prayer during Sunday service" },
+  { src: "gallery-02.jpg", alt: "Congregation raising hands in worship at El-Bethel" },
+  { src: "gallery-03.jpg", alt: "Church member in quiet prayer during service" },
+  { src: "gallery-04.jpg", alt: "Congregation attentively listening to the message" },
+  { src: "gallery-05.jpg", alt: "Pastor preaching with keyboard player during Sunday service" },
+  { src: "gallery-06.jpg", alt: "Church family gathered in worship" },
+  { src: "gallery-07.jpg", alt: "Congregation in a moment of worship and praise" },
+  { src: "gallery-08.jpg", alt: "Members seated and engaged during Sunday service" },
+  { src: "gallery-09.jpg", alt: "Church members standing in worship" },
+  { src: "gallery-10.jpg", alt: "Pastor joyfully ministering to the congregation" },
+  { src: "gallery-11.jpg", alt: "Pastor praying with church members after service" },
+  { src: "gallery-12.jpg", alt: "Brothers in faith worshipping together" },
+  { src: "gallery-13.jpg", alt: "Worship service at El-Bethel with full congregation" },
+];
+
+function PhotoGallerySection() {
+  const [lightbox, setLightbox] = useState<number | null>(null);
+
+  const close  = useCallback(() => setLightbox(null), []);
+  const prev   = useCallback(() => setLightbox(i => i === null ? null : (i - 1 + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length), []);
+  const next   = useCallback(() => setLightbox(i => i === null ? null : (i + 1) % GALLERY_PHOTOS.length), []);
+
+  /* keyboard nav */
+  useEffect(() => {
+    if (lightbox === null) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft")  prev();
+      if (e.key === "ArrowRight") next();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox, close, prev, next]);
+
+  const BASE = import.meta.env.BASE_URL;
+
+  return (
+    <SectionWrapper className="bg-white">
+      <Container>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
+
+          {/* Heading */}
+          <motion.div variants={fadeUp}>
+            <SectionHeading title="Life at El-Bethel" subtitle="Our Church Family" centered />
+          </motion.div>
+
+          {/* Masonry grid — CSS columns */}
+          <motion.div
+            variants={stagger}
+            className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-0"
+          >
+            {GALLERY_PHOTOS.map((photo, i) => (
+              <motion.button
+                key={photo.src}
+                variants={fadeUp}
+                onClick={() => setLightbox(i)}
+                aria-label={`View photo: ${photo.alt}`}
+                className="group relative block w-full mb-3 rounded-xl overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary break-inside-avoid"
+              >
+                <img
+                  src={`${BASE}images/${photo.src}`}
+                  alt={photo.alt}
+                  loading="lazy"
+                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                {/* hover overlay */}
+                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-all duration-300 flex items-center justify-center">
+                  <Maximize2
+                    size={22}
+                    className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow"
+                    aria-hidden="true"
+                  />
+                </div>
+              </motion.button>
+            ))}
+          </motion.div>
+
+          {/* CTA */}
+          <motion.div variants={fadeUp} className="mt-10 text-center">
+            <a
+              href="https://www.facebook.com/people/El-Bethel-Christian-Fellowship-Church/61566950657090/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="rounded-full gap-2 border-primary/30 hover:border-secondary/60 hover:bg-secondary/5">
+                <Facebook size={15} className="text-blue-600" aria-hidden="true" />
+                More Photos on Facebook
+                <ArrowRight size={14} />
+              </Button>
+            </a>
+          </motion.div>
+        </motion.div>
+      </Container>
+
+      {/* ── Lightbox ─────────────────────────────── */}
+      <AnimatePresence>
+        {lightbox !== null && (
+          <motion.div
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 p-4"
+            onClick={close}
+          >
+            {/* Image */}
+            <motion.div
+              key={lightbox}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.94 }}
+              transition={{ duration: 0.25 }}
+              className="relative max-w-4xl w-full max-h-[85vh] flex items-center justify-center"
+              onClick={e => e.stopPropagation()}
+            >
+              <img
+                src={`${BASE}images/${GALLERY_PHOTOS[lightbox].src}`}
+                alt={GALLERY_PHOTOS[lightbox].alt}
+                className="max-h-[85vh] max-w-full rounded-xl object-contain shadow-2xl"
+              />
+
+              {/* Caption */}
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent rounded-b-xl px-5 py-4">
+                <p className="text-white/80 text-sm text-center">{GALLERY_PHOTOS[lightbox].alt}</p>
+                <p className="text-white/40 text-xs text-center mt-0.5">{lightbox + 1} / {GALLERY_PHOTOS.length}</p>
+              </div>
+            </motion.div>
+
+            {/* Close */}
+            <button
+              onClick={close}
+              aria-label="Close photo"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Prev */}
+            <button
+              onClick={e => { e.stopPropagation(); prev(); }}
+              aria-label="Previous photo"
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <ChevronLeft size={22} />
+            </button>
+
+            {/* Next */}
+            <button
+              onClick={e => { e.stopPropagation(); next(); }}
+              aria-label="Next photo"
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SectionWrapper>
   );
 }
 
@@ -681,46 +845,9 @@ export default function Home() {
 
 
       {/* ══════════════════════════════════════════
-          7. TESTIMONIALS
+          7. PHOTO GALLERY
       ══════════════════════════════════════════ */}
-      <SectionWrapper className="bg-background">
-        <Container>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
-            <motion.div variants={fadeUp}>
-              <SectionHeading title="Changed Lives" subtitle="Community Voices" centered />
-            </motion.div>
-
-            <motion.div variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.map(t => (
-                <motion.div key={t.id} variants={fadeUp}>
-                  <Card className="h-full border-border/60 hover:shadow-lg hover:border-secondary/30 transition-all duration-300 group">
-                    <CardContent className="p-8 flex flex-col h-full">
-                      {/* Quote mark */}
-                      <div className="text-6xl font-serif text-secondary/20 leading-none mb-4 select-none group-hover:text-secondary/30 transition-colors">
-                        "
-                      </div>
-                      <p className="text-muted-foreground italic leading-relaxed text-[15px] flex-1 mb-6">
-                        {t.quote}
-                      </p>
-                      <GoldDivider />
-                      <div className="flex items-center gap-4 mt-4">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-secondary/30 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                          {t.initials}
-                        </div>
-                        <div>
-                          <p className="font-bold text-sm text-foreground">{t.name}</p>
-                          <p className="text-xs text-secondary font-medium">{t.role}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </Container>
-      </SectionWrapper>
+      <PhotoGallerySection />
 
 
       {/* ══════════════════════════════════════════
