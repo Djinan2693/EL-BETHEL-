@@ -1,0 +1,64 @@
+Improve the “Give Online” page and make it feel more complete, trustworthy, and donation-focused.
+
+Goals:
+- keep GCash QR code as a visible donation option
+- add a proper “Pay by Card / Debit Card” donation option
+- design the page so it looks professional, modern, secure, and easy to use
+- keep the page responsive and polished on mobile and desktop
+
+Page requirements:
+- create a strong hero/header section for online giving
+- add a short message explaining why giving matters
+- add a donation methods section with clear cards or tabs
+- include these giving methods:
+  1. GCash QR Code
+  2. Bank Transfer
+  3. Credit / Debit Card
+- if useful, also add a short FAQ or trust/security section
+
+GCash section:
+- display the GCash QR code prominently
+- include short step-by-step guidance:
+  - scan the QR code
+  - send the donation
+  - optionally send proof or reference if needed
+- allow space for donor instructions or a note
+- make the QR code visually prominent and easy to scan
+
+Bank section:
+- add a clean bank donation card
+- show placeholders or structured fields for:
+  - bank name
+  - account name
+  - account number
+  - branch
+- make the layout easy to update later
+
+Card payment section:
+- add a clean and modern “Pay with Card” area
+- support credit and debit cards
+- do NOT build a raw insecure custom card processing flow
+- structure this section so it can connect to a secure hosted checkout provider such as Maya Checkout or PayMongo
+- add CTA buttons like:
+  - Donate by Card
+  - Continue to Secure Checkout
+
+Technical direction:
+- do not store or handle raw card data directly in the frontend
+- prepare the code for integration with a secure payment gateway
+- make the card payment flow easy to connect later through an API route or hosted checkout redirect
+- keep the implementation modular and production-ready
+
+Design direction:
+- warm, trustworthy, premium church donation page
+- clear hierarchy
+- strong visual separation between payment methods
+- subtle icons and trust indicators
+- mobile-first responsive layout
+
+Important:
+- do not rebuild the whole site
+- only improve the existing Give Online page
+- preserve the current design system
+- use reusable components where possible
+- keep the page easy to continue later in VS Code with GitHub Copilot
