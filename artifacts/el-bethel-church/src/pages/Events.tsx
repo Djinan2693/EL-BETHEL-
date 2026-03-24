@@ -246,31 +246,30 @@ export default function Events() {
   return (
     <main>
       {/* ════════════════════════ HERO ═══════════════════════════ */}
-      <section aria-label="Events page header" className="pt-36 pb-16 bg-primary relative overflow-hidden">
-        <div aria-hidden="true"
-          className="absolute inset-0 opacity-5"
-          style={{ backgroundImage: "radial-gradient(circle at 80% 50%, hsl(42 66% 54%), transparent 40%), radial-gradient(circle at 20% 80%, hsl(229 65% 60%), transparent 50%)" }}
-        />
-        <Container className="relative z-10">
+      <section aria-label="Events page header" className="bg-primary text-primary-foreground py-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20" aria-hidden="true">
+          <img
+            src={`${import.meta.env.BASE_URL}images/give-texture.png`}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <Container className="relative z-10 text-center max-w-3xl mx-auto pt-16">
           <motion.div initial="hidden" animate="visible" variants={stagger}>
-            <motion.nav variants={fadeUp} aria-label="Breadcrumb"
-              className="flex items-center gap-1.5 text-white/40 text-xs uppercase tracking-widest mb-6">
-              <Link href="/" className="hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary rounded">Home</Link>
-              <ChevronRight size={12} aria-hidden="true" />
-              <span className="text-secondary">Events</span>
-            </motion.nav>
-            <motion.p variants={fadeUp} className="text-secondary text-xs font-bold uppercase tracking-widest mb-3">
-              Gather · Grow · Serve
-            </motion.p>
-            <motion.h1 variants={fadeUp} className="text-5xl md:text-6xl font-serif font-bold text-white mb-5">
+            <motion.div variants={fadeUp}>
+              <Calendar className="w-12 h-12 text-secondary mx-auto mb-6" />
+            </motion.div>
+            <motion.h1 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold mb-6">
               Events
             </motion.h1>
-            <motion.p variants={fadeUp} className="text-white/65 text-lg max-w-2xl leading-relaxed">
-              Stay connected with your church family. From Sunday services to youth camps to community outreach — there's always a place for you at El-Bethel.
+            <motion.p variants={fadeUp} className="text-lg text-primary-foreground/80 font-light italic font-serif text-xl mb-8">
+              "Not giving up meeting together, as some are in the habit of doing, but encouraging one another."
+            </motion.p>
+            <motion.p variants={fadeUp} className="text-sm text-secondary uppercase tracking-widest font-semibold">
+              — Hebrews 10:25
             </motion.p>
           </motion.div>
         </Container>
-        <div aria-hidden="true" className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* ════════════════════ FILTER + GRID ══════════════════════ */}

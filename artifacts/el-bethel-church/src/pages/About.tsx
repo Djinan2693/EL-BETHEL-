@@ -117,51 +117,33 @@ export default function About() {
       ════════════════════════════════════════════════ */}
       <section
         aria-label="About El-Bethel — hero"
-        className="relative pt-40 pb-24 md:pt-52 md:pb-32 overflow-hidden bg-primary"
+        className="bg-primary text-primary-foreground py-20 relative overflow-hidden"
       >
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" aria-hidden="true">
           <img
             src={`${import.meta.env.BASE_URL}images/hero-worship.png`}
             alt=""
-            aria-hidden="true"
             className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/80 to-primary" />
-          <img
-            src={`${import.meta.env.BASE_URL}images/pattern-cross.png`}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover opacity-5 mix-blend-overlay"
-          />
+          <div className="absolute inset-0 bg-primary/60" />
         </div>
 
-        <Container className="relative z-10">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-white/50 text-xs mb-8 uppercase tracking-widest">
-            <Link href="/" className="hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary rounded">Home</Link>
-            <ChevronRight size={12} aria-hidden="true" />
-            <span className="text-secondary">About Us</span>
-          </nav>
-
-          <motion.div
-            initial="hidden" animate="visible" variants={stagger}
-            className="max-w-3xl"
-          >
-            <motion.p variants={fadeUp} className="text-secondary text-xs font-bold uppercase tracking-widest mb-4">
-              Makati City, Philippines · In partnership with El Bethel AG International, India
-            </motion.p>
-            <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight mb-6">
+        <Container className="relative z-10 text-center max-w-3xl mx-auto pt-16">
+          <motion.div initial="hidden" animate="visible" variants={stagger}>
+            <motion.div variants={fadeUp}>
+              <Home className="w-12 h-12 text-secondary mx-auto mb-6" />
+            </motion.div>
+            <motion.h1 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold mb-6">
               Who We Are
             </motion.h1>
-            <motion.div variants={fadeUp}>
-              <GoldRule />
-            </motion.div>
-            <motion.p variants={fadeUp} className="text-xl text-white/75 mt-6 leading-relaxed max-w-2xl">
-              El-Bethel Christian Fellowship is a beacon of hope, faith, and transformation — a place where God's love is not only preached but actively practiced and embodied in daily life.
+            <motion.p variants={fadeUp} className="text-lg text-primary-foreground/80 font-light italic font-serif text-xl mb-8">
+              "And He called the name of that place Bethel, for there God was revealed to him."
+            </motion.p>
+            <motion.p variants={fadeUp} className="text-sm text-secondary uppercase tracking-widest font-semibold">
+              — Genesis 35:7
             </motion.p>
           </motion.div>
         </Container>
-
-        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* ════════════════════════════════════════════════

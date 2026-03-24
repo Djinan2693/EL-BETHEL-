@@ -206,31 +206,27 @@ export default function Contact() {
       {/* ══════════════════════════════════════════
           HERO
       ══════════════════════════════════════════ */}
-      <section className="relative bg-primary overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: "url('/images/pattern-cross.png')", backgroundSize: "280px" }}
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary/85" aria-hidden="true" />
-
-        <Container className="relative z-10 pt-36 pb-24">
-          <motion.div
-            initial="hidden" animate="visible" variants={stagger}
-            className="max-w-2xl"
-          >
-            <motion.p variants={fadeUp} className="text-secondary text-xs font-bold uppercase tracking-widest mb-4">
-              We'd Love to Hear from You
-            </motion.p>
-            <motion.h1 variants={fadeUp} className="font-serif text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+      <section className="bg-primary text-primary-foreground py-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20" aria-hidden="true">
+          <img
+            src={`${import.meta.env.BASE_URL}images/give-texture.png`}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <Container className="relative z-10 text-center max-w-3xl mx-auto pt-16">
+          <motion.div initial="hidden" animate="visible" variants={stagger}>
+            <motion.div variants={fadeUp}>
+              <MessageCircle className="w-12 h-12 text-secondary mx-auto mb-6" />
+            </motion.div>
+            <motion.h1 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold mb-6">
               Let's Connect
             </motion.h1>
-            <motion.p variants={fadeUp} className="text-white/70 text-lg leading-relaxed mb-5">
-              Whether you have a question, want to plan your first visit, need prayer, or simply want to
-              know more about El-Bethel — our church family is here for you.
+            <motion.p variants={fadeUp} className="text-lg text-primary-foreground/80 font-light italic font-serif text-xl mb-8">
+              "How good and pleasant it is when God's people live together in unity!"
             </motion.p>
-            <motion.p variants={fadeUp} className="text-secondary/80 font-serif italic text-base">
-              "How good and pleasant it is when God's people live together in unity!" — Psalm 133:1
+            <motion.p variants={fadeUp} className="text-sm text-secondary uppercase tracking-widest font-semibold">
+              — Psalm 133:1
             </motion.p>
           </motion.div>
         </Container>
