@@ -374,7 +374,7 @@ export default function Home() {
             alt=""
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/85" />
+          <div className="absolute inset-0 bg-primary/90" />
         </div>
         <Container className="relative z-10">
           <motion.div
