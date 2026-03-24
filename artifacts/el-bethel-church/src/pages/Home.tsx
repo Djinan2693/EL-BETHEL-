@@ -391,11 +391,6 @@ export default function Home() {
         {/* ── Main text content ────────────────────────────────── */}
         <Container className="relative z-20 text-center text-white pt-28 pb-20">
           <motion.div initial="hidden" animate="visible" variants={stagger}>
-            <motion.span variants={fadeUp}
-              className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full border border-secondary/60 text-secondary text-xs font-semibold tracking-widest mb-8 uppercase">
-              <Star size={12} className="fill-secondary" /> Genesis 35:7
-            </motion.span>
-
             <motion.h1 variants={fadeUp}
               className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif font-bold mb-6 drop-shadow-xl leading-[0.95] tracking-tight">
               Where Faith
