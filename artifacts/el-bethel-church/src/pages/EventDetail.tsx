@@ -5,7 +5,7 @@ import {
   Share2, Mail, Facebook, Twitter, Link2, Tag, BadgeCheck,
   MessageSquareHeart, Download, CheckCircle2, Star,
 } from "lucide-react";
-import { useSEO } from "@/lib/seo";
+import { useSEO, useJsonLd, SITE_URL, DEFAULT_OG, buildBreadcrumbItem } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { events, EventData } from "@/data/events";
@@ -17,6 +17,15 @@ const fadeUp = {
 };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
 const fadeIn  = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } };
+
+/* ── SEO helpers ────────────────────────────────────────────────── */
+/** "4:00 PM" → "16:00" (24-hour, no seconds) */
+function to24h(t: string): string {
+  const [time, period] = t.trim().split(" ");
+  const [h, m] = time.split(":").map(Number);
+  const hh = period === "PM" && h !== 12 ? h + 12 : period === "AM" && h === 12 ? 0 : h;
+  return `${String(hh).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
 
 /* ── category colour map ────────────────────────────────────────── */
 const CAT_COLORS: Record<string, string> = {
@@ -77,9 +86,60 @@ export default function EventDetail() {
   const { slug } = useParams<{ slug: string }>();
   const event = events.find((e) => e.slug === slug);
 
+  /* ── SEO + JSON-LD — always called before any early return ── */
+  useSEO(
+    event
+      ? {
+          title:       event.title,
+          description: event.excerpt.slice(0, 155),
+          canonical:   `/events/${event.slug}`,
+          ogType:      "website" as const,
+        }
+      : { title: "Event Not Found", description: "This event could not be found.", noindex: true },
+  );
+
+  useJsonLd(
+    event
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type":              "Event",
+              "@id":                `${SITE_URL}/events/${event.slug}#event`,
+              name:                 event.title,
+              description:          event.excerpt.slice(0, 300),
+              startDate:            `${event.dateISO}T${to24h(event.time)}:00+08:00`,
+              endDate:              `${event.dateISO}T${to24h(event.endTime)}:00+08:00`,
+              eventStatus:          "https://schema.org/EventScheduled",
+              eventAttendanceMode:  "https://schema.org/OfflineEventAttendanceMode",
+              isAccessibleForFree:  event.cost.toLowerCase().includes("free"),
+              location: {
+                "@type": "Place",
+                name:    event.location,
+                address: {
+                  "@type":           "PostalAddress",
+                  streetAddress:     "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street",
+                  addressLocality:   "Salcedo Village, Makati City",
+                  addressRegion:     "Metro Manila",
+                  addressCountry:    "PH",
+                },
+              },
+              organizer: { "@id": `${SITE_URL}/#organization` },
+              image:     DEFAULT_OG,
+              url:       `${SITE_URL}/events/${event.slug}`,
+            },
+            buildBreadcrumbItem([
+              { name: "Home",   path: "/" },
+              { name: "Events", path: "/events" },
+              { name: event.title, path: `/events/${event.slug}` },
+            ]),
+          ],
+        }
+      : null,
+  );
+
   /* ── 404 ──────────────────────────────────────────────────── */
   if (!event) {
-    useSEO("Event Not Found", "This event could not be found.");
     return (
       <main className="pt-40 pb-24 min-h-screen flex items-start justify-center">
         <div className="text-center max-w-md">
@@ -97,11 +157,6 @@ export default function EventDetail() {
       </main>
     );
   }
-
-  useSEO(
-    event.title,
-    `${event.excerpt.slice(0, 155)}`,
-  );
 
   /* ── Related events ───────────────────────────────────────── */
   const related = events

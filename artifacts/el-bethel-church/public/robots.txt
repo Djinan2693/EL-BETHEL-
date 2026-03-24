@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Block internal/utility paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /src/
+
+# Sitemap
+Sitemap: https://ebchristianfellowship.org/sitemap.xml

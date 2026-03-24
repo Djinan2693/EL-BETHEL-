@@ -43,7 +43,11 @@ function GoldDivider() {
 }
 
 export default function Home() {
-  useSEO("Home", "Welcome to El-Bethel Christian Fellowship Church — a Spirit-filled community in Makati City, Philippines.");
+  useSEO({
+    title:       "El-Bethel Christian Fellowship Church",
+    description: "A Spirit-filled Christian community in the heart of Makati City, Philippines. Join us every Sunday at 4:00 PM for worship, expository preaching, and genuine community.",
+    canonical:   "/",
+  });
 
   // Newsletter
   const [email, setEmail] = useState("");

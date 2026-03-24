@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# El-Bethel Christian Fellowship Church — URL Redirect Map
+# Format (Netlify/Cloudflare Pages): /old-path  /new-path  301
+# ─────────────────────────────────────────────────────────────────────────────
+# Used to map old WordPress URLs to the new React site structure.
+# Add entries below as you identify legacy URLs from the old site.
+#
+# IMPORTANT: More specific rules should come first.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── WordPress admin / system paths ───────────────────────────────────────────
+/wp-admin/*         /     301
+/wp-login.php       /     301
+/xmlrpc.php         /     404
+/wp-json/*          /     404
+
+# ── Category archive pages → listing pages ───────────────────────────────────
+/category/sermons         /sermons  301
+/category/sermons/*       /sermons  301
+/category/messages        /sermons  301
+/category/events          /events   301
+/category/events/*        /events   301
+/category/announcements   /events   301
+
+# ── Old page slugs (add WordPress page IDs or slugs as you discover them) ────
+# /about-us            /about   301
+# /our-story           /about   301
+# /service-times       /contact 301
+# /how-to-give         /give    301
+# /contact-us          /contact 301
+# /?page_id=2          /about   301
+
+# ── Old sermon post URLs (add individual ?p= IDs or slugs) ──────────────────
+# /?p=101              /sermons/the-god-who-restores  301
+# /2025/03/the-god-who-restores  /sermons/the-god-who-restores  301
+
+# ── Catch-all: send WordPress query strings to home ──────────────────────────
+# /?*                  /  301

@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Heart, Building2, Smartphone, CreditCard } from "lucide-react";
 
 export default function GivePage() {
-  useSEO("Give", "Support the mission and ministries of El-Bethel Church.");
+  useSEO({
+    title:       "Give Online",
+    description: "Support the mission of El-Bethel Christian Fellowship Church. Give securely online via GCash, credit/debit card, or bank transfer — every gift advances the Kingdom.",
+    canonical:   "/give",
+  });
 
   return (
     <main className="pt-24">

@@ -60,10 +60,11 @@ const PILLARS = [
 ];
 
 export default function PrayerRequest() {
-  useSEO(
-    "Prayer Request",
-    "Submit a prayer request to El-Bethel Christian Fellowship. Our intercessory team will pray over your needs with faith and confidentiality.",
-  );
+  useSEO({
+    title:       "Prayer Request",
+    description: "Submit a prayer request to El-Bethel Christian Fellowship Church in Makati City. Our dedicated intercessory team will pray over your needs with faith and complete confidentiality.",
+    canonical:   "/prayer",
+  });
 
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);

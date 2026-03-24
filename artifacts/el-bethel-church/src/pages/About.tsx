@@ -82,10 +82,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
    PAGE COMPONENT
 ══════════════════════════════════════════════════════════════════ */
 export default function About() {
-  useSEO(
-    "About Us",
-    "Discover the mission, history, beliefs, and pastoral team of El-Bethel Christian Fellowship Church — a Spirit-filled community in Makati City, Philippines.",
-  );
+  useSEO({
+    title:       "About Us",
+    description: "Discover the story, mission, core beliefs, and pastoral team of El-Bethel Christian Fellowship Church — a Spirit-filled community in Makati City, Philippines since 1987.",
+    canonical:   "/about",
+  });
 
   return (
     <main>

@@ -51,6 +51,23 @@ Every package extends `tsconfig.base.json` which sets `composite: true`. The roo
 
 ## Packages
 
+### `artifacts/el-bethel-church` (`@workspace/el-bethel-church`)
+
+React + Vite + TypeScript + Tailwind CSS church website for **El-Bethel Christian Fellowship Church** (Makati City, Philippines).
+
+- **Fonts**: Cormorant Garamond (headings), Inter (body)
+- **Colors**: Navy `hsl(229 65% 30%)`, Gold `hsl(42 66% 54%)`, Cream `hsl(40 38% 97%)`
+- **Routing**: `wouter` — pages in `src/pages/`
+- **Church data**: single source of truth at `src/data/church.ts`
+- **SEO**: `src/lib/seo.ts` — `useSEO(options)` hook, `useJsonLd(schema)` hook, `buildBreadcrumbSchema` / `buildBreadcrumbItem` helpers; `SITE_URL` and `DEFAULT_OG` constants exported
+- **Pages**: Home, About, Sermons (with detail), Events (with detail), Prayer Request, Contact, Give
+- **JSON-LD schemas**: Organization + WebSite in `index.html`; VideoObject + BreadcrumbList on sermon detail pages; Event + BreadcrumbList on event detail pages; noindex on 404 states
+- **Public files**: `robots.txt`, `sitemap.xml` (all pages + 12 sermons + 5 events), `_redirects` (WordPress URL map)
+- **API integration**: POST `/api/email/contact`, `/api/email/newsletter`, `/api/email/prayer` (RESEND_API_KEY via Resend)
+- **Dev**: `pnpm --filter @workspace/el-bethel-church run dev`
+- **Domain**: `https://ebchristianfellowship.org`
+- **Sunday service**: 4:00 PM – 6:30 PM; Wednesday: 7:00 – 8:30 PM
+
 ### `artifacts/api-server` (`@workspace/api-server`)
 
 Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` for request and response validation and `@workspace/db` for persistence.

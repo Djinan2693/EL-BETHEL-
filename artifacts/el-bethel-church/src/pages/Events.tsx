@@ -211,10 +211,11 @@ function EventCardList({ event }: { event: EventData }) {
    PAGE COMPONENT
 ════════════════════════════════════════════════════════════════ */
 export default function Events() {
-  useSEO(
-    "Events",
-    "Upcoming events and gatherings at El-Bethel Christian Fellowship Church — Makati City, Philippines. Worship services, youth camps, conferences, and community outreach.",
-  );
+  useSEO({
+    title:       "Events",
+    description: "Upcoming events at El-Bethel Christian Fellowship Church — Sunday worship services, special services, Easter, and community gatherings in Makati City, Philippines.",
+    canonical:   "/events",
+  });
 
   const [search,      setSearch]   = useState("");
   const [category,    setCategory] = useState("All");

@@ -162,10 +162,11 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 /* ── Main page ────────────────────────────────────────── */
 export default function Contact() {
-  useSEO(
-    "Contact Us",
-    "Get in touch with El-Bethel Christian Fellowship Church in Makati City. Call, email, visit, or send a message.",
-  );
+  useSEO({
+    title:       "Contact Us",
+    description: "Get in touch with El-Bethel Christian Fellowship Church in Makati City. Call, email, visit our Salcedo Village location, or send a message — we'd love to hear from you.",
+    canonical:   "/contact",
+  });
 
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);

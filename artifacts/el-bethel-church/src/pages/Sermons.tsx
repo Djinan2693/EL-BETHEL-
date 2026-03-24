@@ -330,10 +330,11 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
    PAGE COMPONENT
 ════════════════════════════════════════════════════════════════ */
 export default function Sermons() {
-  useSEO(
-    "Sermons",
-    "Listen to the latest messages and teachings from El-Bethel Christian Fellowship — biblical preaching from Makati City, Philippines.",
-  );
+  useSEO({
+    title:       "Sermons",
+    description: "Watch and listen to the latest sermon messages from El-Bethel Christian Fellowship — expository, biblically-grounded preaching from Makati City, Philippines.",
+    canonical:   "/sermons",
+  });
 
   const [search,          setSearch]   = useState("");
   const [selectedSpeaker, setSpeaker]  = useState("");

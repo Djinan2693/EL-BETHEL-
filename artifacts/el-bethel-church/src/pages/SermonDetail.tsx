@@ -5,7 +5,7 @@ import {
   Calendar, Clock, BookOpen, Mic2, ArrowLeft, MessageSquareHeart,
   Twitter, Facebook, Link2, Mail, ChevronLeft,
 } from "lucide-react";
-import { useSEO } from "@/lib/seo";
+import { useSEO, useJsonLd, SITE_URL, DEFAULT_OG, buildBreadcrumbItem } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { sermons, SermonData } from "@/data/sermons";
@@ -30,6 +30,18 @@ const TOPIC_COLORS: Record<string, string> = {
   Community:     "bg-cyan-50 text-cyan-700 border-cyan-200",
   Faith:         "bg-indigo-50 text-indigo-700 border-indigo-200",
 };
+
+/* ── SEO helpers ────────────────────────────────────────────────── */
+/** "46:12" → "PT46M12S" (ISO 8601 duration) */
+function isoDuration(str: string): string {
+  const [m, s] = str.split(":").map(Number);
+  return `PT${m}M${s}S`;
+}
+/** Extract YouTube video ID from watch URL */
+function ytId(url: string): string {
+  const m = url.match(/[?&]v=([^&]+)/);
+  return m ? m[1] : url;
+}
 
 /* ── helper components ──────────────────────────────────────────── */
 function TopicPill({ topic }: { topic: string }) {
@@ -96,10 +108,49 @@ export default function SermonDetail() {
   const { slug } = useParams<{ slug: string }>();
   const sermon = sermons.find((s) => s.slug === slug);
 
+  /* ── SEO + JSON-LD — always called before any early return ── */
+  useSEO(
+    sermon
+      ? {
+          title:       `${sermon.title} — ${sermon.speaker}`,
+          description: sermon.excerpt.slice(0, 155),
+          canonical:   `/sermons/${sermon.slug}`,
+          ogType:      "video.other" as const,
+        }
+      : { title: "Sermon Not Found", description: "This sermon could not be found.", noindex: true },
+  );
+
+  useJsonLd(
+    sermon
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type":       "VideoObject",
+              "@id":         `${SITE_URL}/sermons/${sermon.slug}#video`,
+              name:          sermon.title,
+              description:   sermon.excerpt.slice(0, 300),
+              uploadDate:    sermon.dateISO,
+              duration:      isoDuration(sermon.duration),
+              contentUrl:    sermon.videoUrl,
+              embedUrl:      `https://www.youtube.com/embed/${ytId(sermon.videoUrl)}`,
+              thumbnailUrl:  DEFAULT_OG,
+              author:        { "@type": "Person", name: sermon.speaker },
+              publisher:     { "@id": `${SITE_URL}/#organization` },
+              url:           `${SITE_URL}/sermons/${sermon.slug}`,
+            },
+            buildBreadcrumbItem([
+              { name: "Home",    path: "/" },
+              { name: "Sermons", path: "/sermons" },
+              { name: sermon.title, path: `/sermons/${sermon.slug}` },
+            ]),
+          ],
+        }
+      : null,
+  );
+
   /* ── 404 state ────────────────────────────────────────────── */
   if (!sermon) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useSEO("Sermon Not Found", "This sermon could not be found.");
     return (
       <main className="pt-40 pb-24 min-h-screen flex items-start justify-center">
         <div className="text-center max-w-md">
@@ -119,12 +170,6 @@ export default function SermonDetail() {
       </main>
     );
   }
-
-  /* ── SEO ──────────────────────────────────────────────────── */
-  useSEO(
-    `${sermon.title} — ${sermon.speaker}`,
-    `${sermon.excerpt.slice(0, 155)}`,
-  );
 
   /* ── Related sermons ──────────────────────────────────────── */
   const related = sermons
