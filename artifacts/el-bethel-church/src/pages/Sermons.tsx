@@ -162,9 +162,11 @@ function FeaturedCard({ sermon }: { sermon: SermonData }) {
             </span>
             <TopicBadge topic={sermon.topic} />
           </div>
-          <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3 leading-snug group-hover:text-secondary/90 transition-colors">
-            {sermon.title}
-          </h2>
+          <Link href={`/sermons/${sermon.slug}`} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary rounded">
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3 leading-snug group-hover:text-secondary/90 transition-colors">
+              {sermon.title}
+            </h2>
+          </Link>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-white/50 text-xs mb-5">
             <span className="flex items-center gap-1.5"><Mic2 size={11} /> {sermon.speaker}</span>
             <span className="flex items-center gap-1.5"><Calendar size={11} /> {sermon.date}</span>
@@ -174,9 +176,11 @@ function FeaturedCard({ sermon }: { sermon: SermonData }) {
             {sermon.excerpt}
           </p>
           <div className="flex flex-wrap gap-3">
-            <Button size="sm" className="rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
-              <PlayCircle size={15} /> Watch Now
-            </Button>
+            <Link href={`/sermons/${sermon.slug}`}>
+              <Button size="sm" className="rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                <PlayCircle size={15} /> Watch Now
+              </Button>
+            </Link>
             <Button size="sm" variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 bg-transparent gap-2">
               <Headphones size={15} /> Listen
             </Button>
@@ -222,9 +226,11 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
               <Clock size={10} /> {sermon.duration}
             </span>
           </div>
-          <h3 className="font-serif font-bold text-primary text-lg leading-snug mb-2 group-hover:text-secondary transition-colors line-clamp-2">
-            {sermon.title}
-          </h3>
+          <Link href={`/sermons/${sermon.slug}`} className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary rounded">
+            <h3 className="font-serif font-bold text-primary text-lg leading-snug mb-2 group-hover:text-secondary transition-colors line-clamp-2">
+              {sermon.title}
+            </h3>
+          </Link>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground mb-3">
             <span className="flex items-center gap-1"><Mic2 size={11} /> {sermon.speaker}</span>
             <span className="flex items-center gap-1"><Calendar size={11} /> {sermon.date}</span>
@@ -232,9 +238,11 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 flex-1">{sermon.excerpt}</p>
           <div className="flex gap-2 mt-4">
-            <Button size="sm" className="rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-1.5 text-xs px-4">
-              <PlayCircle size={13} /> Watch
-            </Button>
+            <Link href={`/sermons/${sermon.slug}`}>
+              <Button size="sm" className="rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-1.5 text-xs px-4">
+                <PlayCircle size={13} /> Watch
+              </Button>
+            </Link>
             <Button size="sm" variant="outline" className="rounded-full text-xs gap-1.5 px-4">
               <Headphones size={13} /> Listen
             </Button>
@@ -276,9 +284,11 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
           <TopicBadge topic={sermon.topic} />
         </div>
 
-        <h3 className="font-serif font-bold text-primary text-xl leading-snug mb-3 group-hover:text-secondary transition-colors line-clamp-2">
-          {sermon.title}
-        </h3>
+        <Link href={`/sermons/${sermon.slug}`} className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary rounded">
+          <h3 className="font-serif font-bold text-primary text-xl leading-snug mb-3 group-hover:text-secondary transition-colors line-clamp-2">
+            {sermon.title}
+          </h3>
+        </Link>
 
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground mb-3">
           <span className="flex items-center gap-1 font-medium text-foreground/80">
@@ -299,9 +309,11 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
 
         {/* Actions */}
         <div className="flex gap-2 mt-5 pt-4 border-t border-border">
-          <Button size="sm" className="flex-1 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-1.5 text-xs">
-            <PlayCircle size={13} /> Watch
-          </Button>
+          <Link href={`/sermons/${sermon.slug}`} className="flex-1">
+            <Button size="sm" className="w-full rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-1.5 text-xs">
+              <PlayCircle size={13} /> Watch
+            </Button>
+          </Link>
           <Button size="sm" variant="outline" className="rounded-full gap-1.5 text-xs px-3">
             <Headphones size={13} />
           </Button>

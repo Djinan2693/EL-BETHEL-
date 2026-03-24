@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Sermons from "@/pages/Sermons";
+import SermonDetail from "@/pages/SermonDetail";
 import Events from "@/pages/Events";
 import Ministries from "@/pages/Ministries";
 import Contact from "@/pages/Contact";
@@ -27,6 +28,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/about" component={About} />
           <Route path="/sermons" component={Sermons} />
+          <Route path="/sermons/:slug" component={SermonDetail} />
           <Route path="/events" component={Events} />
           <Route path="/ministries" component={Ministries} />
           <Route path="/contact" component={Contact} />
