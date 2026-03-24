@@ -105,7 +105,7 @@ const FAQS = [
   },
   {
     q: "How do I request a pastoral visit or counselling session?",
-    a: "You can send us a message through this contact form, call our office, or email us directly at contact@ebchristianfellowship.org. Our pastoral team will follow up to schedule a time.",
+    a: "You can send us a message through this contact form, call our office, or email us directly at info@ebchristianfellowship.org. Our pastoral team will follow up to schedule a time.",
   },
   {
     q: "Is there a children's programme during the Sunday service?",

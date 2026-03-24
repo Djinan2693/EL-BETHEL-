@@ -5,7 +5,7 @@ export const churchInfo: ChurchInfo = {
   tagline: "Where Faith Meets Family",
   address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
   phone: "+63 966 926 9566",
-  email: "contact@ebchristianfellowship.org",
+  email: "info@ebchristianfellowship.org",
   website: "https://ebchristianfellowship.org",
   founded: 1987,
   socialMedia: {
