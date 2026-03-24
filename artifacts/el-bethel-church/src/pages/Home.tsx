@@ -295,17 +295,14 @@ export default function Home() {
     if (!email || subscribing) return;
     setSubscribing(true);
     try {
-      await fetch("/api/email/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      setSubscribed(true);
-      setEmail("");
-    } catch {
-      setSubscribed(true);
-      setEmail("");
+      const emailjs = await import("@emailjs/browser");
+      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
+      await emailjs.send(cfg.SERVICE_ID, cfg.NEWSLETTER_TEMPLATE_ID, {
+        subscriber_email: email,
+      }, cfg.PUBLIC_KEY);
     } finally {
+      setSubscribed(true);
+      setEmail("");
       setSubscribing(false);
     }
   }
@@ -315,15 +312,16 @@ export default function Home() {
     if (!prayerRequest.trim() || prayerLoading) return;
     setPrayerLoading(true);
     try {
-      await fetch("/api/email/prayer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: prayerName, email: prayerEmail, request: prayerRequest }),
-      });
-      setPrayerDone(true);
-    } catch {
-      setPrayerDone(true);
+      const emailjs = await import("@emailjs/browser");
+      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
+      await emailjs.send(cfg.SERVICE_ID, cfg.PRAYER_TEMPLATE_ID, {
+        from_name:  prayerName ?? "",
+        from_email: prayerEmail ?? "",
+        topic:      "",
+        request:    prayerRequest,
+      }, cfg.PUBLIC_KEY);
     } finally {
+      setPrayerDone(true);
       setPrayerLoading(false);
     }
   }

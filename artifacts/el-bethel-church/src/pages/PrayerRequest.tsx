@@ -78,13 +78,14 @@ export default function PrayerRequest() {
   async function onSubmit(data: PrayerFormValues) {
     setLoading(true);
     try {
-      const res = await fetch("/api/email/prayer", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(data),
-      });
-      const json = await res.json() as { success?: boolean; error?: string };
-      if (!res.ok || !json.success) throw new Error(json.error ?? "Unknown error");
+      const emailjs = await import("@emailjs/browser");
+      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
+      await emailjs.send(cfg.SERVICE_ID, cfg.PRAYER_TEMPLATE_ID, {
+        from_name:  data.name ?? "",
+        from_email: data.email ?? "",
+        topic:      data.topic ?? "",
+        request:    data.request,
+      }, cfg.PUBLIC_KEY);
       setSubmitted(true);
       form.reset();
     } catch (err) {

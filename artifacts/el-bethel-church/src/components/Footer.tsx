@@ -62,11 +62,11 @@ export function Footer() {
     if (!email.trim() || loading) return;
     setLoading(true);
     try {
-      await fetch("/api/email/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const emailjs = await import("@emailjs/browser");
+      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
+      await emailjs.send(cfg.SERVICE_ID, cfg.NEWSLETTER_TEMPLATE_ID, {
+        subscriber_email: email,
+      }, cfg.PUBLIC_KEY);
     } finally {
       setSubscribed(true);
       setEmail("");
