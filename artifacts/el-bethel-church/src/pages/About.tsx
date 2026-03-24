@@ -365,7 +365,7 @@ export default function About() {
                 <img
                   src={`${import.meta.env.BASE_URL}images/community-family.jpg`}
                   alt="El-Bethel church community gathered in worship"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-[50%_20%]"
                 />
               </div>
               <div className="absolute -bottom-6 -right-4 md:-right-8 max-w-xs bg-white rounded-2xl shadow-2xl p-6 border border-border">
