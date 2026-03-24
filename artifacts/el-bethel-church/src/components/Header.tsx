@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Cross } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { churchInfo } from "@/data/church";
@@ -44,16 +44,26 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-primary text-secondary p-1.5 rounded-sm group-hover:bg-secondary group-hover:text-primary transition-colors">
-              <Cross size={24} strokeWidth={2.5} />
+          <Link href="/" className="flex items-center gap-3 group">
+            <img
+              src="/images/logo.jpg"
+              alt="El-Bethel Christian Fellowship Church"
+              className="w-12 h-12 rounded-full object-cover shadow-md ring-2 ring-secondary/40 group-hover:ring-secondary transition-all duration-300"
+            />
+            <div className="hidden sm:flex flex-col leading-tight">
+              <span className={cn(
+                "font-serif text-lg font-bold tracking-tight transition-colors leading-snug",
+                isScrolled ? "text-primary" : "text-white drop-shadow"
+              )}>
+                El-Bethel
+              </span>
+              <span className={cn(
+                "text-[10px] font-medium uppercase tracking-widest transition-colors",
+                isScrolled ? "text-secondary" : "text-secondary"
+              )}>
+                Christian Fellowship
+              </span>
             </div>
-            <span className={cn(
-              "font-serif text-2xl font-semibold tracking-tight transition-colors",
-              isScrolled ? "text-primary" : "text-primary md:text-white"
-            )}>
-              El-Bethel
-            </span>
           </Link>
 
           {/* Desktop Nav */}

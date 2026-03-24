@@ -74,58 +74,58 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  /* Cream Background #FAF7F2 */
-  --background: 40 40% 97%;
-  /* Dark Text #1C1C1C */
-  --foreground: 0 0% 11%;
+  /* Cream Background — warm white parchment */
+  --background: 40 38% 97%;
+  /* Dark Text */
+  --foreground: 228 35% 12%;
   /* Subtle Border */
-  --border: 40 20% 88%;
-  
+  --border: 228 18% 88%;
+
   /* White Cards */
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 11%;
-  --card-border: 40 20% 88%;
-  
-  /* Navy Primary #1A2744 */
-  --primary: 221 45% 18%;
+  --card-foreground: 228 35% 12%;
+  --card-border: 228 18% 88%;
+
+  /* Royal Cobalt Blue (from logo outer ring) #1C2B80 */
+  --primary: 229 65% 30%;
   --primary-foreground: 0 0% 100%;
-  
-  /* Gold Secondary #C9A84C */
-  --secondary: 44 55% 54%;
-  --secondary-foreground: 221 45% 18%;
-  
+
+  /* Logo Gold #D4AB3E */
+  --secondary: 42 66% 54%;
+  --secondary-foreground: 229 65% 20%;
+
   /* Muted Cream */
-  --muted: 40 30% 94%;
-  --muted-foreground: 0 0% 42%;
-  
+  --muted: 228 22% 94%;
+  --muted-foreground: 228 12% 44%;
+
   /* Gold Accent */
-  --accent: 44 55% 54%;
-  --accent-foreground: 0 0% 100%;
-  
-  /* Warm Red #B5373B */
+  --accent: 42 66% 54%;
+  --accent-foreground: 229 65% 20%;
+
+  /* Warm Red */
   --destructive: 358 54% 46%;
   --destructive-foreground: 0 0% 100%;
-  
-  --input: 40 20% 88%;
-  --ring: 44 55% 54%;
-  --chart-1: 221 45% 18%;
-  --chart-2: 44 55% 54%;
-  --chart-3: 40 30% 80%;
-  --chart-4: 0 0% 11%;
-  --chart-5: 40 40% 97%;
+
+  --input: 228 18% 88%;
+  --ring: 42 66% 54%;
+  --chart-1: 229 65% 30%;
+  --chart-2: 42 66% 54%;
+  --chart-3: 210 70% 60%;
+  --chart-4: 228 35% 12%;
+  --chart-5: 40 38% 97%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 11%;
-  --popover-border: 40 20% 88%;
+  --popover-foreground: 228 35% 12%;
+  --popover-border: 228 18% 88%;
 
-  --sidebar: 221 45% 18%;
-  --sidebar-foreground: 40 40% 97%;
-  --sidebar-border: 221 45% 25%;
-  --sidebar-primary: 44 55% 54%;
+  --sidebar: 229 65% 30%;
+  --sidebar-foreground: 40 38% 97%;
+  --sidebar-border: 229 65% 38%;
+  --sidebar-primary: 42 66% 54%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 221 45% 25%;
-  --sidebar-accent-foreground: 40 40% 97%;
-  --sidebar-ring: 44 55% 54%;
+  --sidebar-accent: 229 65% 38%;
+  --sidebar-accent-foreground: 40 38% 97%;
+  --sidebar-ring: 42 66% 54%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: 'Cormorant Garamond', serif;
