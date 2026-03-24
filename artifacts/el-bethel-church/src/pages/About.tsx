@@ -165,9 +165,6 @@ export default function About() {
           >
             {/* Left — mission statement */}
             <motion.div variants={fadeUp}>
-              <div className="w-14 h-14 rounded-2xl bg-secondary/10 border border-secondary/30 flex items-center justify-center text-secondary mb-6">
-                <Target size={26} />
-              </div>
               <SectionLabel>Our Purpose</SectionLabel>
               <h2 id="mission-heading" className="text-4xl font-serif font-bold text-primary mb-5 leading-snug">
                 Our Mission
@@ -216,7 +213,6 @@ export default function About() {
                           <Icon size={16} aria-hidden="true" />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-[10px] font-bold text-secondary/60 font-serif">{c.number}</span>
                           <p className="text-primary font-semibold text-sm leading-snug truncate">{c.title}</p>
                         </div>
                       </div>
