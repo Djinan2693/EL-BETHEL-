@@ -504,12 +504,6 @@ export default function Contact() {
                           )}
                         </Button>
 
-                        <p className="text-xs text-center text-muted-foreground">
-                          Replies go to your email from{" "}
-                          <a href="mailto:contact@ebchristianfellowship.org" className="text-primary hover:underline">
-                            contact@ebchristianfellowship.org
-                          </a>
-                        </p>
                       </form>
                     </Form>
                   </>
