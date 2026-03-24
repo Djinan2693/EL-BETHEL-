@@ -55,7 +55,7 @@ function DateBlock({ event, large }: { event: EventData; large?: boolean }) {
   return (
     <div className={`flex flex-col items-center justify-center bg-primary text-primary-foreground rounded-2xl ${large ? "w-24 h-24" : "w-16 h-16"} shrink-0`}>
       <span className={`text-secondary font-bold uppercase tracking-widest ${large ? "text-sm" : "text-[9px]"}`}>{month}</span>
-      <span className={`font-serif font-bold leading-none ${large ? "text-4xl" : "text-2xl"}`}>{day}</span>
+      <span className={`font-sans font-bold leading-none tracking-tight ${large ? "text-4xl" : "text-2xl"}`}>{day}</span>
     </div>
   );
 }

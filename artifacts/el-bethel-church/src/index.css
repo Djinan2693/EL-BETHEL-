@@ -154,6 +154,9 @@
 @layer base {
   * {
     @apply border-border;
+    /* Force lining (non-oldstyle) numerals everywhere — prevents Playfair Display
+       from rendering numbers with inconsistent heights and descenders */
+    font-variant-numeric: lining-nums;
   }
 
   html {
@@ -162,11 +165,29 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    /* DM Sans: lining + proportional numerals — clean, modern, readable */
+    font-variant-numeric: lining-nums proportional-nums;
+    font-feature-settings: "lnum" 1, "kern" 1;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
     letter-spacing: -0.01em;
+    /* Override Playfair Display's default oldstyle figures */
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
+  }
+
+  /* Dates, times, phone numbers, and numeric codes always use tabular lining numerals */
+  time, address, [data-numeric] {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
+  /* Ensure code/mono blocks never inherit serif */
+  code, kbd, pre, samp {
+    font-family: var(--app-font-mono);
+    font-variant-numeric: tabular-nums lining-nums;
   }
 }
 

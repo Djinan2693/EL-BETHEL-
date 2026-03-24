@@ -294,7 +294,7 @@ export default function Home() {
                 { value: "6", label: "Active Ministries" },
               ].map(stat => (
                 <div key={stat.label} className="px-4 text-center">
-                  <div className="text-2xl md:text-3xl font-serif font-bold text-secondary">{stat.value}</div>
+                  <div className="text-2xl md:text-3xl font-sans font-bold text-secondary tracking-tight">{stat.value}</div>
                   <div className="text-xs text-white/60 mt-0.5 uppercase tracking-widest">{stat.label}</div>
                 </div>
               ))}
@@ -428,7 +428,7 @@ export default function Home() {
                 </div>
                 <span className="text-secondary text-xs font-bold uppercase tracking-widest">{service.day}</span>
                 <h3 className="text-xl font-bold text-white mt-1 mb-1">{service.name}</h3>
-                <p className="text-2xl font-serif text-secondary/90 font-semibold mb-3">{service.time}</p>
+                <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">{service.time}</p>
                 <div className="flex items-center gap-2 text-white/50 text-sm mb-4">
                   <MapPin size={14} className="text-secondary" /> {service.location}
                 </div>
@@ -580,7 +580,7 @@ export default function Home() {
                   {/* Date badge */}
                   <div className="shrink-0 w-20 h-20 rounded-xl bg-primary/5 border border-primary/10 flex flex-col items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-300">
                     <span className="text-[10px] font-extrabold uppercase tracking-widest text-secondary mb-0.5">{month}</span>
-                    <span className="text-3xl font-serif font-bold text-primary group-hover:text-white leading-none transition-colors">{day}</span>
+                    <span className="text-3xl font-sans font-bold text-primary group-hover:text-white leading-none transition-colors">{day}</span>
                   </div>
 
                   <div className="flex-1 min-w-0">
