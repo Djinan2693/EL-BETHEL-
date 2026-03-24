@@ -1,3 +1,5 @@
+import type { VideoPlatform } from "@/lib/video";
+
 export interface SermonData {
   id: number;
   slug: string;
@@ -9,7 +11,19 @@ export interface SermonData {
   series: string;
   excerpt: string;
   thumbnail: string | null;
+  /**
+   * Full video URL — YouTube or Facebook public video/live replay.
+   * Examples:
+   *   YouTube:  "https://www.youtube.com/watch?v=abc123XYZ"
+   *   Facebook: "https://www.facebook.com/reel/123456789"
+   *   Facebook live replay: "https://www.facebook.com/YourPage/videos/123456789"
+   */
   videoUrl: string;
+  /**
+   * Optional — auto-detected from videoUrl if omitted.
+   * Set explicitly to "facebook" or "youtube" to override detection.
+   */
+  videoPlatform?: VideoPlatform;
   transcriptExcerpt: string;
   scripture: string;
   duration: string;

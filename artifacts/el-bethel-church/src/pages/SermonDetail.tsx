@@ -9,6 +9,8 @@ import { useSEO, useJsonLd, SITE_URL, DEFAULT_OG, buildBreadcrumbItem } from "@/
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { sermons, SermonData } from "@/data/sermons";
+import { VideoPlayer } from "@/components/VideoPlayer";
+import { resolveEmbed } from "@/lib/video";
 
 /* ── animation helpers ──────────────────────────────────────────── */
 const fadeUp = {
@@ -36,11 +38,6 @@ const TOPIC_COLORS: Record<string, string> = {
 function isoDuration(str: string): string {
   const [m, s] = str.split(":").map(Number);
   return `PT${m}M${s}S`;
-}
-/** Extract YouTube video ID from watch URL */
-function ytId(url: string): string {
-  const m = url.match(/[?&]v=([^&]+)/);
-  return m ? m[1] : url;
 }
 
 /* ── helper components ──────────────────────────────────────────── */
@@ -133,7 +130,7 @@ export default function SermonDetail() {
               uploadDate:    sermon.dateISO,
               duration:      isoDuration(sermon.duration),
               contentUrl:    sermon.videoUrl,
-              embedUrl:      `https://www.youtube.com/embed/${ytId(sermon.videoUrl)}`,
+              embedUrl:      resolveEmbed(sermon.videoUrl, sermon.videoPlatform).embedUrl ?? sermon.videoUrl,
               thumbnailUrl:  DEFAULT_OG,
               author:        { "@type": "Person", name: sermon.speaker },
               publisher:     { "@id": `${SITE_URL}/#organization` },
@@ -280,32 +277,14 @@ export default function SermonDetail() {
               {/* Video embed */}
               <motion.div
                 initial="hidden" animate="visible" variants={fadeIn}
-                className="relative aspect-video rounded-2xl overflow-hidden bg-primary shadow-2xl shadow-primary/20 mb-10 group"
+                className="mb-10"
               >
-                {/* Gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary to-secondary/20 flex flex-col items-center justify-center gap-4 p-8">
-                  <SeriesPill series={sermon.series} />
-                  <p className="text-white font-serif font-bold text-xl md:text-2xl text-center leading-snug max-w-lg">
-                    {sermon.title}
-                  </p>
-                  <p className="text-white/50 text-sm">{sermon.speaker} · {sermon.date}</p>
-                </div>
-
-                {/* Play overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <button
-                    aria-label={`Play sermon: ${sermon.title}`}
-                    className="w-20 h-20 rounded-full bg-secondary border-4 border-white/20 flex items-center justify-center shadow-2xl shadow-secondary/40 hover:scale-110 hover:bg-secondary/90 transition-all duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/50 group-hover:scale-105"
-                  >
-                    <PlayCircle size={36} className="text-secondary-foreground ml-1" aria-hidden="true" />
-                  </button>
-                  <span className="text-white/60 text-xs">Click to watch · {sermon.duration}</span>
-                </div>
-
-                {/* Placeholder label */}
-                <div className="absolute top-4 right-4 bg-black/40 text-white/60 text-[10px] uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-sm">
-                  Video Placeholder
-                </div>
+                <VideoPlayer
+                  videoUrl={sermon.videoUrl}
+                  videoPlatform={sermon.videoPlatform}
+                  title={sermon.title}
+                  subtitle={`${sermon.speaker} · ${sermon.date}`}
+                />
               </motion.div>
 
               {/* Quick actions below video */}
