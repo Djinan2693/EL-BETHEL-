@@ -9,9 +9,9 @@ export const churchInfo: ChurchInfo = {
   website: "https://ebchristianfellowship.org",
   founded: 1987,
   socialMedia: {
-    facebook: "https://facebook.com/elbethelmanila",
-    youtube: "https://youtube.com/@elbethelmanila",
-    instagram: "https://instagram.com/elbethelmanila"
+    facebook:  "https://www.facebook.com/people/El-Bethel-Christian-Fellowship-Church/61566950657090/?mibextid=LQQJ4d",
+    youtube:   "https://www.youtube.com/@Elbethel-Christianfellowship",
+    instagram: "https://www.instagram.com/el_bethel_christian_ebcfc",
   }
 };
 

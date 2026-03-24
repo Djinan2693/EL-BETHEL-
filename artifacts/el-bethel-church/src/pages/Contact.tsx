@@ -89,9 +89,9 @@ const SCHEDULE = [
 ];
 
 const SOCIAL = [
-  { label: "Facebook",  href: churchInfo.socialMedia.facebook,  icon: Facebook,  handle: "@elbethelmanila" },
-  { label: "Instagram", href: churchInfo.socialMedia.instagram, icon: Instagram, handle: "@elbethelmanila" },
-  { label: "YouTube",   href: churchInfo.socialMedia.youtube,   icon: Youtube,   handle: "El-Bethel Manila" },
+  { label: "Facebook",  href: churchInfo.socialMedia.facebook,  icon: Facebook,  handle: "El-Bethel Christian Fellowship Church" },
+  { label: "Instagram", href: churchInfo.socialMedia.instagram, icon: Instagram, handle: "@el_bethel_christian_ebcfc" },
+  { label: "YouTube",   href: churchInfo.socialMedia.youtube,   icon: Youtube,   handle: "@Elbethel-Christianfellowship" },
 ];
 
 const FAQS = [
