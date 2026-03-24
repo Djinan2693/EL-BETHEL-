@@ -10,15 +10,15 @@ export const team: Pastor[] = [
   },
   {
     id: 2,
-    name: "Tareck",
-    title: "Berger",
+    name: "Tareck Ngoyi",
+    title: "Shepherd",
     bio: "",
     imageUrl: "images/pastor-tareck.png",
   },
   {
     id: 3,
     name: "Arnold Ciamala",
-    title: "Berger",
+    title: "Shepherd",
     bio: "",
     imageUrl: "images/pastor-arnold.png",
   },
