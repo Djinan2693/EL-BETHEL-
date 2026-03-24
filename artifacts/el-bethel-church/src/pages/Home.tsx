@@ -531,12 +531,16 @@ export default function Home() {
                     <p className="text-sm text-muted-foreground mb-2">{sermon.speaker}</p>
                     <p className="text-xs text-secondary font-medium mb-4">{sermon.scripture}</p>
                     <div className="mt-auto pt-4 border-t border-border flex gap-4">
-                      <Button variant="ghost" size="sm" className="px-0 hover:bg-transparent text-primary text-sm font-semibold">
-                        <PlayCircle className="mr-1.5 w-4 h-4" /> Watch
-                      </Button>
-                      <Button variant="ghost" size="sm" className="px-0 hover:bg-transparent text-muted-foreground text-sm">
-                        <BookOpen className="mr-1.5 w-4 h-4" /> Notes
-                      </Button>
+                      <Link href={`/sermons/${sermon.slug}`}>
+                        <Button variant="ghost" size="sm" className="px-0 hover:bg-transparent text-primary text-sm font-semibold">
+                          <PlayCircle className="mr-1.5 w-4 h-4" /> Watch
+                        </Button>
+                      </Link>
+                      <Link href={`/sermons/${sermon.slug}`}>
+                        <Button variant="ghost" size="sm" className="px-0 hover:bg-transparent text-muted-foreground text-sm">
+                          <BookOpen className="mr-1.5 w-4 h-4" /> Notes
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
