@@ -384,14 +384,14 @@ export default function Home() {
                   <CardContent className="p-6 flex flex-col flex-1">
                     <div className="flex justify-between items-center mb-3">
                       <Badge className="bg-secondary/15 text-secondary border-0 hover:bg-secondary/25 text-xs font-semibold">
-                        {sermon.category}
+                        {sermon.topic}
                       </Badge>
                       <span className="text-xs text-muted-foreground">{sermon.date}</span>
                     </div>
                     <h3 className="text-2xl font-serif font-bold mb-1 group-hover:text-secondary transition-colors line-clamp-2 leading-snug">
                       {sermon.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-2">{sermon.pastor}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{sermon.speaker}</p>
                     <p className="text-xs text-secondary font-medium mb-4">{sermon.scripture}</p>
                     <div className="mt-auto pt-4 border-t border-border flex gap-4">
                       <Button variant="ghost" size="sm" className="px-0 hover:bg-transparent text-primary text-sm font-semibold">
