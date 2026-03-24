@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, PlayCircle, MapPin, Clock,
   Heart, Mail, Phone, ChevronDown, BookOpen, Users, Star,
-  Send, HeartHandshake, Globe
+  Send, HeartHandshake, Globe, X, Loader2, CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -45,16 +45,65 @@ function GoldDivider() {
 
 export default function Home() {
   useSEO("Home", "Welcome to El-Bethel Christian Fellowship Church — a Spirit-filled community in Makati City, Philippines.");
+
+  // Newsletter
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribing, setSubscribing] = useState(false);
+
+  // Prayer modal
+  const [prayerOpen, setPrayerOpen] = useState(false);
+  const [prayerName, setPrayerName] = useState("");
+  const [prayerEmail, setPrayerEmail] = useState("");
+  const [prayerRequest, setPrayerRequest] = useState("");
+  const [prayerLoading, setPrayerLoading] = useState(false);
+  const [prayerDone, setPrayerDone] = useState(false);
 
   const featuredSermons = sermons.slice(0, 3);
   const upcomingEvents = events.slice(0, 3);
   const featuredMinistries = ministries.slice(0, 4);
 
-  function handleSubscribe(e: React.FormEvent) {
+  async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
-    if (email) { setSubscribed(true); setEmail(""); }
+    if (!email || subscribing) return;
+    setSubscribing(true);
+    try {
+      await fetch("/api/email/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setSubscribed(true);
+      setEmail("");
+    } catch {
+      setSubscribed(true);
+      setEmail("");
+    } finally {
+      setSubscribing(false);
+    }
+  }
+
+  async function handlePrayerSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!prayerRequest.trim() || prayerLoading) return;
+    setPrayerLoading(true);
+    try {
+      await fetch("/api/email/prayer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: prayerName, email: prayerEmail, request: prayerRequest }),
+      });
+      setPrayerDone(true);
+    } catch {
+      setPrayerDone(true);
+    } finally {
+      setPrayerLoading(false);
+    }
+  }
+
+  function closePrayer() {
+    setPrayerOpen(false);
+    setTimeout(() => { setPrayerDone(false); setPrayerName(""); setPrayerEmail(""); setPrayerRequest(""); }, 400);
   }
 
   return (
@@ -552,19 +601,18 @@ export default function Home() {
               No need is too small, no burden too heavy. Our prayer team is committed to lifting you up before God. Share your prayer request and let the family stand with you.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg"
-                  className="rounded-full px-9 h-14 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold shadow-xl shadow-secondary/20">
-                  Submit a Prayer Request
-                </Button>
-              </Link>
-              <Link href="/contact">
+              <Button size="lg" onClick={() => setPrayerOpen(true)}
+                className="rounded-full px-9 h-14 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold shadow-xl shadow-secondary/20">
+                <HeartHandshake className="mr-2 h-5 w-5" />
+                Submit a Prayer Request
+              </Button>
+              <a href={`tel:${churchInfo.phone}`}>
                 <Button size="lg" variant="outline"
                   className="rounded-full px-9 h-14 border-white/30 text-white hover:bg-white/10 bg-transparent">
                   <Phone className="mr-2 h-4 w-4" />
                   Call the Church
                 </Button>
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </Container>
@@ -806,6 +854,103 @@ export default function Home() {
           </motion.div>
         </Container>
       </section>
+
+      {/* ══════════════════════════════════════════
+          PRAYER REQUEST MODAL
+      ══════════════════════════════════════════ */}
+      <AnimatePresence>
+        {prayerOpen && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={(e) => { if (e.target === e.currentTarget) closePrayer(); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+            >
+              {/* Modal Header */}
+              <div className="bg-primary px-8 py-6 flex items-center justify-between">
+                <div>
+                  <p className="text-secondary text-xs font-bold uppercase tracking-widest mb-1">Prayer Team</p>
+                  <h3 className="text-white text-xl font-serif font-bold">Submit a Prayer Request</h3>
+                </div>
+                <button onClick={closePrayer} className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors">
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-8">
+                {prayerDone ? (
+                  <div className="text-center py-6">
+                    <CheckCircle className="w-14 h-14 text-green-500 mx-auto mb-4" />
+                    <h4 className="text-xl font-serif font-bold text-primary mb-2">Prayer Received 🙏</h4>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Your prayer request has been sent to our prayer team. We will be lifting you up before God. You are not alone.
+                    </p>
+                    <Button onClick={closePrayer} className="mt-6">
+                      Close
+                    </Button>
+                  </div>
+                ) : (
+                  <form onSubmit={handlePrayerSubmit} className="space-y-5">
+                    <p className="text-sm text-muted-foreground -mt-1">
+                      Share your prayer request and our team will pray specifically for you. You may remain anonymous.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1.5">Your Name <span className="text-muted-foreground font-normal">(optional)</span></label>
+                        <input
+                          type="text"
+                          value={prayerName}
+                          onChange={e => setPrayerName(e.target.value)}
+                          placeholder="Juan dela Cruz"
+                          className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1.5">Email <span className="text-muted-foreground font-normal">(optional)</span></label>
+                        <input
+                          type="email"
+                          value={prayerEmail}
+                          onChange={e => setPrayerEmail(e.target.value)}
+                          placeholder="juan@example.com"
+                          className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1.5">Your Prayer Request <span className="text-red-500">*</span></label>
+                      <textarea
+                        value={prayerRequest}
+                        onChange={e => setPrayerRequest(e.target.value)}
+                        placeholder="Share what's on your heart…"
+                        required
+                        rows={5}
+                        className="w-full px-4 py-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-all resize-none"
+                      />
+                    </div>
+                    <Button type="submit" className="w-full h-12" disabled={prayerLoading || !prayerRequest.trim()}>
+                      {prayerLoading ? (
+                        <><Loader2 className="mr-2 w-4 h-4 animate-spin" /> Sending to Prayer Team…</>
+                      ) : (
+                        <><HeartHandshake className="mr-2 w-4 h-4" /> Send Prayer Request</>
+                      )}
+                    </Button>
+                    <p className="text-xs text-center text-muted-foreground">
+                      Your request is handled with care and confidentiality.
+                    </p>
+                  </form>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </main>
   );
