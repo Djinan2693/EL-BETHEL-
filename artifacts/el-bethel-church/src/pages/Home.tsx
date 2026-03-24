@@ -757,10 +757,12 @@ export default function Home() {
                   </div>
 
                   <div className="w-full sm:w-auto">
-                    <Button size="sm" variant="ghost"
-                      className="w-full sm:w-auto rounded-full border border-border text-primary hover:bg-primary hover:text-white hover:border-primary transition-all duration-300">
-                      Learn More
-                    </Button>
+                    <Link href={`/events/${event.slug}`}>
+                      <Button size="sm" variant="ghost"
+                        className="w-full sm:w-auto rounded-full border border-border text-primary hover:bg-primary hover:text-white hover:border-primary transition-all duration-300">
+                        Learn More
+                      </Button>
+                    </Link>
                   </div>
                 </motion.div>
               );
