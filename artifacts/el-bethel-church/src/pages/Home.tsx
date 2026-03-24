@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, PlayCircle, MapPin, Clock,
   Heart, Mail, Phone, ChevronDown, BookOpen, Users, Star,
-  Send, HeartHandshake, Globe, X, Loader2, CheckCircle
+  Send, HeartHandshake, Globe, X, Loader2, CheckCircle,
+  ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -32,6 +33,39 @@ const fadeIn = {
   visible: { opacity: 1, transition: { duration: 0.7, ease: "easeOut" } }
 };
 
+/* ── Hero slider data ──────────────────────────────────────────── */
+const HERO_SLIDES = [
+  {
+    src: "images/hero-slide-1.jpg",
+    alt: "Worship and praise at El-Bethel Christian Fellowship Church",
+  },
+  {
+    src: "images/hero-slide-2.jpg",
+    alt: "Community and fellowship at El-Bethel Christian Fellowship Church",
+  },
+  {
+    src: "images/hero-slide-3.jpg",
+    alt: "Sunday service at El-Bethel Christian Fellowship Church",
+  },
+];
+
+const slideVariants = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.75, ease: [0.32, 0.72, 0, 1] },
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? "-100%" : "100%",
+    opacity: 0,
+    transition: { duration: 0.55, ease: [0.32, 0.72, 0, 1] },
+  }),
+};
+
 function GoldDivider() {
   return (
     <div className="flex items-center gap-3 my-2">
@@ -48,6 +82,32 @@ export default function Home() {
     description: "A Spirit-filled Christian community in the heart of Makati City, Philippines. Join us every Sunday at 4:00 PM for worship, expository preaching, and genuine community.",
     canonical:   "/",
   });
+
+  // Hero slider
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [slideDir, setSlideDir] = useState(1);
+
+  const goToSlide = useCallback((next: number, dir: number) => {
+    setSlideDir(dir);
+    setHeroIndex(next);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    goToSlide((heroIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length, -1);
+  }, [heroIndex, goToSlide]);
+
+  const nextSlide = useCallback(() => {
+    goToSlide((heroIndex + 1) % HERO_SLIDES.length, 1);
+  }, [heroIndex, goToSlide]);
+
+  // Auto-advance every 6 s
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlideDir(1);
+      setHeroIndex((i) => (i + 1) % HERO_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [heroIndex]);
 
   // Newsletter
   const [email, setEmail] = useState("");
@@ -114,26 +174,63 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           1. HERO SECTION
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={`${import.meta.env.BASE_URL}images/hero-worship.png`}
-            alt="Worship at El-Bethel"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/65 to-primary/90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-transparent to-primary/40" />
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+        aria-label="Welcome — hero slideshow"
+      >
+        {/* ── Slider images ────────────────────────────────────── */}
+        <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <AnimatePresence initial={false} custom={slideDir}>
+            <motion.div
+              key={heroIndex}
+              custom={slideDir}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="absolute inset-0"
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}${HERO_SLIDES[heroIndex].src}`}
+                alt={HERO_SLIDES[heroIndex].alt}
+                className="w-full h-full object-cover object-center"
+                draggable={false}
+              />
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Persistent gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/88 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/35 via-transparent to-primary/35 z-10" />
         </div>
 
-        {/* Floating cross watermark */}
-        <div className="absolute right-10 top-1/4 opacity-5 pointer-events-none hidden lg:block">
+        {/* ── Floating cross watermark ─────────────────────────── */}
+        <div className="absolute right-10 top-1/4 opacity-5 pointer-events-none hidden lg:block z-10" aria-hidden="true">
           <svg width="320" height="320" viewBox="0 0 100 100" fill="white">
             <rect x="43" y="5" width="14" height="90" rx="3" />
             <rect x="5" y="35" width="90" height="14" rx="3" />
           </svg>
         </div>
 
+        {/* ── Arrow: previous ──────────────────────────────────── */}
+        <button
+          onClick={prevSlide}
+          aria-label="Previous slide"
+          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 w-11 h-11 md:w-13 md:h-13 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 hover:border-white/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        {/* ── Arrow: next ─────────────────────────────────────── */}
+        <button
+          onClick={nextSlide}
+          aria-label="Next slide"
+          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 w-11 h-11 md:w-13 md:h-13 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 hover:border-white/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+        >
+          <ChevronRight size={20} />
+        </button>
+
+        {/* ── Main text content ────────────────────────────────── */}
         <Container className="relative z-20 text-center text-white pt-28 pb-20">
           <motion.div initial="hidden" animate="visible" variants={stagger}>
             <motion.span variants={fadeUp}
@@ -172,9 +269,27 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            {/* Scroll indicator */}
+            {/* ── Dot indicators ─────────────────────────────── */}
+            <motion.div variants={fadeIn} className="mt-12 flex items-center justify-center gap-2.5" role="tablist" aria-label="Slide indicators">
+              {HERO_SLIDES.map((_, i) => (
+                <button
+                  key={i}
+                  role="tab"
+                  aria-selected={i === heroIndex}
+                  aria-label={`Go to slide ${i + 1}`}
+                  onClick={() => goToSlide(i, i > heroIndex ? 1 : -1)}
+                  className={`transition-all duration-300 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary ${
+                    i === heroIndex
+                      ? "w-8 h-2.5 bg-secondary"
+                      : "w-2.5 h-2.5 bg-white/30 hover:bg-white/60"
+                  }`}
+                />
+              ))}
+            </motion.div>
+
+            {/* ── Scroll indicator ───────────────────────────── */}
             <motion.div variants={fadeIn}
-              className="mt-20 flex flex-col items-center gap-2 text-white/50 text-xs tracking-widest uppercase">
+              className="mt-10 flex flex-col items-center gap-2 text-white/50 text-xs tracking-widest uppercase">
               <span>Scroll</span>
               <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}>
                 <ChevronDown size={20} />
@@ -183,7 +298,7 @@ export default function Home() {
           </motion.div>
         </Container>
 
-        {/* Bottom stat bar */}
+        {/* ── Bottom stat bar ──────────────────────────────────── */}
         <div className="absolute bottom-0 left-0 right-0 z-20 bg-secondary/10 backdrop-blur-md border-t border-secondary/20">
           <Container>
             <div className="grid grid-cols-3 divide-x divide-white/10 py-5">
