@@ -367,10 +367,14 @@ export default function Home() {
           3. SERVICE TIMES
       ══════════════════════════════════════════ */}
       <section className="bg-primary py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-          <div className="grid grid-cols-8 h-full gap-px">
-            {Array.from({ length: 8 }).map((_, i) => <div key={i} className="bg-white" />)}
-          </div>
+        {/* Photo background */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src={`${import.meta.env.BASE_URL}images/welcome-bg.jpg`}
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/85" />
         </div>
         <Container className="relative z-10">
           <motion.div
