@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import {
   Facebook, Instagram, Youtube, MapPin, Phone, Mail,
-  Clock, Send, CheckCircle, ChevronRight, Heart,
+  Clock, Send, CheckCircle, ChevronRight,
 } from "lucide-react";
 import { churchInfo } from "@/data/church";
 import { Container } from "./ui/container";
@@ -264,23 +264,16 @@ export function Footer() {
         <Container>
           <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
             <p>
-              &copy; {new Date().getFullYear()} {churchInfo.name}. All rights reserved.
+              &copy; 2024 {churchInfo.name}. All rights reserved.
             </p>
 
-            <p className="flex items-center gap-1">
-              Made with <Heart size={11} aria-hidden="true" className="text-secondary mx-0.5" /> for the Kingdom
-            </p>
-
-            <nav aria-label="Legal links" className="flex gap-4">
-              {["Privacy Policy", "Terms of Service"].map((label) => (
-                <a
-                  key={label}
-                  href="#"
-                  className="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary rounded"
-                >
-                  {label}
-                </a>
-              ))}
+            <nav aria-label="Legal links">
+              <a
+                href="#"
+                className="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-secondary rounded"
+              >
+                Privacy Policy
+              </a>
             </nav>
           </div>
         </Container>
