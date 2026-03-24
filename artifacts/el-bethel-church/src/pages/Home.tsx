@@ -586,7 +586,17 @@ export default function Home() {
           6. PRAYER REQUEST HIGHLIGHT
       ══════════════════════════════════════════ */}
       <SectionWrapper dark>
-        <Container>
+        {/* Photo background */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <img
+            src={`${import.meta.env.BASE_URL}images/prayer-bg.jpg`}
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-primary/90" />
+        </div>
+
+        <Container className="relative z-10">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
 
