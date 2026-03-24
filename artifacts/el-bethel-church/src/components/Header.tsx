@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
 import { churchInfo } from "@/data/church";
 
 const NAV_LINKS = [
-  { name: "Home",       path: "/" },
-  { name: "About Us",   path: "/about" },
-  { name: "Sermons",    path: "/sermons" },
-  { name: "Ministries", path: "/ministries" },
-  { name: "Events",     path: "/events" },
-  { name: "Contact",    path: "/contact" },
+  { name: "Home",           path: "/" },
+  { name: "About Us",       path: "/about" },
+  { name: "Sermons",        path: "/sermons" },
+  { name: "Events",         path: "/events" },
+  { name: "Prayer Request", path: "/prayer" },
+  { name: "Contact",        path: "/contact" },
 ];
 
 export function Header() {

@@ -11,16 +11,15 @@ import { cn } from "@/lib/utils";
 const QUICK_LINKS = [
   { name: "About Our Church",  path: "/about" },
   { name: "Watch Sermons",     path: "/sermons" },
-  { name: "Ministry Groups",   path: "/ministries" },
+  { name: "Prayer Request",    path: "/prayer" },
   { name: "Upcoming Events",   path: "/events" },
   { name: "Give Online",       path: "/give" },
   { name: "Contact Us",        path: "/contact" },
 ];
 
 const SERVICE_TIMES = [
-  { day: "Sunday",    times: ["9:00 AM — Tagalog Service", "11:00 AM — English Service"] },
-  { day: "Wednesday", times: ["7:00 PM — Prayer Night (Hybrid)"] },
-  { day: "Friday",    times: ["6:30 PM — Youth & Young Adults"] },
+  { day: "Sunday",    times: ["4:00 PM – 6:30 PM — Worship Service"] },
+  { day: "Wednesday", times: ["7:00 PM – 8:30 PM — Prayer Night"] },
 ];
 
 const SOCIAL_LINKS = [

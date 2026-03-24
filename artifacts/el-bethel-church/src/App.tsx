@@ -13,7 +13,7 @@ import Sermons from "@/pages/Sermons";
 import SermonDetail from "@/pages/SermonDetail";
 import Events from "@/pages/Events";
 import EventDetail from "@/pages/EventDetail";
-import Ministries from "@/pages/Ministries";
+import PrayerRequest from "@/pages/PrayerRequest";
 import Contact from "@/pages/Contact";
 import GivePage from "@/pages/GivePage";
 import NotFound from "@/pages/not-found";
@@ -32,7 +32,7 @@ function Router() {
           <Route path="/sermons/:slug" component={SermonDetail} />
           <Route path="/events" component={Events} />
           <Route path="/events/:slug" component={EventDetail} />
-          <Route path="/ministries" component={Ministries} />
+          <Route path="/prayer" component={PrayerRequest} />
           <Route path="/contact" component={Contact} />
           <Route path="/give" component={GivePage} />
           <Route component={NotFound} />

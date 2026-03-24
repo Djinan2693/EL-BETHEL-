@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge";
 import { useSEO } from "@/lib/seo";
 import { sermons } from "@/data/sermons";
 import { events } from "@/data/events";
-import { ministries } from "@/data/ministries";
 import { churchInfo, testimonials } from "@/data/church";
 
 const fadeUp = {
@@ -61,7 +60,6 @@ export default function Home() {
 
   const featuredSermons = sermons.slice(0, 3);
   const upcomingEvents = events.slice(0, 3);
-  const featuredMinistries = ministries.slice(0, 4);
 
   async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -477,51 +475,53 @@ export default function Home() {
 
 
       {/* ══════════════════════════════════════════
-          6. MINISTRIES PREVIEW
+          6. PRAYER REQUEST HIGHLIGHT
       ══════════════════════════════════════════ */}
       <SectionWrapper dark>
         <Container>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
+
             <motion.div variants={fadeUp}>
-              <SectionHeading title="Find Your Place" subtitle="Our Ministries" centered dark />
+              <SectionHeading title="We're Here to Pray with You" subtitle="Prayer Request" centered dark />
             </motion.div>
 
+            <motion.p variants={fadeUp}
+              className="text-center text-white/60 max-w-2xl mx-auto text-lg leading-relaxed mb-14">
+              Whatever you are facing — healing, provision, relationships, guidance — you don't have to
+              carry it alone. Share your need and our intercessory team will lift it before God in faith.
+            </motion.p>
+
             <motion.div variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
-              {featuredMinistries.map((ministry, i) => (
-                <motion.div key={ministry.id} variants={fadeUp}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-14">
+              {[
+                { icon: HeartHandshake, title: "Dedicated Intercessors", body: "A faithful team commits to praying over every request, often for days at a time." },
+                { icon: Heart,          title: "Covered in Love",        body: "Every need is met with compassion and genuine care from our whole church family." },
+                { icon: Star,           title: "Rooted in Scripture",    body: "We anchor every prayer in God's Word, trusting His promises over every situation." },
+                { icon: Globe,          title: "Global & Local",         body: "From personal struggles to community concerns — no burden is too small or too large." },
+              ].map(({ icon: Icon, title, body }, i) => (
+                <motion.div key={title} variants={fadeUp}
                   className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group flex flex-col">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-colors duration-300
                     ${i % 2 === 0 ? "bg-secondary/20 text-secondary group-hover:bg-secondary group-hover:text-primary" : "bg-white/10 text-white/60 group-hover:bg-secondary group-hover:text-primary"}`}>
-                    {i === 0 && <Users size={22} />}
-                    {i === 1 && <Heart size={22} />}
-                    {i === 2 && <Star size={22} />}
-                    {i === 3 && <Globe size={22} />}
+                    <Icon size={22} aria-hidden="true" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-1 group-hover:text-secondary transition-colors">
-                    {ministry.name}
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-secondary transition-colors">
+                    {title}
                   </h3>
-                  <p className="text-secondary/80 text-xs font-serif italic mb-3">{ministry.tagline}</p>
-                  <p className="text-white/50 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
-                    {ministry.description}
-                  </p>
-                  <Link href="/ministries">
-                    <span className="text-white/70 text-sm font-semibold flex items-center gap-1 group-hover:text-secondary transition-colors">
-                      Learn More <ArrowRight className="w-4 h-4" />
-                    </span>
-                  </Link>
+                  <p className="text-white/50 text-sm leading-relaxed flex-1">{body}</p>
                 </motion.div>
               ))}
             </motion.div>
 
             <motion.div variants={fadeUp} className="text-center">
-              <Link href="/ministries">
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8">
-                  Explore All Ministries
+              <Link href="/prayer">
+                <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-full px-10 py-3 text-base font-semibold shadow-lg shadow-secondary/30 gap-2">
+                  <Heart size={17} /> Submit a Prayer Request
                 </Button>
               </Link>
             </motion.div>
+
           </motion.div>
         </Container>
       </SectionWrapper>
