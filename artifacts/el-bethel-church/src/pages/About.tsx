@@ -120,12 +120,20 @@ export default function About() {
         className="bg-primary text-primary-foreground py-20 relative overflow-hidden"
       >
         <div className="absolute inset-0" aria-hidden="true">
+          {/* Church photo — subtle base layer */}
           <img
             src={`${import.meta.env.BASE_URL}images/hero-worship.png`}
             alt=""
-            className="w-full h-full object-cover opacity-20"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-primary/60" />
+          {/* Navy overlay to unify colour with Give Online */}
+          <div className="absolute inset-0 bg-primary/70" />
+          {/* Geometric network texture — same as Give Online */}
+          <img
+            src={`${import.meta.env.BASE_URL}images/give-texture.png`}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover opacity-20"
+          />
         </div>
 
         <Container className="relative z-10 text-center max-w-3xl mx-auto pt-16">
