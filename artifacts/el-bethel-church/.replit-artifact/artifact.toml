@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "El-Bethel Christian Fellowship Church"
+version = "1.0.0"
+id = "artifacts/el-bethel-church"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25702
+
+[services.development]
+run = "pnpm --filter @workspace/el-bethel-church run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/el-bethel-church", "run", "build" ]
+publicDir = "artifacts/el-bethel-church/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25702"
+BASE_PATH = "/"

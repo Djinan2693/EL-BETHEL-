@@ -1,0 +1,23 @@
+packages:
+  "framer-motion": "For page transitions, smooth scroll reveals, and elegant micro-interactions matching the premium feel"
+  "react-hook-form": "For robust contact form handling"
+  "@hookform/resolvers": "For Zod validation with the contact form"
+  "zod": "For form schema validation"
+
+images:
+  - path: "artifacts/el-bethel-church/public/images/hero-worship.png"
+    description: "Cinematic, warm, elegant photograph of a modern church worship service, soft gold lighting, deep navy shadows, people with hands raised in silhouette, reverent and uplifting atmosphere"
+    aspect_ratio: "16:9"
+  - path: "artifacts/el-bethel-church/public/images/about-community.png"
+    description: "Warm, candid, high-quality photograph of diverse people talking and smiling in a well-lit modern church lobby, soft focus, elegant cream and navy tones"
+    aspect_ratio: "16:9"
+  - path: "artifacts/el-bethel-church/public/images/give-texture.png"
+    description: "Abstract, elegant deep navy blue background with subtle gold geometric lines and soft light leaks, conveying premium trust and reverence"
+    aspect_ratio: "16:9"
+  - path: "artifacts/el-bethel-church/public/images/pattern-cross.png"
+    description: "Minimalist, seamless subtle pattern of abstract crosses in soft cream on a slightly darker cream background, very faint and elegant"
+    aspect_ratio: "1:1"
+
+notes:
+  - This is a static/mock frontend. All data is loaded from local TypeScript files.
+  - The contact form simulates submission.
