@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, PlayCircle, MapPin, Clock,
-  Heart, Mail, Phone, ChevronDown, BookOpen, Users, Star,
+  Heart, Mail, Phone, BookOpen, Users, Star,
   Send, HeartHandshake, Globe, X, Loader2, CheckCircle,
   ChevronLeft, ChevronRight,
 } from "lucide-react";
@@ -287,14 +287,6 @@ export default function Home() {
               ))}
             </motion.div>
 
-            {/* ── Scroll indicator ───────────────────────────── */}
-            <motion.div variants={fadeIn}
-              className="mt-10 flex flex-col items-center gap-2 text-white/50 text-xs tracking-widest uppercase">
-              <span>Scroll</span>
-              <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}>
-                <ChevronDown size={20} />
-              </motion.div>
-            </motion.div>
           </motion.div>
         </Container>
 
@@ -303,8 +295,8 @@ export default function Home() {
           <Container>
             <div className="grid grid-cols-3 divide-x divide-white/10 py-5">
               {[
-                { value: "37+", label: "Years of Ministry" },
-                { value: "500+", label: "Church Family" },
+                { value: "20+", label: "Years of Ministry" },
+                { value: "100+", label: "Church Family" },
                 { value: "6", label: "Active Ministries" },
               ].map(stat => (
                 <div key={stat.label} className="px-4 text-center">
