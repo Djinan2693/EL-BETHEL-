@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSEO } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
@@ -18,11 +18,7 @@ import {
   ArrowRight,
   Lock,
   Scan,
-  Loader2,
-  AlertCircle,
-  ExternalLink,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 
