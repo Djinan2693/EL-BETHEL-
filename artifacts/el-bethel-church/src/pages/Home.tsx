@@ -319,9 +319,9 @@ export default function Home() {
               <div className="absolute inset-0 bg-secondary/15 translate-x-5 translate-y-5 rounded-2xl -z-10" />
               <div className="absolute -top-4 -left-4 w-24 h-24 border-l-4 border-t-4 border-secondary rounded-tl-xl" />
               <img
-                src={`${import.meta.env.BASE_URL}images/about-community.png`}
+                src={`${import.meta.env.BASE_URL}images/about-community.jpg`}
                 alt="Church Community"
-                className="rounded-2xl shadow-2xl w-full h-auto aspect-[4/3] object-cover border-4 border-white"
+                className="rounded-2xl shadow-2xl w-full h-auto aspect-[4/3] object-cover object-top border-4 border-white"
               />
               {/* Floating verse card */}
               <div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-xl max-w-[200px] border border-border/50">
