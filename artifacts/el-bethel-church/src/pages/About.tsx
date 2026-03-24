@@ -28,31 +28,34 @@ const fadeIn = {
 /* ── page data ──────────────────────────────────────────────────── */
 const COMMITMENTS = [
   {
-    number: "01",
-    icon:   Megaphone,
-    color:  "secondary",
-    title:  "Spread the Gospel with Purpose and Passion",
-    intro:  "In a world longing for truth and purpose, we are unwavering in our dedication to sharing the message of Christ. With every word, action, and outreach, we strive to communicate the power of God's love and grace.",
-    body:   "Using modern tools — digital media, community gatherings, and cultural events — we aim to bridge divides of culture, generation, and background, reaching people exactly where they are. Our mission is to inspire, uplift, and encourage all to embrace a life transformed by Jesus Christ. Through His love and the message of salvation, we endeavor to bring peace, unity, and renewal to the lives of everyone we encounter. Our passion is fueled by the belief that each soul touched by the Gospel can become a vessel of hope, impacting countless others.",
-    verse:  "Matthew 28:19–20",
+    number:     "01",
+    icon:       Megaphone,
+    title:      "Spread the Gospel with Purpose and Passion",
+    intro:      "In a world longing for truth and purpose, we are unwavering in our dedication to sharing the message of Christ.",
+    highlights: ["Digital & community outreach", "Bridging culture & generations", "Every soul — a vessel of hope"],
+    bodyA:      "Using modern tools — digital media, community gatherings, and cultural events — we aim to bridge divides of culture, generation, and background, reaching people exactly where they are.",
+    bodyB:      "Our mission is to inspire, uplift, and encourage all to embrace a life transformed by Jesus Christ. Through His love and the message of salvation, we endeavor to bring peace, unity, and renewal. Our passion is fueled by the belief that each soul touched by the Gospel can become a vessel of hope, impacting countless others.",
+    verse:      "Matthew 28:19–20",
   },
   {
-    number: "02",
-    icon:   Sprout,
-    color:  "primary",
-    title:  "Nurture Faith",
-    intro:  "We believe in cultivating a personal, deep-rooted relationship with God through genuine worship, purposeful prayer, and a consistent commitment to studying His Word.",
-    body:   "In our church community, we create spaces for spiritual growth, offering Bible studies, prayer groups, and mentorship programs that encourage each individual to deepen their understanding of God's love and purpose. We encourage believers to discover their God-given gifts, understanding that each talent is a tool of light to be used in their families, workplaces, and communities. Through a faith that is alive and active, we seek to empower everyone to live courageously, anchored in the hope of God's promises.",
-    verse:  "Colossians 2:6–7",
+    number:     "02",
+    icon:       Sprout,
+    title:      "Nurture Faith",
+    intro:      "We believe in cultivating a personal, deep-rooted relationship with God through genuine worship, purposeful prayer, and a consistent commitment to studying His Word.",
+    highlights: ["Bible studies & prayer groups", "Mentorship programs", "Discovering God-given gifts"],
+    bodyA:      "In our church community, we create spaces for spiritual growth, offering Bible studies, prayer groups, and mentorship programs that encourage each individual to deepen their understanding of God's love and purpose.",
+    bodyB:      "We encourage believers to discover their God-given gifts, understanding that each talent is a tool of light to be used in their families, workplaces, and communities. Through a faith that is alive and active, we seek to empower everyone to live courageously, anchored in the hope of God's promises.",
+    verse:      "Colossians 2:6–7",
   },
   {
-    number: "03",
-    icon:   HandHeart,
-    color:  "secondary",
-    title:  "Serve Communities with Compassion",
-    intro:  "Our calling is to reflect Jesus's compassion by serving those in need and bringing hope, aid, and dignity to every person we encounter.",
-    body:   "We are committed to addressing not only immediate needs but also fostering long-term growth and empowerment. Our efforts extend from feeding the hungry and supporting families in need, to providing a listening ear to those facing hardships. Through local and global outreach initiatives, we partner with other organizations, churches, and community leaders, creating impactful programs that respond to physical, emotional, and spiritual needs — from food distribution and educational support to health initiatives and disaster relief.",
-    verse:  "Matthew 25:35–36",
+    number:     "03",
+    icon:       HandHeart,
+    title:      "Serve Communities with Compassion",
+    intro:      "Our calling is to reflect Jesus's compassion by serving those in need and bringing hope, aid, and dignity to every person we encounter.",
+    highlights: ["Feeding programs & family support", "Local & global outreach", "Physical, emotional & spiritual care"],
+    bodyA:      "We are committed to addressing not only immediate needs but also fostering long-term growth and empowerment — from feeding the hungry and supporting families, to providing a listening ear to those facing hardships.",
+    bodyB:      "Through local and global outreach initiatives, we partner with other organizations, churches, and community leaders to create impactful programs that respond to physical, emotional, and spiritual needs — food distribution, educational support, health initiatives, and disaster relief.",
+    verse:      "Matthew 25:35–36",
   },
 ];
 
@@ -188,26 +191,45 @@ export default function About() {
               </blockquote>
             </motion.div>
 
-            {/* Right — reach & vision */}
-            <motion.div variants={fadeUp} className="space-y-8">
-              <div className="bg-white border border-border rounded-2xl p-8">
-                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                  Our commitment extends far beyond our church doors, reaching into our local community, across nations, and into every place where God's light can shine. We envision a vibrant, interwoven community of believers who are empowered, spiritually renewed, and equipped to serve.
-                </p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Our mission calls us to live authentically in faith, compassionately in service, and boldly in our proclamation of the Gospel.
-                </p>
+            {/* Right — scope & commitments */}
+            <motion.div variants={fadeUp} className="space-y-10">
+              {/* Scope statement — styled as a pull card */}
+              <div className="relative bg-white rounded-2xl border border-border overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary rounded-l-2xl" aria-hidden="true" />
+                <div className="p-8 pl-9">
+                  <p className="font-serif text-base italic text-primary/80 leading-relaxed mb-4">
+                    "Our commitment extends far beyond our church doors, reaching into our local community, across nations, and into every place where God's light can shine."
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    We envision a vibrant, interwoven community of believers who are empowered, spiritually renewed, and equipped to serve — living authentically in faith, compassionately in service, and boldly in proclamation of the Gospel.
+                  </p>
+                </div>
               </div>
 
-              {/* Three commitments preview pills */}
-              <div className="space-y-3">
-                <p className="text-xs font-bold uppercase tracking-widest text-secondary mb-4">Our Purpose Is Rooted in Three Core Commitments</p>
-                {COMMITMENTS.map((c) => (
-                  <div key={c.number} className="flex items-center gap-4 bg-background border border-border rounded-xl px-5 py-3.5">
-                    <span className="text-secondary font-serif font-bold text-sm shrink-0">{c.number}</span>
-                    <span className="text-primary font-semibold text-sm">{c.title}</span>
-                  </div>
-                ))}
+              {/* Three commitments — refined list */}
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-secondary mb-5">
+                  Our Purpose Is Rooted in Three Core Commitments
+                </p>
+                <div className="space-y-3">
+                  {COMMITMENTS.map((c) => {
+                    const Icon = c.icon;
+                    return (
+                      <div
+                        key={c.number}
+                        className="group flex items-center gap-4 bg-background hover:bg-white border border-border hover:border-secondary/30 rounded-xl px-5 py-4 transition-all"
+                      >
+                        <div className="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
+                          <Icon size={16} aria-hidden="true" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-bold text-secondary/60 font-serif">{c.number}</span>
+                          <p className="text-primary font-semibold text-sm leading-snug truncate">{c.title}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -247,30 +269,67 @@ export default function About() {
                   aria-labelledby={`commitment-${c.number}-title`}
                 >
                   {/* Accent panel */}
-                  <div className={`${isAlt ? "lg:order-2" : ""} relative bg-primary p-10 md:p-14 flex flex-col justify-between min-h-[280px]`}>
+                  <div className={`${isAlt ? "lg:order-2" : ""} relative bg-primary p-10 md:p-14 flex flex-col justify-end min-h-[300px] overflow-hidden`}>
+                    {/* Cross texture */}
                     <div aria-hidden="true" className="absolute inset-0 opacity-5">
                       <img src={`${import.meta.env.BASE_URL}images/pattern-cross.png`} alt="" className="w-full h-full object-cover" />
                     </div>
+                    {/* Watermark number */}
+                    <p
+                      aria-hidden="true"
+                      className="absolute top-6 right-6 font-serif font-bold text-[7rem] leading-none text-white/5 select-none pointer-events-none"
+                    >
+                      {c.number}
+                    </p>
+
+                    {/* Content */}
                     <div className="relative z-10">
-                      <div className="w-14 h-14 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary mb-6">
-                        <Icon size={26} aria-hidden="true" />
+                      {/* Icon */}
+                      <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary mb-6">
+                        <Icon size={22} aria-hidden="true" />
                       </div>
-                      <p className="text-secondary/60 font-serif text-5xl font-bold leading-none mb-4" aria-hidden="true">{c.number}</p>
-                      <h3 id={`commitment-${c.number}-title`} className="font-serif text-2xl md:text-3xl font-bold text-white leading-snug mb-4">
+                      {/* Number badge */}
+                      <p className="text-secondary text-[11px] font-bold uppercase tracking-widest mb-3">{c.number}</p>
+                      {/* Title */}
+                      <h3 id={`commitment-${c.number}-title`} className="font-serif text-2xl md:text-3xl font-bold text-white leading-snug mb-5">
                         {c.title}
                       </h3>
-                      <p className="text-white/60 text-xs font-bold uppercase tracking-widest">{c.verse}</p>
+                      {/* Scripture reference */}
+                      <div className="flex items-center gap-2">
+                        <div className="h-px w-8 bg-secondary/50" aria-hidden="true" />
+                        <p className="text-secondary/70 text-xs font-semibold">{c.verse}</p>
+                      </div>
                     </div>
                   </div>
 
                   {/* Content panel */}
-                  <div className={`${isAlt ? "lg:order-1" : ""} bg-background p-10 md:p-14 flex flex-col justify-center`}>
-                    <p className="text-primary font-semibold text-lg leading-relaxed mb-5">
-                      {c.intro}
+                  <div className={`${isAlt ? "lg:order-1" : ""} bg-background p-10 md:p-14 flex flex-col justify-center gap-6`}>
+                    {/* Lead sentence */}
+                    <p className="font-serif text-xl md:text-2xl italic text-primary leading-snug">
+                      "{c.intro}"
                     </p>
-                    <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                      {c.body}
-                    </p>
+
+                    {/* Highlight chips */}
+                    <div className="flex flex-wrap gap-2">
+                      {c.highlights.map((h) => (
+                        <span
+                          key={h}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-secondary bg-secondary/10 border border-secondary/20 rounded-full px-3.5 py-1.5"
+                        >
+                          <span className="w-1 h-1 rounded-full bg-secondary shrink-0" aria-hidden="true" />
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Divider */}
+                    <div className="h-px w-10 bg-secondary/30" aria-hidden="true" />
+
+                    {/* Body — two shorter paragraphs */}
+                    <div className="space-y-3 text-muted-foreground leading-relaxed text-sm md:text-[15px]">
+                      <p>{c.bodyA}</p>
+                      <p>{c.bodyB}</p>
+                    </div>
                   </div>
                 </motion.article>
               );
@@ -309,14 +368,16 @@ export default function About() {
             {/* Right — community description */}
             <motion.div variants={stagger} className="pt-6 lg:pt-0">
               <motion.div variants={fadeUp}><SectionLabel>More Than a Building</SectionLabel></motion.div>
-              <motion.h2 variants={fadeUp} id="community-heading" className="text-4xl md:text-5xl font-serif font-bold text-primary mb-6 leading-snug">
+              <motion.h2 variants={fadeUp} id="community-heading" className="text-4xl md:text-5xl font-serif font-bold text-primary mb-8 leading-snug">
                 A Family United in Faith
               </motion.h2>
 
-              <motion.div variants={fadeUp} className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  We are not merely a church; we are a family of believers united in our desire to see lives changed by God's love. Together, we build a community where each person is valued, each story is cherished, and each individual is encouraged to step into their God-given purpose.
-                </p>
+              {/* Lead sentence — visually distinct */}
+              <motion.p variants={fadeUp} className="text-lg font-medium text-primary/90 leading-relaxed mb-8 pb-8 border-b border-border">
+                We are not merely a church; we are a family of believers united in our desire to see lives changed by God's love — where each person is valued, each story is cherished, and each individual is encouraged to step into their God-given purpose.
+              </motion.p>
+
+              <motion.div variants={fadeUp} className="space-y-5 text-muted-foreground leading-relaxed">
                 <p>
                   With each day, we move forward with faith, hope, and determination, trusting in God's promises and ready to serve His kingdom with humility and joy.
                 </p>
@@ -325,8 +386,12 @@ export default function About() {
                 </p>
               </motion.div>
 
-              <motion.p variants={fadeUp} className="mt-8 font-serif text-lg italic text-primary/80 border-l-4 border-secondary pl-5">
-                El-Bethel Christian Fellowship Church is a sanctuary, a source of strength, and a launching point for individuals committed to transforming the world for Christ.
+              <motion.blockquote variants={fadeUp} className="mt-10 font-serif text-xl italic text-primary/80 border-l-4 border-secondary pl-6 leading-snug">
+                "El-Bethel is a sanctuary, a source of strength, and a launching point for individuals committed to transforming the world for Christ."
+              </motion.blockquote>
+
+              <motion.p variants={fadeUp} className="mt-6 text-sm text-muted-foreground">
+                We welcome everyone to join us in this mission.
               </motion.p>
             </motion.div>
           </motion.div>
