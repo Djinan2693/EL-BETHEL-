@@ -200,17 +200,10 @@ export default function Home() {
           </AnimatePresence>
 
           {/* Persistent gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/55 via-primary/25 to-primary/80 z-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-transparent to-primary/30 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/50 via-primary/15 to-primary/75 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 z-10" />
         </div>
 
-        {/* ── Floating cross watermark ─────────────────────────── */}
-        <div className="absolute right-10 top-1/4 opacity-5 pointer-events-none hidden lg:block z-10" aria-hidden="true">
-          <svg width="320" height="320" viewBox="0 0 100 100" fill="white">
-            <rect x="43" y="5" width="14" height="90" rx="3" />
-            <rect x="5" y="35" width="90" height="14" rx="3" />
-          </svg>
-        </div>
 
         {/* ── Arrow: previous ──────────────────────────────────── */}
         <button
