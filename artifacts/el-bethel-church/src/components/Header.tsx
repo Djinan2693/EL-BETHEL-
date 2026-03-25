@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, ChevronRight, Heart, Calendar } from "lucide-react";
+import { Menu, X, ChevronRight, Calendar } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { churchInfo } from "@/data/church";
@@ -169,7 +169,6 @@ export function Header() {
                       : "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-secondary/30",
                   )}
                 >
-                  <Heart size={14} />
                   Give Online
                 </Button>
               </Link>
@@ -291,7 +290,6 @@ export function Header() {
               variant="secondary"
               className="w-full rounded-full gap-2 font-semibold"
             >
-              <Heart size={16} />
               Give Online
             </Button>
           </Link>
