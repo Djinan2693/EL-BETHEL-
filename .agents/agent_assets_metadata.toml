@@ -18,3 +18,9 @@ id = "s2jtJXvSphnkdGgNb0g8H"
 uri = "file://images-only.zip"
 type = "unspecified"
 title = "images-only.zip — à extraire dans ebchristianfellowship.org/"
+
+[[outputs]]
+id = "7O3j3xPU8Z6rswApGmrrr"
+uri = "file://artifacts/el-bethel-church/public/images-optimized.zip"
+type = "unspecified"
+title = "images-optimized.zip — Remplace le dossier images/ sur cPanel"
