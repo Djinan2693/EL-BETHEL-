@@ -11,6 +11,6 @@
  * 4. Paste the key below — no other files need to change
  */
 
-export const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+export const WEB3FORMS_KEY = "5a69bcfd-6c2f-434a-963a-0762f6f3dcb5";
 
 export const W3F_ENDPOINT = "https://api.web3forms.com/submit";
