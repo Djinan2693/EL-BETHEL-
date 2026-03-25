@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
+import emailjs from "@emailjs/browser";
+import { EMAILJS_CONFIG } from "@/lib/emailjs";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -295,9 +297,7 @@ export default function Home() {
     if (!email || subscribing) return;
     setSubscribing(true);
     try {
-      const emailjs = await import("@emailjs/browser");
-      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
         form_type:  "Newsletter Signup",
         from_name:  "",
         from_email: email,
@@ -305,7 +305,7 @@ export default function Home() {
         subject:    "New Subscriber",
         topic:      "",
         message:    `New newsletter subscriber: ${email}`,
-      }, { publicKey: cfg.PUBLIC_KEY });
+      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
     } finally {
       setSubscribed(true);
       setEmail("");
@@ -318,9 +318,7 @@ export default function Home() {
     if (!prayerRequest.trim() || prayerLoading) return;
     setPrayerLoading(true);
     try {
-      const emailjs = await import("@emailjs/browser");
-      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
         form_type:  "Prayer Request",
         from_name:  prayerName ?? "",
         from_email: prayerEmail ?? "",
@@ -328,7 +326,7 @@ export default function Home() {
         subject:    "Prayer Request",
         topic:      "",
         message:    prayerRequest,
-      }, { publicKey: cfg.PUBLIC_KEY });
+      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
     } finally {
       setPrayerDone(true);
       setPrayerLoading(false);

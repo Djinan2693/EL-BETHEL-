@@ -1,4 +1,6 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
+import { EMAILJS_CONFIG } from "@/lib/emailjs";
 import { Link } from "wouter";
 import {
   Facebook, Instagram, Youtube, MapPin, Phone, Mail,
@@ -62,9 +64,7 @@ export function Footer() {
     if (!email.trim() || loading) return;
     setLoading(true);
     try {
-      const emailjs = await import("@emailjs/browser");
-      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
         form_type:  "Newsletter Signup",
         from_name:  "",
         from_email: email,
@@ -72,7 +72,7 @@ export function Footer() {
         subject:    "New Subscriber",
         topic:      "",
         message:    `New newsletter subscriber: ${email}`,
-      }, { publicKey: cfg.PUBLIC_KEY });
+      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
     } finally {
       setSubscribed(true);
       setEmail("");

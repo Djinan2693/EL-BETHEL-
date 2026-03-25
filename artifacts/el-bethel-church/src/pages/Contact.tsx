@@ -1,4 +1,6 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
+import { EMAILJS_CONFIG } from "@/lib/emailjs";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -180,9 +182,7 @@ export default function Contact() {
   async function onSubmit(data: ContactFormValues) {
     setLoading(true);
     try {
-      const emailjs = await import("@emailjs/browser");
-      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
         form_type:  "Contact Form",
         from_name:  data.name,
         from_email: data.email,
@@ -190,7 +190,7 @@ export default function Contact() {
         subject:    data.subject ?? "",
         topic:      "",
         message:    data.message,
-      }, { publicKey: cfg.PUBLIC_KEY });
+      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
       setSubmitted(true);
       form.reset();
     } catch (err) {

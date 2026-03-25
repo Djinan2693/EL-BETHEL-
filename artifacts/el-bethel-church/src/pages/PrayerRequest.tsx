@@ -1,4 +1,6 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
+import { EMAILJS_CONFIG } from "@/lib/emailjs";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -78,9 +80,7 @@ export default function PrayerRequest() {
   async function onSubmit(data: PrayerFormValues) {
     setLoading(true);
     try {
-      const emailjs = await import("@emailjs/browser");
-      const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
         form_type:  "Prayer Request",
         from_name:  data.name ?? "",
         from_email: data.email ?? "",
@@ -88,7 +88,7 @@ export default function PrayerRequest() {
         subject:    data.topic ?? "",
         topic:      data.topic ?? "",
         message:    data.request,
-      }, { publicKey: cfg.PUBLIC_KEY });
+      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
       setSubmitted(true);
       form.reset();
     } catch (err) {
