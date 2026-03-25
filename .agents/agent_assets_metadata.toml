@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "iJ6bxdm1BOYtrvPbNSLNf"
+uri = "file://el-bethel-church.tar.gz"
+type = "unspecified"
+title = "El-Bethel Church Website (cPanel)"
