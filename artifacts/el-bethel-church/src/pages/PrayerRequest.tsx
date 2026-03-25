@@ -88,7 +88,7 @@ export default function PrayerRequest() {
         subject:    data.topic ?? "",
         topic:      data.topic ?? "",
         message:    data.request,
-      }, cfg.PUBLIC_KEY);
+      }, { publicKey: cfg.PUBLIC_KEY });
       setSubmitted(true);
       form.reset();
     } catch (err) {

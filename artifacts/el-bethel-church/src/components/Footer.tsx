@@ -72,7 +72,7 @@ export function Footer() {
         subject:    "New Subscriber",
         topic:      "",
         message:    `New newsletter subscriber: ${email}`,
-      }, cfg.PUBLIC_KEY);
+      }, { publicKey: cfg.PUBLIC_KEY });
     } finally {
       setSubscribed(true);
       setEmail("");

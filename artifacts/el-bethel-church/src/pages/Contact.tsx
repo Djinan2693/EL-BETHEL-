@@ -190,7 +190,7 @@ export default function Contact() {
         subject:    data.subject ?? "",
         topic:      "",
         message:    data.message,
-      }, cfg.PUBLIC_KEY);
+      }, { publicKey: cfg.PUBLIC_KEY });
       setSubmitted(true);
       form.reset();
     } catch (err) {

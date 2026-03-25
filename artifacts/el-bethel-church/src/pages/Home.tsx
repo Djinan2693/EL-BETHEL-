@@ -305,7 +305,7 @@ export default function Home() {
         subject:    "New Subscriber",
         topic:      "",
         message:    `New newsletter subscriber: ${email}`,
-      }, cfg.PUBLIC_KEY);
+      }, { publicKey: cfg.PUBLIC_KEY });
     } finally {
       setSubscribed(true);
       setEmail("");
@@ -328,7 +328,7 @@ export default function Home() {
         subject:    "Prayer Request",
         topic:      "",
         message:    prayerRequest,
-      }, cfg.PUBLIC_KEY);
+      }, { publicKey: cfg.PUBLIC_KEY });
     } finally {
       setPrayerDone(true);
       setPrayerLoading(false);
