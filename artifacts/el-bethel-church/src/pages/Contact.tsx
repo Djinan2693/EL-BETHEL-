@@ -1,6 +1,5 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { EMAILJS_CONFIG } from "@/lib/emailjs";
+import { WEB3FORMS_KEY, W3F_ENDPOINT } from "@/lib/emailjs";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -182,15 +181,20 @@ export default function Contact() {
   async function onSubmit(data: ContactFormValues) {
     setLoading(true);
     try {
-      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
-        form_type:  "Contact Form",
-        from_name:  data.name,
-        from_email: data.email,
-        phone:      data.phone ?? "",
-        subject:    data.subject ?? "",
-        topic:      "",
-        message:    data.message,
-      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+      const res = await fetch(W3F_ENDPOINT, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject:    `[Contact Form] ${data.subject ?? "Message"} — from ${data.name}`,
+          from_name:  data.name,
+          email:      data.email,
+          phone:      data.phone ?? "",
+          message:    data.message,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message ?? "Submission failed");
       setSubmitted(true);
       form.reset();
     } catch (err) {

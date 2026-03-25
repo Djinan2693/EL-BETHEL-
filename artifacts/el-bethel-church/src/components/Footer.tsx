@@ -1,6 +1,5 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { EMAILJS_CONFIG } from "@/lib/emailjs";
+import { WEB3FORMS_KEY, W3F_ENDPOINT } from "@/lib/emailjs";
 import { Link } from "wouter";
 import {
   Facebook, Instagram, Youtube, MapPin, Phone, Mail,
@@ -64,15 +63,19 @@ export function Footer() {
     if (!email.trim() || loading) return;
     setLoading(true);
     try {
-      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
-        form_type:  "Newsletter Signup",
-        from_name:  "",
-        from_email: email,
-        phone:      "",
-        subject:    "New Subscriber",
-        topic:      "",
-        message:    `New newsletter subscriber: ${email}`,
-      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+      const res = await fetch(W3F_ENDPOINT, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject:    "[Newsletter] New Subscriber",
+          from_name:  "Newsletter Signup",
+          email,
+          message:    `New newsletter subscriber: ${email}`,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message ?? "Submission failed");
     } finally {
       setSubscribed(true);
       setEmail("");

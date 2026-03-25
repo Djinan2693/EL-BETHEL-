@@ -1,6 +1,5 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { EMAILJS_CONFIG } from "@/lib/emailjs";
+import { WEB3FORMS_KEY, W3F_ENDPOINT } from "@/lib/emailjs";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -80,15 +79,20 @@ export default function PrayerRequest() {
   async function onSubmit(data: PrayerFormValues) {
     setLoading(true);
     try {
-      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
-        form_type:  "Prayer Request",
-        from_name:  data.name ?? "",
-        from_email: data.email ?? "",
-        phone:      "",
-        subject:    data.topic ?? "",
-        topic:      data.topic ?? "",
-        message:    data.request,
-      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+      const res = await fetch(W3F_ENDPOINT, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject:    `[Prayer Request] ${data.topic ?? "Prayer"} — from ${data.name ?? "Anonymous"}`,
+          from_name:  data.name ?? "Anonymous",
+          email:      data.email ?? "",
+          topic:      data.topic ?? "",
+          message:    data.request,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message ?? "Submission failed");
       setSubmitted(true);
       form.reset();
     } catch (err) {

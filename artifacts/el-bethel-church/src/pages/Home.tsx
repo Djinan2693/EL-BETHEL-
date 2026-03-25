@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import emailjs from "@emailjs/browser";
-import { EMAILJS_CONFIG } from "@/lib/emailjs";
+import { WEB3FORMS_KEY, W3F_ENDPOINT } from "@/lib/emailjs";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -297,15 +296,17 @@ export default function Home() {
     if (!email || subscribing) return;
     setSubscribing(true);
     try {
-      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
-        form_type:  "Newsletter Signup",
-        from_name:  "",
-        from_email: email,
-        phone:      "",
-        subject:    "New Subscriber",
-        topic:      "",
-        message:    `New newsletter subscriber: ${email}`,
-      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+      await fetch(W3F_ENDPOINT, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject:    "[Newsletter] New Subscriber",
+          from_name:  "Newsletter Signup",
+          email,
+          message:    `New newsletter subscriber: ${email}`,
+        }),
+      });
     } finally {
       setSubscribed(true);
       setEmail("");
@@ -318,15 +319,17 @@ export default function Home() {
     if (!prayerRequest.trim() || prayerLoading) return;
     setPrayerLoading(true);
     try {
-      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, {
-        form_type:  "Prayer Request",
-        from_name:  prayerName ?? "",
-        from_email: prayerEmail ?? "",
-        phone:      "",
-        subject:    "Prayer Request",
-        topic:      "",
-        message:    prayerRequest,
-      }, { publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+      await fetch(W3F_ENDPOINT, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject:    `[Prayer Request] from ${prayerName ?? "Anonymous"}`,
+          from_name:  prayerName ?? "Anonymous",
+          email:      prayerEmail ?? "",
+          message:    prayerRequest,
+        }),
+      });
     } finally {
       setPrayerDone(true);
       setPrayerLoading(false);

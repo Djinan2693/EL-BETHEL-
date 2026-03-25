@@ -1,48 +1,16 @@
 /**
- * EmailJS Configuration
+ * Web3Forms Configuration
  * ─────────────────────────────────────────────────────────────────────────────
- * All form emails are sent via EmailJS — no backend server required.
+ * All form emails are sent via Web3Forms — no backend server required.
  * This works on any static hosting including cPanel.
  *
- * HOW TO SET UP (one-time, free at emailjs.com):
- *
- * 1. Sign up at https://www.emailjs.com (free — 200 emails/month)
- *
- * 2. Add an Email Service:
- *    Dashboard → Email Services → Add New Service
- *    Connect Gmail or use Custom SMTP with info@ebchristianfellowship.org
- *    Copy the Service ID → paste into SERVICE_ID below
- *
- * 3. Create 3 Email Templates (Dashboard → Email Templates → Create New):
- *
- *    Template A — "Contact Form"
- *      Subject: [Contact] {{subject}} from {{from_name}}
- *      Body:    Name: {{from_name}}, Email: {{from_email}}, Phone: {{phone}}, Message: {{message}}
- *      To:      info@ebchristianfellowship.org
- *      Copy Template ID → paste into CONTACT_TEMPLATE_ID below
- *
- *    Template B — "Prayer Request"
- *      Subject: [Prayer Request] from {{from_name}}
- *      Body:    Name: {{from_name}}, Email: {{from_email}}, Topic: {{topic}}, Request: {{request}}
- *      To:      info@ebchristianfellowship.org
- *      Copy Template ID → paste into PRAYER_TEMPLATE_ID below
- *
- *    Template C — "Newsletter Signup"
- *      Subject: [Newsletter] New Subscriber: {{subscriber_email}}
- *      Body:    New newsletter subscriber: {{subscriber_email}}
- *      To:      info@ebchristianfellowship.org
- *      Copy Template ID → paste into NEWSLETTER_TEMPLATE_ID below
- *
- * 4. Get your Public Key:
- *    Dashboard → Account → API Keys → Public Key
- *    Paste into PUBLIC_KEY below
- *
- * 5. Replace every "YOUR_..." placeholder below with your real values.
- *    No other files need to change.
+ * HOW TO GET YOUR FREE KEY (one-time):
+ * 1. Go to https://web3forms.com
+ * 2. Enter "info@ebchristianfellowship.org" and click "Create Access Key"
+ * 3. Check that inbox for the key email
+ * 4. Paste the key below — no other files need to change
  */
 
-export const EMAILJS_CONFIG = {
-  SERVICE_ID:   "service_3uqyl8n",
-  TEMPLATE_ID:  "template_7zn25v6",  // one template handles all 3 form types
-  PUBLIC_KEY:   "IMLEZU1hppWmdjBgd",
-} as const;
+export const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+
+export const W3F_ENDPOINT = "https://api.web3forms.com/submit";
