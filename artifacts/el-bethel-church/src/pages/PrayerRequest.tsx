@@ -80,11 +80,14 @@ export default function PrayerRequest() {
     try {
       const emailjs = await import("@emailjs/browser");
       const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.PRAYER_TEMPLATE_ID, {
+      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+        form_type:  "Prayer Request",
         from_name:  data.name ?? "",
         from_email: data.email ?? "",
+        phone:      "",
+        subject:    data.topic ?? "",
         topic:      data.topic ?? "",
-        request:    data.request,
+        message:    data.request,
       }, cfg.PUBLIC_KEY);
       setSubmitted(true);
       form.reset();

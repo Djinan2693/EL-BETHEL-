@@ -182,11 +182,13 @@ export default function Contact() {
     try {
       const emailjs = await import("@emailjs/browser");
       const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.CONTACT_TEMPLATE_ID, {
+      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+        form_type:  "Contact Form",
         from_name:  data.name,
         from_email: data.email,
         phone:      data.phone ?? "",
         subject:    data.subject ?? "",
+        topic:      "",
         message:    data.message,
       }, cfg.PUBLIC_KEY);
       setSubmitted(true);

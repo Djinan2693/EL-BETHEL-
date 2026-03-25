@@ -64,8 +64,14 @@ export function Footer() {
     try {
       const emailjs = await import("@emailjs/browser");
       const { EMAILJS_CONFIG: cfg } = await import("@/lib/emailjs");
-      await emailjs.send(cfg.SERVICE_ID, cfg.NEWSLETTER_TEMPLATE_ID, {
-        subscriber_email: email,
+      await emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
+        form_type:  "Newsletter Signup",
+        from_name:  "",
+        from_email: email,
+        phone:      "",
+        subject:    "New Subscriber",
+        topic:      "",
+        message:    `New newsletter subscriber: ${email}`,
       }, cfg.PUBLIC_KEY);
     } finally {
       setSubscribed(true);
