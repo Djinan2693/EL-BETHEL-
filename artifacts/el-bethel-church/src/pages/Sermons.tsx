@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search, PlayCircle, Headphones, FileText, ChevronDown,
+  Search, PlayCircle, ChevronDown,
   X, Clock, Calendar, BookOpen, Mic2, LayoutGrid, List,
   Tv2, ChevronRight,
 } from "lucide-react";
@@ -205,12 +205,6 @@ function FeaturedCard({ sermon }: { sermon: SermonData }) {
                 <PlayCircle size={15} /> Watch Now
               </Button>
             </Link>
-            <Button size="sm" variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 bg-transparent gap-2">
-              <Headphones size={15} /> Listen
-            </Button>
-            <Button size="sm" variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 bg-transparent gap-2">
-              <FileText size={15} /> Notes
-            </Button>
           </div>
         </div>
       </div>
@@ -267,12 +261,6 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
                 <PlayCircle size={13} /> Watch
               </Button>
             </Link>
-            <Button size="sm" variant="outline" className="rounded-full text-xs gap-1.5 px-4">
-              <Headphones size={13} /> Listen
-            </Button>
-            <Button size="sm" variant="ghost" className="rounded-full text-xs gap-1.5 px-3 text-muted-foreground hover:text-foreground">
-              <FileText size={13} /> Notes
-            </Button>
           </div>
         </div>
       </motion.article>
@@ -338,12 +326,6 @@ function SermonCard({ sermon, layout }: { sermon: SermonData; layout: "grid" | "
               <PlayCircle size={13} /> Watch
             </Button>
           </Link>
-          <Button size="sm" variant="outline" className="rounded-full gap-1.5 text-xs px-3">
-            <Headphones size={13} />
-          </Button>
-          <Button size="sm" variant="outline" className="rounded-full gap-1.5 text-xs px-3">
-            <FileText size={13} />
-          </Button>
         </div>
       </div>
     </motion.article>

@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { useParams, Link } from "wouter";
 import { motion } from "framer-motion";
 import {
-  PlayCircle, Headphones, FileText, Share2, ChevronRight,
+  PlayCircle, Share2, ChevronRight,
   Calendar, Clock, BookOpen, Mic2, ArrowLeft, MessageSquareHeart,
-  Twitter, Facebook, Link2, Mail, ChevronLeft,
+  Twitter, Facebook, Link2, Mail, ChevronLeft, Check, FileText,
 } from "lucide-react";
 import { useSEO, useJsonLd, SITE_URL, DEFAULT_OG, buildBreadcrumbItem } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
@@ -168,6 +169,27 @@ export default function SermonDetail() {
     );
   }
 
+  /* ── Share helpers ────────────────────────────────────────── */
+  const [copied, setCopied] = useState(false);
+  const pageUrl = typeof window !== "undefined"
+    ? window.location.href
+    : `${SITE_URL}/sermons/${sermon.slug}`;
+
+  function handleShare() {
+    if (navigator.share) {
+      navigator.share({ title: sermon.title, text: sermon.excerpt, url: pageUrl }).catch(() => {});
+    } else {
+      handleCopyLink();
+    }
+  }
+
+  function handleCopyLink() {
+    navigator.clipboard.writeText(pageUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
   /* ── Related sermons ──────────────────────────────────────── */
   const related = sermons
     .filter((s) => s.id !== sermon.id && (s.series === sermon.series || s.speaker === sermon.speaker))
@@ -292,23 +314,28 @@ export default function SermonDetail() {
                 initial="hidden" animate="visible" variants={stagger}
                 className="flex flex-wrap gap-3 mb-12 pb-8 border-b border-border"
               >
-                {[
-                  { icon: PlayCircle,  label: "Watch",          variant: "default"  as const },
-                  { icon: Headphones,  label: "Listen to Audio", variant: "outline" as const },
-                  { icon: FileText,    label: "Download Notes",  variant: "outline" as const },
-                  { icon: Share2,      label: "Share",           variant: "ghost"   as const },
-                ].map(({ icon: Icon, label, variant }) => (
-                  <motion.div key={label} variants={fadeUp}>
+                <motion.div variants={fadeUp}>
+                  <a href={sermon.videoUrl} target="_blank" rel="noopener noreferrer">
                     <Button
-                      variant={variant}
                       size="sm"
-                      className={`rounded-full gap-2 ${variant === "default" ? "bg-secondary text-secondary-foreground hover:bg-secondary/90" : ""}`}
+                      className="rounded-full gap-2 bg-secondary text-secondary-foreground hover:bg-secondary/90"
                     >
-                      <Icon size={14} aria-hidden="true" />
-                      {label}
+                      <PlayCircle size={14} aria-hidden="true" />
+                      Watch
                     </Button>
-                  </motion.div>
-                ))}
+                  </a>
+                </motion.div>
+                <motion.div variants={fadeUp}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleShare}
+                    className="rounded-full gap-2"
+                  >
+                    {copied ? <Check size={14} aria-hidden="true" /> : <Share2 size={14} aria-hidden="true" />}
+                    {copied ? "Copied!" : "Share"}
+                  </Button>
+                </motion.div>
               </motion.div>
 
               {/* ── Transcript / Message Content ─────────────── */}
@@ -478,43 +505,54 @@ export default function SermonDetail() {
                   </dl>
                 </div>
 
-                {/* Quick listen */}
+                {/* Watch Online */}
                 <div className="bg-primary rounded-2xl p-6">
-                  <p className="text-secondary text-xs font-bold uppercase tracking-widest mb-3">Listen Anywhere</p>
+                  <p className="text-secondary text-xs font-bold uppercase tracking-widest mb-3">Watch Online</p>
                   <p className="text-white font-serif font-bold text-lg leading-snug mb-5 line-clamp-2">
                     {sermon.title}
                   </p>
-                  <div className="space-y-2">
+                  <a href={sermon.videoUrl} target="_blank" rel="noopener noreferrer" className="block">
                     <Button className="w-full rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2 justify-start" size="sm">
-                      <PlayCircle size={15} /> Watch on YouTube
+                      <PlayCircle size={15} /> Watch Now
                     </Button>
-                    <Button variant="outline" className="w-full rounded-full border-white/20 text-white hover:bg-white/10 bg-transparent gap-2 justify-start" size="sm">
-                      <Headphones size={15} /> Listen to Podcast
-                    </Button>
-                    <Button variant="outline" className="w-full rounded-full border-white/20 text-white hover:bg-white/10 bg-transparent gap-2 justify-start" size="sm">
-                      <FileText size={15} /> Download Notes PDF
-                    </Button>
-                  </div>
+                  </a>
                 </div>
 
                 {/* Share */}
                 <div className="bg-white border border-border rounded-2xl p-6">
                   <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Share This Message</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { icon: Facebook, label: "Facebook",   cls: "hover:bg-blue-600 hover:text-white hover:border-blue-600"   },
-                      { icon: Twitter,  label: "X / Twitter", cls: "hover:bg-black hover:text-white hover:border-black"         },
-                      { icon: Link2,    label: "Copy Link",   cls: "hover:bg-primary hover:text-white hover:border-primary"     },
-                      { icon: Mail,     label: "Email",       cls: "hover:bg-secondary hover:text-secondary-foreground hover:border-secondary" },
-                    ].map(({ icon: Icon, label, cls }) => (
-                      <button
-                        key={label}
-                        aria-label={`Share on ${label}`}
-                        className={`flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary ${cls}`}
-                      >
-                        <Icon size={13} aria-hidden="true" /> {label}
-                      </button>
-                    ))}
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      aria-label="Share on Facebook"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-blue-600 hover:text-white hover:border-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      <Facebook size={13} aria-hidden="true" /> Facebook
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(sermon.title)}&url=${encodeURIComponent(pageUrl)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      aria-label="Share on X / Twitter"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-black hover:text-white hover:border-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      <Twitter size={13} aria-hidden="true" /> X / Twitter
+                    </a>
+                    <button
+                      onClick={handleCopyLink}
+                      aria-label="Copy link"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-primary hover:text-white hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      {copied ? <Check size={13} aria-hidden="true" /> : <Link2 size={13} aria-hidden="true" />}
+                      {copied ? "Copied!" : "Copy Link"}
+                    </button>
+                    <a
+                      href={`mailto:?subject=${encodeURIComponent(sermon.title)}&body=${encodeURIComponent(`Watch this sermon: ${pageUrl}`)}`}
+                      aria-label="Share by Email"
+                      className="flex items-center gap-2 text-xs font-medium text-muted-foreground border border-border rounded-full px-3 py-2 transition-all hover:bg-secondary hover:text-secondary-foreground hover:border-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                    >
+                      <Mail size={13} aria-hidden="true" /> Email
+                    </a>
                   </div>
                 </div>
 

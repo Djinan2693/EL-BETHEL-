@@ -24,3 +24,9 @@ id = "7O3j3xPU8Z6rswApGmrrr"
 uri = "file://artifacts/el-bethel-church/public/images-optimized.zip"
 type = "unspecified"
 title = "images-optimized.zip — Remplace le dossier images/ sur cPanel"
+
+[[outputs]]
+id = "6IiGs82M98Y_G_GvWdyZ2"
+uri = "file://artifacts/el-bethel-church/public/el-bethel-church-final.zip"
+type = "unspecified"
+title = "el-bethel-church-final.zip — Site complet à uploader sur cPanel"
