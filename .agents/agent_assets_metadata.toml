@@ -30,3 +30,9 @@ id = "6IiGs82M98Y_G_GvWdyZ2"
 uri = "file://artifacts/el-bethel-church/public/el-bethel-church-final.zip"
 type = "unspecified"
 title = "el-bethel-church-final.zip — Site complet à uploader sur cPanel"
+
+[[outputs]]
+id = "4tAkDeFw9vEnfaeyWE3jP"
+uri = "file://.downloads/el-bethel-church-final.zip"
+type = "unspecified"
+title = "el-bethel-church-final.zip — Site complet à uploader sur cPanel"

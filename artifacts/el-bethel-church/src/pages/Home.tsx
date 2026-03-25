@@ -561,48 +561,23 @@ export default function Home() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <BookOpen size={26} />,
-                day: "Sunday",
-                name: "Sunday Worship Service",
-                time: "9:00 AM & 11:00 AM",
-                location: "Main Sanctuary",
-                detail: "Live praise & worship, expository teaching, and fellowship."
-              },
-              {
-                icon: <Heart size={26} />,
-                day: "Wednesday",
-                name: "Wednesday Prayer Night",
-                time: "7:00 PM",
-                location: "Online & In-Person",
-                detail: "Corporate prayer, intercession, and midweek spiritual refreshing."
-              },
-              {
-                icon: <Users size={26} />,
-                day: "Friday",
-                name: "Youth Friday Night",
-                time: "6:30 PM",
-                location: "Youth Hall",
-                detail: "Spirit-filled gathering for teens and young adults to connect and grow."
-              }
-            ].map(service => (
-              <motion.div key={service.name} variants={fadeUp}
-                className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group">
-                <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mb-6 group-hover:bg-secondary group-hover:text-primary transition-colors duration-300">
-                  {service.icon}
-                </div>
-                <span className="text-secondary text-xs font-bold uppercase tracking-widest">{service.day}</span>
-                <h3 className="text-xl font-bold text-white mt-1 mb-1">{service.name}</h3>
-                <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">{service.time}</p>
-                <div className="flex items-center gap-2 text-white/50 text-sm mb-4">
-                  <MapPin size={14} className="text-secondary" /> {service.location}
-                </div>
-                <GoldDivider />
-                <p className="text-white/60 text-sm mt-3 leading-relaxed">{service.detail}</p>
-              </motion.div>
-            ))}
+            className="flex justify-center">
+            <motion.div variants={fadeUp}
+              className="bg-white/5 border border-white/10 rounded-2xl p-10 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group w-full max-w-lg text-center">
+              <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mb-6 group-hover:bg-secondary group-hover:text-primary transition-colors duration-300 mx-auto">
+                <BookOpen size={26} />
+              </div>
+              <span className="text-secondary text-xs font-bold uppercase tracking-widest">Sunday</span>
+              <h3 className="text-xl font-bold text-white mt-1 mb-1">Sunday Worship Service</h3>
+              <p className="text-3xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">4:00 PM – 6:30 PM</p>
+              <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
+                <MapPin size={14} className="text-secondary" /> KMC Armstrong Corporate Center, Makati
+              </div>
+              <GoldDivider />
+              <p className="text-white/60 text-sm mt-3 leading-relaxed">
+                Live praise &amp; worship, expository teaching, and fellowship. Come as you are — all are welcome.
+              </p>
+            </motion.div>
           </motion.div>
 
           <motion.div
