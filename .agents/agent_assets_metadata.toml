@@ -6,3 +6,9 @@ id = "iJ6bxdm1BOYtrvPbNSLNf"
 uri = "file://el-bethel-church.tar.gz"
 type = "unspecified"
 title = "El-Bethel Church — Upload vers public_html/ebchristianfellowship.org/"
+
+[[outputs]]
+id = "RCiMl2-DUS8qSDueQEZO_"
+uri = "file://el-bethel-church.zip"
+type = "unspecified"
+title = "El-Bethel Church — dist.zip (upload dans ebchristianfellowship.org/)"
