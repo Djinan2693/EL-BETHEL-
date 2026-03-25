@@ -44,5 +44,5 @@
 export const EMAILJS_CONFIG = {
   SERVICE_ID:   "service_3uqyl8n",
   TEMPLATE_ID:  "template_7zn25v6",  // one template handles all 3 form types
-  PUBLIC_KEY:   "YOUR_PUBLIC_KEY",   // Dashboard → Account → General → Public Key
+  PUBLIC_KEY:   "IMLEZU1hppWmdjBgd",
 } as const;
