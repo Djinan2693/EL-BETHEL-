@@ -12,3 +12,9 @@ id = "RCiMl2-DUS8qSDueQEZO_"
 uri = "file://el-bethel-church.zip"
 type = "unspecified"
 title = "El-Bethel Church — dist.zip (upload dans ebchristianfellowship.org/)"
+
+[[outputs]]
+id = "s2jtJXvSphnkdGgNb0g8H"
+uri = "file://images-only.zip"
+type = "unspecified"
+title = "images-only.zip — à extraire dans ebchristianfellowship.org/"
