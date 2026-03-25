@@ -470,7 +470,6 @@ export default function About() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-secondary/60 text-xs font-bold font-serif">0{i + 1}</span>
                     <h3 className="font-bold text-primary text-base">{label}</h3>
                   </div>
                   <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
