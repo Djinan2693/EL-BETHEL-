@@ -49,6 +49,10 @@ const HERO_SLIDES = [
     src: "images/hero-slide-3.jpg",
     alt: "Sunday service at El-Bethel Christian Fellowship Church",
   },
+  {
+    src: "images/hero-slide-4.jpg",
+    alt: "Pastor preaching at El-Bethel Christian Fellowship Church",
+  },
 ];
 
 const slideVariants = {
