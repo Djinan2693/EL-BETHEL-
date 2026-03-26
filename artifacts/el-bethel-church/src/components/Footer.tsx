@@ -20,7 +20,7 @@ const QUICK_LINKS = [
 
 const SERVICE_TIMES = [
   { day: "Sunday",    times: ["4:00 PM – 6:30 PM — Worship Service"] },
-  { day: "Wednesday", times: ["7:00 PM – 8:30 PM — Prayer Night"] },
+  { day: "Wednesday", times: ["7:00 PM – 8:30 PM — Prayer Night · Online"] },
 ];
 
 const SOCIAL_LINKS = [
