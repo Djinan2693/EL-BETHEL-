@@ -20,6 +20,7 @@ export interface EventData {
   isFeatured: boolean;
   registrationRequired: boolean;
   cost: string;
+  tickets?: { tier: string; price: string }[];
   tags: string[];
   flyer?: string;
 }
@@ -103,40 +104,31 @@ export const events: EventData[] = [
   },
   {
     id: 3,
-    slug: "good-friday-prayer-vigil",
-    title: "Good Friday Prayer Vigil",
+    slug: "easter-celebration-april-5",
+    title: "Fête de Pâques — Easter Celebration",
     category: "Special Service",
-    dateISO: "2025-04-18",
-    date: "April 18, 2025",
-    time: "9:00 PM",
-    endTime: "12:00 AM",
+    dateISO: "2026-04-05",
+    date: "April 5, 2026",
+    time: "4:00 PM",
+    endTime: "6:30 PM",
     isMultiDay: false,
     location: "El-Bethel Main Sanctuary",
     address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
     organizer: CHURCH,
-    excerpt: "A solemn, Spirit-filled night of prayer and reflection as we remember the weight of the cross and the sacrifice of our Lord Jesus Christ.",
-    description: "Good Friday is the most solemn night in the Christian calendar — the night we remember what love costs. El-Bethel holds a Prayer Vigil from 9 PM through midnight, creating a sacred space for reflection, repentance, and gratitude.\n\nThe service moves through seven stations corresponding to the seven last words of Christ. It is liturgical without being rigid, emotional without being manipulative — a genuine encounter with the story of the cross.",
+    excerpt: "Rejoice! He is risen! Join El-Bethel as we celebrate Easter Sunday with Spirit-filled worship, a resurrection message, and the joy of our church family.",
+    description: "Easter is the most glorious day in the Christian calendar — the day death was defeated and hope was restored. On April 5, 2026, El-Bethel Christian Fellowship Church gathers to celebrate the resurrection of Jesus Christ with heartfelt worship, a powerful Easter message, and the warmth of our growing church family.\n\nWhether you are a long-time member or joining us for the very first time, you are warmly invited. Come and celebrate the greatest victory in history: He is risen!",
     whatToExpect: [
-      "Seven-station meditation on the last words of Christ",
-      "Candlelit sanctuary setting",
-      "Moments of silent prayer and guided confession",
-      "Corporate worship through hymns and contemporary songs",
-      "Communion (the Lord's Supper) at the close",
+      "Joyful, Spirit-led corporate worship to open the celebration",
+      "A resurrection-centred Easter message",
+      "Time of response, prayer, and new commitments",
+      "Warm fellowship and community celebration after the service",
+      "A welcoming environment for first-time guests and families",
     ],
-    schedule: [
-      { time: "9:00 PM", item: "Opening worship and preparation of hearts" },
-      { time: "9:20 PM", item: "The Seven Last Words — stations 1–3" },
-      { time: "10:00 PM", item: "Corporate intercession" },
-      { time: "10:30 PM", item: "The Seven Last Words — stations 4–7" },
-      { time: "11:20 PM", item: "Holy Communion" },
-      { time: "11:50 PM", item: "Silent prayer and closing benediction" },
-      { time: "12:00 AM", item: "Close of vigil" },
-    ],
-    accentColor: "bg-slate-800",
+    accentColor: "bg-amber-600",
     isFeatured: true,
     registrationRequired: false,
-    cost: "Free",
-    tags: ["holy-week", "prayer", "good-friday", "special"],
+    cost: "Free — all are welcome",
+    tags: ["easter", "2026", "resurrection", "celebration", "special"],
   },
   {
     id: 4,
@@ -245,9 +237,14 @@ export const events: EventData[] = [
     ],
     accentColor: "bg-amber-600",
     isFeatured: true,
-    registrationRequired: false,
-    cost: "Free — all are welcome",
-    tags: ["easter", "2026", "celebration", "resurrection", "taguig"],
+    registrationRequired: true,
+    cost: "Ticketed event — registration required",
+    tickets: [
+      { tier: "Standard", price: "₱300" },
+      { tier: "Regular",  price: "₱500" },
+      { tier: "VIP",      price: "₱1,000" },
+    ],
+    tags: ["easter", "2026", "celebration", "resurrection", "taguig", "ticketed"],
     flyer: "easter-flyer.jpg",
   },
 ];

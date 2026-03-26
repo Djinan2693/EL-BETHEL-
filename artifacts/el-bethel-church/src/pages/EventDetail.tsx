@@ -522,7 +522,18 @@ export default function EventDetail() {
                     </div>
                     <div className="pt-3 border-t border-border">
                       <dt className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">Cost</dt>
-                      <dd className="text-sm text-foreground leading-relaxed">{event.cost}</dd>
+                      {event.tickets && event.tickets.length > 0 ? (
+                        <dd className="space-y-1.5 mt-1">
+                          {event.tickets.map(({ tier, price }) => (
+                            <div key={tier} className="flex items-center justify-between bg-primary/5 rounded-lg px-3 py-1.5">
+                              <span className="text-xs font-semibold text-primary">{tier}</span>
+                              <span className="text-xs font-bold text-secondary">{price}</span>
+                            </div>
+                          ))}
+                        </dd>
+                      ) : (
+                        <dd className="text-sm text-foreground leading-relaxed">{event.cost}</dd>
+                      )}
                     </div>
                   </dl>
                 </div>
