@@ -376,31 +376,6 @@ export default function EventDetail() {
                 </motion.div>
               )}
 
-              {/* Schedule */}
-              {event.schedule && event.schedule.length > 0 && (
-                <motion.div
-                  initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-                  className="mb-10"
-                >
-                  <motion.h3 variants={fadeUp} className="text-xl font-serif font-bold text-primary mb-5">
-                    Event Schedule
-                  </motion.h3>
-                  <div className="relative">
-                    <div aria-hidden="true" className="absolute left-[52px] top-0 bottom-0 w-px bg-border" />
-                    <div className="space-y-3">
-                      {event.schedule.map(({ time, item }, i) => (
-                        <motion.div key={i} variants={fadeUp} className="flex items-start gap-4">
-                          <div className="w-24 shrink-0 text-right">
-                            <span className="text-secondary text-xs font-bold">{time}</span>
-                          </div>
-                          <div className="relative z-10 w-3 h-3 rounded-full bg-secondary border-2 border-white shadow-sm mt-1 shrink-0" aria-hidden="true" />
-                          <p className="text-sm text-muted-foreground leading-relaxed pt-0.5">{item}</p>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
 
               {/* Map / Venue */}
               <motion.div
