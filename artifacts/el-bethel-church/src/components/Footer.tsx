@@ -23,10 +23,19 @@ const SERVICE_TIMES = [
   { day: "Wednesday", times: ["7:00 PM – 8:30 PM — Prayer Night · Online"] },
 ];
 
+function TikTokIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.31 6.31 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+    </svg>
+  );
+}
+
 const SOCIAL_LINKS = [
   { label: "Facebook",  href: churchInfo.socialMedia.facebook,  icon: Facebook },
   { label: "Instagram", href: churchInfo.socialMedia.instagram, icon: Instagram },
   { label: "YouTube",   href: churchInfo.socialMedia.youtube,   icon: Youtube },
+  { label: "TikTok",    href: churchInfo.socialMedia.tiktok,    icon: TikTokIcon },
 ];
 
 function FooterHeading({ children }: { children: React.ReactNode }) {

@@ -12,6 +12,7 @@ export const churchInfo: ChurchInfo = {
     facebook:  "https://www.facebook.com/people/El-Bethel-Christian-Fellowship-Church/61566950657090/?mibextid=LQQJ4d",
     youtube:   "https://www.youtube.com/@Elbethel-Christianfellowship",
     instagram: "https://www.instagram.com/el_bethel_christian_ebcfc",
+    tiktok:    "https://www.tiktok.com/@elbethel.christia",
   }
 };
 
