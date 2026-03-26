@@ -240,8 +240,6 @@ export function Footer() {
               <div className="flex gap-3 text-sm">
                 <Clock size={17} aria-hidden="true" className="text-secondary shrink-0 mt-0.5" />
                 <div className="text-white/70">
-                  <p>Office: Tue–Fri, 9 AM–5 PM</p>
-                  <p>Saturday: 9 AM–1 PM</p>
                   <p>Sunday: After service</p>
                 </div>
               </div>

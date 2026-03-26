@@ -83,8 +83,6 @@ const SCHEDULE = [
   {
     day: "Office Hours",
     services: [
-      { name: "Tuesday – Friday", time: "9:00 AM – 5:00 PM", note: "Administrative team on-site" },
-      { name: "Saturday",         time: "9:00 AM – 1:00 PM", note: "Pastoral walk-ins welcome" },
       { name: "Sunday",           time: "After service",      note: "Pastoral team available" },
     ],
   },
