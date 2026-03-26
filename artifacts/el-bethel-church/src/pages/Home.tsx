@@ -565,15 +565,17 @@ export default function Home() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-            className="flex justify-center">
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
+            {/* Sunday */}
             <motion.div variants={fadeUp}
-              className="bg-white/5 border border-white/10 rounded-2xl p-10 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group w-full max-w-lg text-center">
+              className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group text-center">
               <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mb-6 group-hover:bg-secondary group-hover:text-primary transition-colors duration-300 mx-auto">
                 <BookOpen size={26} />
               </div>
               <span className="text-secondary text-xs font-bold uppercase tracking-widest">Sunday</span>
               <h3 className="text-xl font-bold text-white mt-1 mb-1">Sunday Worship Service</h3>
-              <p className="text-3xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">4:00 PM – 6:30 PM</p>
+              <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">4:00 PM – 6:30 PM</p>
               <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
                 <MapPin size={14} className="text-secondary" /> KMC Armstrong Corporate Center, Makati
               </div>
@@ -582,6 +584,25 @@ export default function Home() {
                 Live praise &amp; worship, expository teaching, and fellowship. Come as you are — all are welcome.
               </p>
             </motion.div>
+
+            {/* Wednesday */}
+            <motion.div variants={fadeUp}
+              className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group text-center">
+              <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mb-6 group-hover:bg-secondary group-hover:text-primary transition-colors duration-300 mx-auto">
+                <Heart size={26} />
+              </div>
+              <span className="text-secondary text-xs font-bold uppercase tracking-widest">Wednesday</span>
+              <h3 className="text-xl font-bold text-white mt-1 mb-1">Prayer Night</h3>
+              <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">7:00 PM – 8:30 PM</p>
+              <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
+                <Globe size={14} className="text-secondary" /> Online
+              </div>
+              <GoldDivider />
+              <p className="text-white/60 text-sm mt-3 leading-relaxed">
+                Corporate prayer, intercession, and midweek spiritual refreshing — join us from anywhere.
+              </p>
+            </motion.div>
+
           </motion.div>
 
           <motion.div
