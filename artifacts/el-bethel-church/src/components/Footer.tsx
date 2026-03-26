@@ -242,6 +242,7 @@ export function Footer() {
                 <div className="text-white/70">
                   <p>Office: Tue–Fri, 9 AM–5 PM</p>
                   <p>Saturday: 9 AM–1 PM</p>
+                  <p>Sunday: After service</p>
                 </div>
               </div>
             </address>
