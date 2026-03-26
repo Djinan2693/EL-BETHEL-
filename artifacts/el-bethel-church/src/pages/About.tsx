@@ -410,7 +410,7 @@ export default function About() {
               What We Believe
             </motion.h2>
             <motion.p variants={fadeUp} className="text-white/65 text-lg max-w-2xl mx-auto leading-relaxed">
-              Our faith is anchored in the historic truths of orthodox Christianity. These are not opinions — they are the convictions we stake our lives on.
+              Our faith is anchored in the historic truths of the Assemblée of God. These are not opinions — they are the convictions we stake our lives on.
             </motion.p>
           </motion.div>
 
