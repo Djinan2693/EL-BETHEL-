@@ -42,9 +42,11 @@ jobs:
       - name: Deploy to cPanel (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          server: ftp.pilseasy-logistique.fr
+          username: push@ebchristianfellowship.org
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
           local-dir: artifacts/el-bethel-church/dist/public/
           server-dir: ${{ secrets.FTP_REMOTE_DIR }}
           dangerous-clean-slate: false
