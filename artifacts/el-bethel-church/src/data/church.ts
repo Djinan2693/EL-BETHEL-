@@ -3,7 +3,7 @@ import { ChurchInfo } from "../types/church";
 export const churchInfo: ChurchInfo = {
   name: "El-Bethel Christian Fellowship Church",
   tagline: "Where Faith Meets Family",
-  address: "7th Floor, KMC Armstrong Corporate Center, HV Dela Costa Street, Salcedo Village, Makati City",
+  address: "Sunshine Place Jupiter Makati No. 56 Jupiter St., Brgy. Bel-Air, Makati City, Manila, Philippines, 1632",
   phone: "+63 966 926 9566",
   email: "info@ebchristianfellowship.org",
   website: "https://ebchristianfellowship.org",

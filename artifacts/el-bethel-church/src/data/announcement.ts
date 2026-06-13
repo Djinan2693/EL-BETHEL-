@@ -35,21 +35,21 @@ export interface AnnouncementConfig {
 // ─── ACTIVE ANNOUNCEMENT ────────────────────────────────────────────────────
 // Switch `enabled` to false to remove the popup without deleting the config.
 export const announcement: AnnouncementConfig = {
-  id:                 "easter-2026-v1",   // change when content changes
+  id:                 "new-location-2026-v2",   // change when content changes
   enabled:            true,
-  delayMs:            1200,               // 1.2 s after page load
-  showOnceForHours:   24,                 // show once per day per visitor
+  delayMs:            900,
+  showOnceForHours:   72,
 
-  badge:       "Upcoming Event",
-  title:       "Easter Celebration 2026",
-  description: "Join us for a powerful Easter celebration as we proclaim the risen Christ. \"Worthy Is The Lamb\" — Revelation 5:12",
-  date:        "Sunday, April 19, 2026",
-  time:        "3:30 PM – 7:00 PM",
-  location:    "7th Floor Tower 1, SMDC Grace Residences Function Hall, Levi Mariano, Taguig City",
-  image:       "easter-flyer.jpg",
+  badge:       "Important Update",
+  title:       "New Location Alert !!!",
+  description: "El-Bethel Christian Fellowship Church is now welcoming everyone at our new church address.",
+  date:        "June 14, 2026",
+  time:        "4:00 PM – 6:30 PM",
+  location:    "Sunshine Place Jupiter Makati (Roof Deck Venue)",
+  image:       "new-location-2026-v2.jpg",
   cta: {
-    label:    "View Event Details",
-    href:     "/events/easter-celebration-2026",
+    label:    "View Contact Page",
+    href:     "/contact",
     external: false,
   },
 };
