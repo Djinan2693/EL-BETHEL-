@@ -1,0 +1,50 @@
+name: Build & Deploy to cPanel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── 2. Setup Node + pnpm ─────────────────────────────────────────────────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      # ── 3. Install dependencies ───────────────────────────────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 4. Build church website ───────────────────────────────────────────────
+      - name: Build
+        working-directory: artifacts/el-bethel-church
+        env:
+          PORT: 8080
+          BASE_PATH: /
+        run: pnpm run build
+
+      # ── 5. Deploy dist/public → cPanel via FTP ────────────────────────────────
+      - name: Deploy to cPanel (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: artifacts/el-bethel-church/dist/public/
+          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
+          dangerous-clean-slate: false
