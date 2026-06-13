@@ -35,7 +35,7 @@ jobs:
         working-directory: artifacts/el-bethel-church
         env:
           PORT: 8080
-          BASE_PATH: /push/
+          BASE_PATH: /
         run: pnpm run build
 
       # ── 5. Deploy dist/public → cPanel via FTP ────────────────────────────────
