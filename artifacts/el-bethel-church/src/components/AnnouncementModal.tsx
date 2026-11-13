@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 import { announcement } from "@/data/announcement";
 import { Button } from "@/components/ui/button";
+import { imageUrl } from "@/lib/siteContent";
 
 /* ── localStorage helpers ──────────────────────────────────────────────────── */
 function getDismissedAt(id: string): number | null {
@@ -96,8 +97,6 @@ export function AnnouncementModal() {
   }, [open]);
 
   const cfg = announcement;
-  const BASE = import.meta.env.BASE_URL;
-
   /* CTA: render as <Link> for internal routes, <a> for external */
   const CtaButton = cfg.cta ? (
     cfg.cta.external ? (
@@ -159,7 +158,7 @@ export function AnnouncementModal() {
               {cfg.image && (
                 <div className="w-full aspect-[4/3] overflow-hidden bg-primary/10">
                   <img
-                    src={`${BASE}images/${cfg.image}`}
+                    src={imageUrl(cfg.image)}
                     alt={cfg.title}
                     className="w-full h-full object-cover object-top"
                   />

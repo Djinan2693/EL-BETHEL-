@@ -4,6 +4,7 @@ import { Menu, X, ChevronRight, Calendar } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { churchInfo } from "@/data/church";
+import { TickerBanner } from "./TickerBanner";
 
 const NAV_LINKS = [
   { name: "Home",           path: "/" },
@@ -70,11 +71,12 @@ export function Header() {
         className={cn(
           "fixed top-0 inset-x-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-white/96 backdrop-blur-md shadow-sm border-b border-border/40 py-3"
-            : "bg-transparent py-5",
+            ? "bg-white/96 backdrop-blur-md shadow-sm border-b border-border/40"
+            : "bg-transparent",
         )}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TickerBanner />
+        <div className={cn("max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300", scrolled ? "py-3" : "py-5")}>
           <div className="flex items-center justify-between gap-4">
 
             {/* ── Logo ──────────────────────────────────────── */}

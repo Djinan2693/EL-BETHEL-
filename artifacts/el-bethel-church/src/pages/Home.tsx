@@ -19,6 +19,7 @@ import { sermons } from "@/data/sermons";
 import { getVideoThumbnail, detectPlatform } from "@/lib/video";
 import { events } from "@/data/events";
 import { churchInfo } from "@/data/church";
+import { siteContent, imageUrl } from "@/lib/siteContent";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -35,25 +36,7 @@ const fadeIn = {
   visible: { opacity: 1, transition: { duration: 0.7, ease: "easeOut" } }
 };
 
-/* ── Hero slider data ──────────────────────────────────────────── */
-const HERO_SLIDES = [
-  {
-    src: "images/hero-slide-1.jpg",
-    alt: "Worship and praise at El-Bethel Christian Fellowship Church",
-  },
-  {
-    src: "images/hero-slide-2.jpg",
-    alt: "Community and fellowship at El-Bethel Christian Fellowship Church",
-  },
-  {
-    src: "images/hero-slide-3.jpg",
-    alt: "Sunday service at El-Bethel Christian Fellowship Church",
-  },
-  {
-    src: "images/hero-slide-4.jpg",
-    alt: "Pastor preaching at El-Bethel Christian Fellowship Church",
-  },
-];
+/* Hero slides, gallery, titles and stats are editable from /admin — see src/lib/siteContent.ts */
 
 const slideVariants = {
   enter: (dir: number) => ({
@@ -72,6 +55,20 @@ const slideVariants = {
   }),
 };
 
+/** Hero headline. A line starting with "&" gets the gold italic ampersand. */
+function HeroTitle({ line1, line2 }: { line1: string; line2: string }) {
+  const amp = line2.trimStart().startsWith("&");
+  const rest = amp ? line2.trimStart().slice(1).trimStart() : line2;
+  return (
+    <>
+      {line1}
+      {line1 && line2 && <br />}
+      {amp && <><span className="italic text-secondary font-light">&amp;</span>{" "}</>}
+      <span className="text-white">{rest}</span>
+    </>
+  );
+}
+
 function GoldDivider() {
   return (
     <div className="flex items-center gap-3 my-2">
@@ -82,24 +79,9 @@ function GoldDivider() {
   );
 }
 
-/* ── Photo gallery data ─────────────────────────────────────── */
-const GALLERY_PHOTOS = [
-  { src: "gallery-01.jpg", alt: "Worship team leading in prayer during Sunday service" },
-  { src: "gallery-02.jpg", alt: "Congregation raising hands in worship at El-Bethel" },
-  { src: "gallery-03.jpg", alt: "Church member in quiet prayer during service" },
-  { src: "gallery-04.jpg", alt: "Congregation attentively listening to the message" },
-  { src: "gallery-05.jpg", alt: "Pastor preaching with keyboard player during Sunday service" },
-  { src: "gallery-06.jpg", alt: "Church family gathered in worship" },
-  { src: "gallery-07.jpg", alt: "Congregation in a moment of worship and praise" },
-  { src: "gallery-08.jpg", alt: "Members seated and engaged during Sunday service" },
-  { src: "gallery-09.jpg", alt: "Church members standing in worship" },
-  { src: "gallery-10.jpg", alt: "Pastor joyfully ministering to the congregation" },
-  { src: "gallery-11.jpg", alt: "Pastor praying with church members after service" },
-  { src: "gallery-12.jpg", alt: "Brothers in faith worshipping together" },
-  { src: "gallery-13.jpg", alt: "Worship service at El-Bethel with full congregation" },
-];
 
 function PhotoGallerySection() {
+  const GALLERY_PHOTOS = siteContent.home.gallery;
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   const close  = useCallback(() => setLightbox(null), []);
@@ -118,7 +100,6 @@ function PhotoGallerySection() {
     return () => window.removeEventListener("keydown", onKey);
   }, [lightbox, close, prev, next]);
 
-  const BASE = import.meta.env.BASE_URL;
 
   return (
     <SectionWrapper className="bg-white">
@@ -127,7 +108,7 @@ function PhotoGallerySection() {
 
           {/* Heading */}
           <motion.div variants={fadeUp}>
-            <SectionHeading title="Life at El-Bethel" subtitle="Our Church Family" centered />
+            <SectionHeading title={siteContent.home.galleryTitle} subtitle="Our Church Family" centered />
           </motion.div>
 
           {/* Masonry grid — CSS columns */}
@@ -144,7 +125,7 @@ function PhotoGallerySection() {
                 className="group relative block w-full mb-3 rounded-xl overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary break-inside-avoid"
               >
                 <img
-                  src={`${BASE}images/${photo.src}`}
+                  src={imageUrl(photo.src)}
                   alt={photo.alt}
                   loading="lazy"
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
@@ -201,7 +182,7 @@ function PhotoGallerySection() {
               onClick={e => e.stopPropagation()}
             >
               <img
-                src={`${BASE}images/${GALLERY_PHOTOS[lightbox].src}`}
+                src={imageUrl(GALLERY_PHOTOS[lightbox].src)}
                 alt={GALLERY_PHOTOS[lightbox].alt}
                 className="max-h-[85vh] max-w-full rounded-xl object-contain shadow-2xl"
               />
@@ -247,6 +228,7 @@ function PhotoGallerySection() {
 }
 
 export default function Home() {
+  const HERO_SLIDES = siteContent.home.heroSlides;
   useSEO({
     title:       "El-Bethel Christian Fellowship Church",
     description: "A Spirit-filled Christian community in the heart of Makati City, Philippines. Join us every Sunday at 4:00 PM for worship, expository preaching, and genuine community.",
@@ -368,7 +350,7 @@ export default function Home() {
               className="absolute inset-0"
             >
               <img
-                src={`${import.meta.env.BASE_URL}${HERO_SLIDES[heroIndex].src}`}
+                src={imageUrl(HERO_SLIDES[heroIndex].src)}
                 alt={HERO_SLIDES[heroIndex].alt}
                 className="w-full h-full object-cover object-center"
                 draggable={false}
@@ -405,16 +387,12 @@ export default function Home() {
           <motion.div initial="hidden" animate="visible" variants={stagger}>
             <motion.h1 variants={fadeUp}
               className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-serif font-bold mb-6 drop-shadow-xl leading-[0.95] tracking-tight">
-              Where Faith
-              <br />
-              <span className="italic text-secondary font-light">&amp;</span>{" "}
-              <span className="text-white">Family Meet</span>
+              <HeroTitle line1={siteContent.home.heroTitleLine1} line2={siteContent.home.heroTitleLine2} />
             </motion.h1>
 
             <motion.p variants={fadeUp}
               className="text-lg md:text-xl text-white/85 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-              A Spirit-filled community in the heart of Makati City — dedicated to
-              knowing Christ and making Him known in every area of life.
+              {siteContent.home.heroSubtitle}
             </motion.p>
 
             <motion.div variants={fadeUp}
@@ -458,12 +436,8 @@ export default function Home() {
         {/* ── Bottom stat bar ──────────────────────────────────── */}
         <div className="absolute bottom-0 left-0 right-0 z-20 bg-secondary/10 backdrop-blur-md border-t border-secondary/20">
           <Container>
-            <div className="grid grid-cols-3 divide-x divide-white/10 py-5">
-              {[
-                { value: "20+", label: "Years of Ministry" },
-                { value: "100+", label: "Church Family" },
-                { value: "6", label: "Active Ministries" },
-              ].map(stat => (
+            <div className={`grid ${siteContent.home.stats.length === 4 ? "grid-cols-4" : siteContent.home.stats.length === 2 ? "grid-cols-2" : "grid-cols-3"} divide-x divide-white/10 py-5`}>
+              {siteContent.home.stats.map(stat => (
                 <div key={stat.label} className="px-4 text-center">
                   <div className="text-2xl md:text-3xl font-sans font-bold text-secondary tracking-tight">{stat.value}</div>
                   <div className="text-xs text-white/60 mt-0.5 uppercase tracking-widest">{stat.label}</div>
@@ -491,7 +465,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-secondary/15 translate-x-5 translate-y-5 rounded-2xl -z-10" />
               <div className="absolute -top-4 -left-4 w-24 h-24 border-l-4 border-t-4 border-secondary rounded-tl-xl" />
               <img
-                src={`${import.meta.env.BASE_URL}images/about-community.jpg`}
+                src={imageUrl(siteContent.home.storyImage)}
                 alt="Church Community"
                 className="rounded-2xl shadow-2xl w-full h-auto aspect-[4/3] object-cover object-top border-4 border-white"
               />
@@ -509,7 +483,7 @@ export default function Home() {
               className="order-1 lg:order-2"
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
               <motion.div variants={fadeUp}>
-                <SectionHeading title="A Place to Belong" subtitle="Our Story" />
+                <SectionHeading title={siteContent.home.storyTitle} subtitle="Our Story" />
               </motion.div>
               <motion.div variants={fadeUp} className="space-y-5 text-muted-foreground leading-relaxed mb-8">
                 <p>

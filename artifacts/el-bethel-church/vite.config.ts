@@ -3,6 +3,37 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import { siteDefaults } from "./src/data/siteDefaults";
+import { announcement } from "./src/data/announcement";
+import { churchInfo } from "./src/data/church";
+
+/**
+ * Writes admin/defaults.json into the build: the content the site shows when
+ * nothing has been saved from the admin panel yet. The panel reads it (via
+ * admin/api.php) so the forms start pre-filled with what visitors see today.
+ */
+function adminDefaults() {
+  return {
+    name: "admin-defaults",
+    apply: "build" as const,
+    generateBundle(this: { emitFile: (f: { type: "asset"; fileName: string; source: string }) => void }) {
+      const { id: _id, ...popup } = announcement;
+      this.emitFile({
+        type: "asset",
+        fileName: "admin/defaults.json",
+        source: JSON.stringify(
+          {
+            ...siteDefaults,
+            announcement: { id: announcement.id, ...popup },
+            church: { phone: churchInfo.phone, email: churchInfo.email, address: churchInfo.address },
+          },
+          null,
+          2,
+        ),
+      });
+    },
+  };
+}
 
 const rawPort = process.env.PORT ?? "5173";
 
@@ -20,6 +51,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
+    adminDefaults(),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

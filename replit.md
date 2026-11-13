@@ -112,3 +112,13 @@ Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHea
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+
+## Website editor (`/admin`)
+
+A small PHP panel (in `artifacts/el-bethel-church/public/admin/`) lets the church make **minor** changes without touching code: popup announcement, scrolling banner, home page hero (titles, slideshow photos, numbers, "Our story" photo), photo gallery, contact details, and restoring previous versions.
+
+- Saves to `/content/site-content.json` on the server; uploads go to `/content/uploads/`. Neither is in git — the FTP deploy never overwrites them.
+- The React app loads that JSON at start-up (`src/lib/siteContent.ts`) and merges it over the defaults in `src/data/siteDefaults.ts`, `announcement.ts` and `church.ts`. No file / slow server → defaults.
+- Login comes from the `ADMIN_USER` and `ADMIN_PASSWORD` GitHub secrets; the deploy workflow writes only a bcrypt hash to `admin/secret.php`. Without the secrets the editor shows "not switched on".
+- Security: CSRF token, session cookie limited to `/admin`, 5 failed logins per 15 min, every field whitelisted server-side, images re-encoded with GD, no scripts can run in `/content/uploads/`, 25 backups in `admin/data/` (blocked from the web).
+- Edit `SUPPORT_NAME` / `SUPPORT_CONTACT` in `admin/lib.php` for the "Need something bigger?" line.

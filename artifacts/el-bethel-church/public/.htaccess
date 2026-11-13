@@ -1,16 +1,21 @@
 Options -MultiViews
+DirectoryIndex index.html index.php
 RewriteEngine On
+
+# ── Force HTTPS (first, so the editor login is always encrypted) ─────────────
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── Website editor + its content: real files, not the React app ──────────────
+RewriteRule ^admin$ /admin/ [L,R=301]
+RewriteRule ^(admin|content)(/|$) - [L]
+
+# ── Single-page app: everything else goes to index.html ──────────────────────
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.html [QSA,L]
 
 # ── Hide server information ───────────────────────────────────────────────────
 ServerSignature Off
-
-# ── Force HTTPS ───────────────────────────────────────────────────────────────
-<IfModule mod_rewrite.c>
-  RewriteCond %{HTTPS} off
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
 
 # ── HTTP Security Headers ─────────────────────────────────────────────────────
 <IfModule mod_headers.c>
@@ -72,6 +77,7 @@ Options -Indexes
   ExpiresByType font/woff2           "access plus 1 year"
   ExpiresByType application/font-woff2 "access plus 1 year"
   ExpiresByType text/html            "access plus 0 seconds"
+  ExpiresByType application/json     "access plus 0 seconds"
 </IfModule>
 
 # ── Enable Gzip compression ───────────────────────────────────────────────────
