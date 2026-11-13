@@ -187,7 +187,7 @@ function mfa_send_code() {
 /* ── Sending through an outside mailbox (SMTP) ───────────────────────────────
  * Used when secret.php defines SMTP_HOST, SMTP_USER and SMTP_PASS. Optional:
  * SMTP_PORT (465), SMTP_SECURE ('ssl' for 465, 'tls' for 587, 'none'),
- * SMTP_FROM (defaults to SMTP_USER). No library needed. */
+ * SMTP_FROM (defaults to SMTP_USER), SMTP_FROM_NAME. No library needed. */
 function smtp_configured() {
     return defined('SMTP_HOST') && defined('SMTP_USER') && defined('SMTP_PASS') && SMTP_HOST !== '' && SMTP_PASS !== '';
 }
@@ -239,7 +239,7 @@ function smtp_send($to, $subject, $body) {
         $cmd('DATA', 354);
         $msgId = bin2hex(random_bytes(12)) . '@' . substr(strrchr($from, '@'), 1);
         $headers = 'Date: ' . date('r') . "\r\n"
-            . 'From: =?UTF-8?B?' . base64_encode('El-Bethel website') . '?= <' . $from . ">\r\n"
+            . 'From: =?UTF-8?B?' . base64_encode(defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : 'El-Bethel website') . '?= <' . $from . ">\r\n"
             . 'To: <' . $to . ">\r\n"
             . 'Subject: =?UTF-8?B?' . base64_encode($subject) . "?=\r\n"
             . 'Message-ID: <' . $msgId . ">\r\n"
