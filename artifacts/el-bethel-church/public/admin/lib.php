@@ -175,11 +175,89 @@ function mfa_send_code() {
         . "If this wasn't you, don't share this code. Someone may know the editor password:\r\n"
         . "please ask " . SUPPORT_NAME . " to change it.\r\n\r\n"
         . "https://{$host}/admin/\r\n";
+    if (smtp_configured()) return smtp_send(ADMIN_MFA_EMAIL, $subject, $body);
+
     $headers = "From: El-Bethel website <{$from}>\r\n"
         . "Reply-To: {$from}\r\n"
         . "Content-Type: text/plain; charset=UTF-8\r\n"
         . "X-Auto-Response-Suppress: All\r\n";
     return @mail(ADMIN_MFA_EMAIL, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers, '-f' . $from);
+}
+
+/* ── Sending through an outside mailbox (SMTP) ───────────────────────────────
+ * Used when secret.php defines SMTP_HOST, SMTP_USER and SMTP_PASS. Optional:
+ * SMTP_PORT (465), SMTP_SECURE ('ssl' for 465, 'tls' for 587, 'none'),
+ * SMTP_FROM (defaults to SMTP_USER). No library needed. */
+function smtp_configured() {
+    return defined('SMTP_HOST') && defined('SMTP_USER') && defined('SMTP_PASS') && SMTP_HOST !== '' && SMTP_PASS !== '';
+}
+
+function smtp_log($msg) {
+    @file_put_contents(DATA_DIR . '/smtp-errors.log', date('c') . ' ' . $msg . "\n", FILE_APPEND | LOCK_EX);
+}
+
+function smtp_send($to, $subject, $body) {
+    $port   = defined('SMTP_PORT') ? (int)SMTP_PORT : 465;
+    $secure = defined('SMTP_SECURE') ? SMTP_SECURE : ($port === 465 ? 'ssl' : ($port === 587 ? 'tls' : 'none'));
+    $from   = defined('SMTP_FROM') && SMTP_FROM !== '' ? SMTP_FROM : SMTP_USER;
+    $ctx    = stream_context_create(['ssl' => ['verify_peer' => true, 'verify_peer_name' => true, 'SNI_enabled' => true, 'peer_name' => SMTP_HOST]]);
+    $target = ($secure === 'ssl' ? 'ssl://' : 'tcp://') . SMTP_HOST . ':' . $port;
+    $fp = @stream_socket_client($target, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ctx);
+    if (!$fp) { smtp_log("connect {$target} failed: {$errstr} ({$errno})"); return false; }
+    stream_set_timeout($fp, 15);
+
+    $read = function () use ($fp) {
+        $data = '';
+        while (($line = fgets($fp, 515)) !== false) {
+            $data .= $line;
+            if (strlen($line) < 4 || $line[3] === ' ') break;
+        }
+        return $data;
+    };
+    // $label is what goes in the error log, so credentials never get written there.
+    $cmd = function ($line, $expect, $label = null) use ($fp, $read) {
+        if ($line !== null) fwrite($fp, $line . "\r\n");
+        $reply = $read();
+        if ((int)substr($reply, 0, 3) !== $expect) throw new RuntimeException(($label ?? (string)$line) . ' -> ' . trim($reply));
+        return $reply;
+    };
+
+    try {
+        $ehlo = 'EHLO ' . (preg_replace('/[^A-Za-z0-9.\-]/', '', $_SERVER['HTTP_HOST'] ?? 'localhost') ?: 'localhost');
+        $cmd(null, 220, 'greeting');
+        $cmd($ehlo, 250);
+        if ($secure === 'tls') {
+            $cmd('STARTTLS', 220);
+            if (!stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) throw new RuntimeException('STARTTLS handshake failed');
+            $cmd($ehlo, 250);
+        }
+        $cmd('AUTH LOGIN', 334);
+        $cmd(base64_encode(SMTP_USER), 334, 'username');
+        $cmd(base64_encode(SMTP_PASS), 235, 'password (wrong username/password?)');
+        $cmd('MAIL FROM:<' . $from . '>', 250);
+        $cmd('RCPT TO:<' . $to . '>', 250);
+        $cmd('DATA', 354);
+        $msgId = bin2hex(random_bytes(12)) . '@' . substr(strrchr($from, '@'), 1);
+        $headers = 'Date: ' . date('r') . "\r\n"
+            . 'From: =?UTF-8?B?' . base64_encode('El-Bethel website') . '?= <' . $from . ">\r\n"
+            . 'To: <' . $to . ">\r\n"
+            . 'Subject: =?UTF-8?B?' . base64_encode($subject) . "?=\r\n"
+            . 'Message-ID: <' . $msgId . ">\r\n"
+            . "MIME-Version: 1.0\r\n"
+            . "Content-Type: text/plain; charset=UTF-8\r\n"
+            . "Content-Transfer-Encoding: 8bit\r\n"
+            . "X-Auto-Response-Suppress: All\r\n";
+        $data = preg_replace('/^\./m', '..', str_replace(["\r\n", "\r"], "\n", $body));
+        $data = str_replace("\n", "\r\n", $data);
+        $cmd($headers . "\r\n" . $data . "\r\n.", 250, 'message body');
+        fwrite($fp, "QUIT\r\n");
+        fclose($fp);
+        return true;
+    } catch (Throwable $e) {
+        smtp_log($e->getMessage());
+        @fclose($fp);
+        return false;
+    }
 }
 
 function complete_login() {
