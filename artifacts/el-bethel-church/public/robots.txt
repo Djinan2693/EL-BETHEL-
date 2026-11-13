@@ -5,6 +5,7 @@ Allow: /
 Disallow: /api/
 Disallow: /_next/
 Disallow: /src/
+Disallow: /admin/
 
 # Sitemap
 Sitemap: https://ebchristianfellowship.org/sitemap.xml

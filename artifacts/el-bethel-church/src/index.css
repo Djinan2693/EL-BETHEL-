@@ -205,3 +205,20 @@
   background: hsl(var(--secondary));
   color: hsl(var(--primary));
 }
+
+/* ── Scrolling banner (TickerBanner) ─────────────────────────────── */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: ticker-scroll linear infinite;
+}
+.ticker:hover .ticker-track,
+.ticker:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; }
+  .ticker-seq[aria-hidden="true"] { display: none; }
+}

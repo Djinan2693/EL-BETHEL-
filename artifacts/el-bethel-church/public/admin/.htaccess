@@ -1,0 +1,18 @@
+# Website editor — only index.php, api.php and the static assets are public.
+DirectoryIndex index.php
+Options -Indexes
+
+<FilesMatch "^(lib\.php|secret\.php|defaults\.json|.*\.tmp-.*)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Cache-Control "no-store"
+</IfModule>
