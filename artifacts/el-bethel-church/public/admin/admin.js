@@ -131,7 +131,13 @@
 
   /** Call after every edit: refreshes the save bar, nav dots and previews. */
   function changed() {
-    document.getElementById("savebar").hidden = !dirty();
+    const d = dirty();
+    const bar = document.getElementById("savebar");
+    bar.classList.toggle("is-clean", !d);
+    document.getElementById("savebar-text").textContent = d ? "You have changes that are not published yet" : "Everything is published";
+    document.getElementById("discard").hidden = !d;
+    const save = document.getElementById("save");
+    if (!save.dataset.busy) save.disabled = !d;
     renderNav();
     document.querySelectorAll("[data-preview]").forEach((el) => el.replaceWith(PREVIEWS[el.dataset.preview]()));
   }
@@ -516,6 +522,7 @@
   document.getElementById("save").addEventListener("click", async (e) => {
     const btn = e.currentTarget;
     btn.disabled = true;
+    btn.dataset.busy = "1";
     btn.textContent = "Publishing…";
     try {
       const r = await api("save", { content: draft });
@@ -524,8 +531,9 @@
     } catch (ex) {
       toast(ex.message, true);
     } finally {
-      btn.disabled = false;
+      delete btn.dataset.busy;
       btn.textContent = "Publish changes";
+      btn.disabled = !dirty();
     }
   });
 
