@@ -18,7 +18,7 @@ $logged = $configured && is_logged_in();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=1">
+<link rel="stylesheet" href="admin.css?v=2">
 </head>
 <body class="<?= $logged ? 'is-app' : 'is-gate' ?>">
 
@@ -66,16 +66,16 @@ $logged = $configured && is_logged_in();
     New pages, sermons, events, layout or colours are handled by <?= htmlspecialchars(SUPPORT_NAME) ?><?= SUPPORT_CONTACT !== '' ? ' (' . htmlspecialchars(SUPPORT_CONTACT) . ')' : '' ?>.
   </aside>
 
-  <div class="savebar" id="savebar" hidden>
-    <span id="savebar-text">You have unsaved changes</span>
+  <div class="savebar is-clean" id="savebar">
+    <span id="savebar-text">Everything is published</span>
     <div>
-      <button type="button" class="btn btn-ghost" id="discard">Undo changes</button>
-      <button type="button" class="btn btn-gold" id="save">Publish changes</button>
+      <button type="button" class="btn btn-ghost" id="discard" hidden>Undo changes</button>
+      <button type="button" class="btn btn-gold" id="save" disabled>Publish changes</button>
     </div>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <?php endif; ?>
 
-<?php if ($configured): ?><script src="admin.js?v=1"></script><?php endif; ?>
+<?php if ($configured): ?><script src="admin.js?v=2"></script><?php endif; ?>
 </body>
 </html>
