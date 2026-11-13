@@ -34,7 +34,7 @@
     } catch {
       throw new Error("No connection to the server. Check your internet and try again.");
     }
-    if (res.status === 401 && action !== "login") { location.reload(); throw new Error(data.error); }
+    if (res.status === 401 && !["login", "verify_code", "resend_code"].includes(action)) { location.reload(); throw new Error(data.error); }
     if (!data.ok) throw new Error(data.error || "Something went wrong.");
     return data;
   }
@@ -60,13 +60,61 @@
       btn.disabled = true;
       btn.textContent = "Signing in…";
       try {
-        await api("login", { username: loginForm.username.value, password: loginForm.password.value });
+        const r = await api("login", { username: loginForm.username.value, password: loginForm.password.value });
+        if (r.csrf) csrf = r.csrf;
+        if (r.mfa) return showCodeStep(r.email);
         location.reload();
       } catch (ex) {
         err.textContent = ex.message;
         err.hidden = false;
         btn.disabled = false;
         btn.textContent = "Sign in";
+      }
+    });
+
+    /* Step 2: the code emailed to the church */
+    const codeForm = document.getElementById("code-form");
+    function showCodeStep(email) {
+      document.getElementById("code-email").textContent = email;
+      loginForm.hidden = true;
+      codeForm.hidden = false;
+      document.querySelector(".gate-note").textContent = "One more step to keep the website safe.";
+      codeForm.code.focus();
+    }
+    codeForm.code.addEventListener("input", () => {
+      codeForm.code.value = codeForm.code.value.replace(/\D/g, "").slice(0, 6);
+      if (codeForm.code.value.length === 6) codeForm.requestSubmit();
+    });
+    codeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = codeForm.querySelector(".form-error");
+      const btn = codeForm.querySelector("button[type=submit]");
+      if (btn.disabled) return;
+      err.hidden = true;
+      btn.disabled = true;
+      btn.textContent = "Checking…";
+      try {
+        await api("verify_code", { code: codeForm.code.value, remember: codeForm.remember.checked });
+        location.reload();
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.hidden = false;
+        btn.disabled = false;
+        btn.textContent = "Continue";
+        codeForm.code.select();
+        if (/sign in again/i.test(ex.message)) setTimeout(() => location.reload(), 2500);
+      }
+    });
+    document.getElementById("resend").addEventListener("click", async () => {
+      const err = codeForm.querySelector(".form-error");
+      try {
+        const r = await api("resend_code", {});
+        err.hidden = true;
+        document.getElementById("code-email").textContent = r.email;
+        codeForm.querySelector(".code-sent").firstChild.textContent = "New code sent to ";
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.hidden = false;
       }
     });
     return;

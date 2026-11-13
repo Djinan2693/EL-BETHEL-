@@ -56,11 +56,41 @@ case 'login':
         fail('Wrong username or password.', 401);
     }
     clear_failed_logins();
+    if (!mfa_enabled() || mfa_device_trusted()) json_out(['ok' => true, 'csrf' => complete_login()]);
+
+    // Password is right: now ask for the emailed code.
     session_regenerate_id(true);
-    $_SESSION['user'] = ADMIN_USER;
-    $_SESSION['last'] = time();
-    $_SESSION['csrf'] = bin2hex(random_bytes(32));
-    json_out(['ok' => true, 'csrf' => $_SESSION['csrf']]);
+    $_SESSION['pending_user'] = ADMIN_USER;
+    if (!mfa_send_code()) fail('The sign-in code email could not be sent. Please contact ' . SUPPORT_NAME . '.', 500);
+    json_out(['ok' => true, 'mfa' => true, 'email' => mfa_masked_email(), 'csrf' => $_SESSION['csrf']]);
+
+case 'verify_code':
+    if ($method !== 'POST') fail('Method not allowed', 405);
+    require_csrf();
+    $m = $_SESSION['mfa'] ?? null;
+    if (empty($_SESSION['pending_user']) || !$m) fail('Please sign in again.', 401);
+    if (time() > $m['exp']) { unset($_SESSION['mfa'], $_SESSION['pending_user']); fail('This code has expired. Please sign in again.', 401); }
+    $b = body_json();
+    $code = preg_replace('/\D/', '', (string)($b['code'] ?? ''));
+    if (strlen($code) !== 6 || !password_verify($code, $m['hash'])) {
+        $_SESSION['mfa']['tries']++;
+        record_failed_login();
+        if ($_SESSION['mfa']['tries'] >= MFA_MAX_TRIES) { unset($_SESSION['mfa'], $_SESSION['pending_user']); fail('Too many wrong codes. Please sign in again.', 401); }
+        usleep(400000);
+        fail('This code is not right. Check the latest email and try again.', 400);
+    }
+    if (!empty($b['remember'])) mfa_trust_device();
+    clear_failed_logins();
+    json_out(['ok' => true, 'csrf' => complete_login()]);
+
+case 'resend_code':
+    if ($method !== 'POST') fail('Method not allowed', 405);
+    require_csrf();
+    if (empty($_SESSION['pending_user']) || empty($_SESSION['mfa'])) fail('Please sign in again.', 401);
+    $wait = MFA_RESEND_WAIT - (time() - $_SESSION['mfa']['sent']);
+    if ($wait > 0) fail('Please wait ' . $wait . ' seconds before asking for a new code.', 429);
+    if (!mfa_send_code()) fail('The email could not be sent. Please contact ' . SUPPORT_NAME . '.', 500);
+    json_out(['ok' => true, 'email' => mfa_masked_email()]);
 
 case 'logout':
     if ($method !== 'POST') fail('Method not allowed', 405);
