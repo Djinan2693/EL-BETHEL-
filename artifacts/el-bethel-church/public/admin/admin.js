@@ -144,6 +144,7 @@
     ["banner", "Scrolling banner", renderBanner],
     ["home", "Home page top", renderHome],
     ["gallery", "Photo gallery", renderGallery],
+    ["services", "Service times", renderServices],
     ["contact", "Contact & address", renderContact],
     ["history", "Previous versions", renderHistory],
   ];
@@ -157,6 +158,7 @@
       home: Object.assign({}, d.home, clone(c.home || {})),
       announcement: Object.assign({ enabled: false, showOnceForHours: 72, title: "" }, clone(c.announcement || d.announcement || {})),
       church: Object.assign({}, d.church, clone(c.church || {})),
+      services: clone(c.services || d.services || []),
     };
     const cta = out.announcement.cta || {};
     out.announcement.cta = { label: cta.label || "", href: cta.href || "" };
@@ -167,7 +169,7 @@
   const dirty = () => !!draft && JSON.stringify(draft) !== JSON.stringify(saved);
   function sectionDirty(id) {
     if (!draft || !saved) return false;
-    const key = { popup: "announcement", banner: "ticker", contact: "church" }[id];
+    const key = { popup: "announcement", banner: "ticker", contact: "church", services: "services" }[id];
     if (key) return JSON.stringify(draft[key]) !== JSON.stringify(saved[key]);
     if (id === "home") {
       const pick = (o) => JSON.stringify([o.heroTitleLine1, o.heroTitleLine2, o.heroSubtitle, o.heroSlides, o.stats, o.storyTitle, o.storyImage]);
@@ -499,6 +501,37 @@
       ...header("Photo gallery", "The wall of photos on the home page. Add new pictures after an event, remove old ones, or change their order."),
       h("div", { class: "panel" }, text("Gallery title", m, "galleryTitle", { max: 80 })),
       h("div", { class: "panel" }, h("h3", {}, "Photos (" + m.gallery.length + ")"), h("span", { class: "hint" }, "Up to 40 photos. The description helps people using screen readers and Google."), photoGrid(m.gallery, { max: 40 })),
+    ];
+  }
+
+  function renderServices() {
+    const list = draft.services;
+    const box = h("div", { class: "list" });
+    function draw() {
+      box.replaceChildren(...list.map((svc, i) =>
+        h("div", { class: "list-item" },
+          h("div", { class: "fields" },
+            h("div", { class: "row" },
+              text("Day", svc, "day", { max: 30, placeholder: "Sunday" }),
+              text("Time", svc, "time", { max: 60, placeholder: "4:00 PM \u2013 6:30 PM" })),
+            text("Name of the service", svc, "name", { max: 80, placeholder: "Sunday Worship Service" }),
+            text("Place", svc, "place", { max: 120, placeholder: "Sunshine Place Jupiter, Makati" }),
+            h("label", { class: "check" }, h("input", { type: "checkbox", checked: svc.online, onchange: (e) => { svc.online = e.target.checked; changed(); } }), "This service is online (shows a globe instead of a map pin)"),
+            text("Short description", svc, "description", { max: 300, multiline: true })),
+          h("div", { class: "item-tools" },
+            h("button", { type: "button", class: "icon-btn", "aria-label": "Move up", disabled: i === 0, onclick: () => { list.splice(i - 1, 0, list.splice(i, 1)[0]); draw(); changed(); } }, "\u2191"),
+            h("button", { type: "button", class: "icon-btn", "aria-label": "Move down", disabled: i === list.length - 1, onclick: () => { list.splice(i + 1, 0, list.splice(i, 1)[0]); draw(); changed(); } }, "\u2193"),
+            h("button", { type: "button", class: "icon-btn remove", "aria-label": "Delete service " + (i + 1), disabled: list.length <= 1, onclick: () => { list.splice(i, 1); draw(); changed(); } }, "\u2715"))
+        )));
+    }
+    draw();
+    return [
+      ...header("Service times", "The service cards on the home page (\u201cJoin Us This Week\u201d), the schedule on the Contact page and in the footer. The first service is also shown on the About and Give pages."),
+      h("div", { class: "panel" },
+        box,
+        h("button", { type: "button", class: "btn btn-ghost", onclick: () => { if (list.length >= 4) return toast("4 services maximum.", true); list.push({ day: "", name: "", time: "", place: "", online: false, description: "" }); draw(); changed(); } }, "+ Add a service")
+      ),
+      h("p", { class: "hint" }, "The \u201cGet Directions\u201d button under the cards opens the map from Contact & address."),
     ];
   }
 

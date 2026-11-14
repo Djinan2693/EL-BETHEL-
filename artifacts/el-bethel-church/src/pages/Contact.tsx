@@ -73,24 +73,15 @@ const getQuickContacts = () => [
   },
 ];
 
-const SCHEDULE = [
-  {
-    day: "Sunday",
-    services: [
-      { name: "Worship Service", time: "4:00 PM – 6:30 PM", note: "Main Sanctuary · All welcome" },
-    ],
-  },
-  {
-    day: "Wednesday",
-    services: [
-      { name: "Prayer Night", time: "7:00 PM – 8:30 PM", note: "Hybrid — in-person & online" },
-    ],
-  },
+/* Services from the editor (/admin → Service times) + office hours. */
+const getSchedule = () => [
+  ...siteContent.services.map((svc) => ({
+    day: svc.day || svc.name,
+    services: [{ name: svc.name, time: svc.time, note: svc.place }],
+  })),
   {
     day: "Office Hours",
-    services: [
-      { name: "Sunday",           time: "After service",      note: "Pastoral team available" },
-    ],
+    services: [{ name: siteContent.contact.officeHours, time: "", note: "" }],
   },
 ];
 
@@ -550,11 +541,11 @@ export default function Contact() {
 
             <motion.div
               variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+              className={`grid grid-cols-1 gap-6 mb-12 ${siteContent.services.length + 1 >= 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3"}`}
             >
-              {SCHEDULE.map(({ day, services }) => (
+              {getSchedule().map(({ day, services }) => (
                 <motion.div
-                  key={day}
+                  key={day + services[0].name}
                   variants={fadeUp}
                   className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/8 hover:border-secondary/40 transition-all duration-300"
                 >
@@ -565,7 +556,7 @@ export default function Contact() {
                   <div className="space-y-4">
                     {services.map(({ name, time, note }) => (
                       <div key={name} className="pl-4 border-l-2 border-secondary/40">
-                        <p className="text-white font-semibold text-sm">{name}</p>
+                        <p className="text-white font-semibold text-sm whitespace-pre-line">{name}</p>
                         <p className="text-secondary text-sm font-medium">{time}</p>
                         <p className="text-white/50 text-xs mt-0.5">{note}</p>
                       </div>

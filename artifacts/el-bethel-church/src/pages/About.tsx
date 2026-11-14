@@ -6,6 +6,7 @@ import {
   ChevronRight, Calendar, Clock, MapPin, Quote,
   Megaphone, Sprout, HandHeart,
 } from "lucide-react";
+import { siteContent } from "@/lib/siteContent";
 import { useSEO } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -565,8 +566,8 @@ export default function About() {
 
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               {[
-                { icon: Clock,  text: "Sunday · 4:00 PM – 6:30 PM" },
-                { icon: MapPin, text: "KMC Armstrong, 7F, Makati City" },
+                { icon: Clock,  text: [siteContent.services[0]?.day, siteContent.services[0]?.time].filter(Boolean).join(" · ") },
+                { icon: MapPin, text: siteContent.services[0]?.place || siteContent.contact.areaLine },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2 text-white/70 text-sm bg-white/5 border border-white/10 rounded-full px-5 py-2.5">
                   <Icon size={14} className="text-secondary shrink-0" aria-hidden="true" />
