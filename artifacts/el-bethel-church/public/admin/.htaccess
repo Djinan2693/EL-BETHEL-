@@ -2,7 +2,7 @@
 DirectoryIndex index.php
 Options -Indexes
 
-<FilesMatch "^(lib\.php|secret\.php|defaults\.json|.*\.tmp-.*)$">
+<FilesMatch "^(lib\.php|secret\.php|secret\.local\.php|defaults\.json|.*\.tmp-.*)$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
