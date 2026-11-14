@@ -422,6 +422,8 @@ function sanitize_content($in) {
     }
     if (!$services) fail('Please keep at least one service (with a name) in Service times.');
 
+    $events = sanitize_events($in['events'] ?? []);
+
     return [
         'ticker' => [
             'enabled' => !empty($t['enabled']) && count($items) > 0,
@@ -440,6 +442,7 @@ function sanitize_content($in) {
             'gallery'        => clean_images($h['gallery'] ?? [], 40, 1),
         ],
         'services' => $services,
+        'events'   => $events,
         'announcement' => $popup,
         'church' => [
             'phone'        => clean_text($c['phone'] ?? '', 40),
@@ -454,6 +457,80 @@ function sanitize_content($in) {
             'mapLink'      => preg_match('#^https://#i', clean_link($c['mapLink'] ?? '')) ? clean_link($c['mapLink']) : '',
         ],
     ];
+}
+
+/** Events: whitelist every field, check the date and times, keep links stable. */
+function clean_time($v) {
+    $v = strtoupper(trim((string)$v));
+    return preg_match('/^(1[0-2]|[1-9]):[0-5]\d (AM|PM)$/', $v) ? $v : '';
+}
+
+function sanitize_events($list) {
+    $out = []; $slugs = [];
+    foreach (array_slice((array)$list, 0, 60) as $e) {
+        if (!is_array($e)) continue;
+        $title = clean_text($e['title'] ?? '', 120);
+        $date  = (string)($e['dateISO'] ?? '');
+        if ($title === '') continue;
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) || !checkdate((int)substr($date, 5, 2), (int)substr($date, 8, 2), (int)substr($date, 0, 4))) {
+            fail('The event “' . $title . '” needs a date.');
+        }
+        $time = clean_time($e['time'] ?? '');
+        if ($time === '') fail('The event “' . $title . '” needs a start time.');
+
+        // Keep the web address of an existing event; make one for a new event.
+        $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string)($e['slug'] ?? '')));
+        if ($slug === '') {
+            $base = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower((function_exists('iconv') ? @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title) : '') ?: $title)), '-');
+            $slug = substr($base ?: 'event', 0, 60) . '-' . $date;
+        }
+        $n = 2; $try = $slug;
+        while (isset($slugs[$try])) $try = $slug . '-' . $n++;
+        $slug = $try; $slugs[$slug] = true;
+
+        $lines = function ($v, $max, $len) {
+            $r = [];
+            foreach ((array)$v as $x) { $x = clean_text(is_string($x) ? $x : '', $len); if ($x !== '') $r[] = $x; if (count($r) >= $max) break; }
+            return $r;
+        };
+        $schedule = [];
+        foreach (array_slice((array)($e['schedule'] ?? []), 0, 20) as $row) {
+            if (!is_array($row)) continue;
+            $item = clean_text($row['item'] ?? '', 200);
+            if ($item !== '') $schedule[] = ['time' => clean_text($row['time'] ?? '', 20), 'item' => $item];
+        }
+        $tickets = [];
+        foreach (array_slice((array)($e['tickets'] ?? []), 0, 6) as $t) {
+            if (!is_array($t)) continue;
+            $tier = clean_text($t['tier'] ?? '', 40);
+            if ($tier !== '') $tickets[] = ['tier' => $tier, 'price' => clean_text($t['price'] ?? '', 30)];
+        }
+        $row = [
+            'slug'                 => $slug,
+            'title'                => $title,
+            'category'             => clean_text($e['category'] ?? '', 40) ?: 'Event',
+            'dateISO'              => $date,
+            'time'                 => $time,
+            'endTime'              => clean_time($e['endTime'] ?? ''),
+            'location'             => clean_text($e['location'] ?? '', 120),
+            'address'              => clean_text($e['address'] ?? '', 300),
+            'excerpt'              => clean_text($e['excerpt'] ?? '', 400),
+            'description'          => clean_text($e['description'] ?? '', 4000),
+            'whatToExpect'         => $lines($e['whatToExpect'] ?? [], 12, 200),
+            'schedule'             => $schedule,
+            'accentColor'          => ($e['accentColor'] ?? '') === 'bg-amber-600' ? 'bg-amber-600' : 'bg-primary',
+            'isFeatured'           => !empty($e['isFeatured']),
+            'registrationRequired' => !empty($e['registrationRequired']),
+            'cost'                 => clean_text($e['cost'] ?? '', 80),
+            'tickets'              => $tickets,
+            'tags'                 => $lines($e['tags'] ?? [], 10, 30),
+        ];
+        $flyer = clean_image($e['flyer'] ?? '');
+        if ($flyer !== '') $row['flyer'] = $flyer;
+        $out[] = $row;
+    }
+    usort($out, function ($a, $b) { return strcmp($a['dateISO'], $b['dateISO']); });
+    return $out;
 }
 
 function write_atomic($path, $string) {

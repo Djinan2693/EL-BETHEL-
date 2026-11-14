@@ -6,6 +6,7 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { siteDefaults } from "./src/data/siteDefaults";
 import { announcement } from "./src/data/announcement";
 import { churchInfo } from "./src/data/church";
+import { events } from "./src/data/events";
 
 /**
  * Writes admin/defaults.json into the build: the content the site shows when
@@ -26,6 +27,7 @@ function adminDefaults() {
             ticker: siteDefaults.ticker,
             home: siteDefaults.home,
             services: siteDefaults.services,
+            events: events.map(({ id: _i, date: _d, organizer: _o, isMultiDay: _m, dateRange: _r, ...e }) => e),
             announcement: { id: announcement.id, ...popup },
             church: { phone: churchInfo.phone, email: churchInfo.email, address: churchInfo.address, ...siteDefaults.contact },
           },

@@ -11,6 +11,7 @@ import { useSEO, useJsonLd, SITE_URL, DEFAULT_OG, buildBreadcrumbItem } from "@/
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { events, EventData } from "@/data/events";
+import { imageUrl } from "@/lib/siteContent";
 
 /* ── animation helpers ──────────────────────────────────────────── */
 const fadeUp = {
@@ -335,7 +336,7 @@ export default function EventDetail() {
                   </div>
                   <div className="rounded-2xl overflow-hidden border border-border shadow-sm bg-white inline-block max-w-sm w-full">
                     <img
-                      src={`/images/${event.flyer}`}
+                      src={imageUrl(event.flyer)}
                       alt={`${event.title} — official event flyer`}
                       className="w-full h-auto object-cover"
                       loading="lazy"
