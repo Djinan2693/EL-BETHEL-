@@ -44,4 +44,14 @@ export const siteDefaults = {
       { src: "gallery-13.jpg", alt: "Worship service at El-Bethel with full congregation" },
     ],
   },
+  contact: {
+    phoneNote: "Mon – Fri, 9 AM – 5 PM",
+    emailNote: "We reply within 24 hours",
+    areaLine: "Salcedo Village, Makati City",
+    buildingLine: "7th Floor, KMC Armstrong Corporate Center",
+    directions:
+      "We are located in the heart of Salcedo Village — easily accessible by MRT, Grab, or car from all across Metro Manila.",
+    officeHours: "Sunday: After service",
+    mapLink: "",
+  },
 };

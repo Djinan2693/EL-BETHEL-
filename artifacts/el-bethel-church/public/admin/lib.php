@@ -425,9 +425,16 @@ function sanitize_content($in) {
         ],
         'announcement' => $popup,
         'church' => [
-            'phone'   => clean_text($c['phone'] ?? '', 40),
-            'email'   => $email,
-            'address' => clean_text($c['address'] ?? '', 300),
+            'phone'        => clean_text($c['phone'] ?? '', 40),
+            'phoneNote'    => clean_text($c['phoneNote'] ?? '', 80),
+            'email'        => $email,
+            'emailNote'    => clean_text($c['emailNote'] ?? '', 80),
+            'address'      => clean_text($c['address'] ?? '', 300),
+            'areaLine'     => clean_text($c['areaLine'] ?? '', 80),
+            'buildingLine' => clean_text($c['buildingLine'] ?? '', 120),
+            'directions'   => clean_text($c['directions'] ?? '', 400),
+            'officeHours'  => clean_text($c['officeHours'] ?? '', 200),
+            'mapLink'      => preg_match('#^https://#i', clean_link($c['mapLink'] ?? '')) ? clean_link($c['mapLink']) : '',
         ],
     ];
 }

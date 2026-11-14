@@ -19,7 +19,7 @@ import { sermons } from "@/data/sermons";
 import { getVideoThumbnail, detectPlatform } from "@/lib/video";
 import { events } from "@/data/events";
 import { churchInfo } from "@/data/church";
-import { siteContent, imageUrl } from "@/lib/siteContent";
+import { siteContent, imageUrl, mapUrl } from "@/lib/siteContent";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -551,7 +551,7 @@ export default function Home() {
               <h3 className="text-xl font-bold text-white mt-1 mb-1">Sunday Worship Service</h3>
               <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">4:00 PM – 6:30 PM</p>
               <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
-                <MapPin size={14} className="text-secondary" /> KMC Armstrong Corporate Center, Makati
+                <MapPin size={14} className="text-secondary" /> {siteContent.contact.areaLine}
               </div>
               <GoldDivider />
               <p className="text-white/60 text-sm mt-3 leading-relaxed">
@@ -978,7 +978,7 @@ export default function Home() {
                       {churchInfo.address}
                     </p>
                     <a
-                      href={`https://maps.google.com/?q=KMC+Armstrong+Corporate+Center+Salcedo+Village+Makati`}
+                      href={mapUrl()}
                       target="_blank"
                       rel="noreferrer">
                       <Button variant="outline" size="sm" className="rounded-full">
@@ -1006,7 +1006,7 @@ export default function Home() {
                     icon: <MapPin size={20} />,
                     label: "Address",
                     value: churchInfo.address,
-                    href: `https://maps.google.com/?q=KMC+Armstrong+Corporate+Center+Salcedo+Makati`
+                    href: mapUrl()
                   },
                   {
                     icon: <Phone size={20} />,
@@ -1023,7 +1023,7 @@ export default function Home() {
                   {
                     icon: <Clock size={20} />,
                     label: "Office Hours",
-                    value: "Mon–Fri: 9AM–5PM\nSat: 10AM–2PM",
+                    value: siteContent.contact.officeHours,
                     href: null
                   }
                 ].map(item => (

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
+import { churchInfo } from "@/data/church";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55 } } };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
@@ -109,7 +110,7 @@ function GCashPanel() {
         {[
           { step: "1", icon: <Scan className="w-5 h-5" />, title: "Open GCash & Scan", body: "Open your GCash app, tap \"Send Money\" → \"Scan QR\", then scan the QR code above. Alternatively, search for the mobile number 0966-926-9566." },
           { step: "2", icon: <Heart className="w-5 h-5" />, title: "Enter Your Gift Amount", body: "Type the amount you'd like to give. You may add a note such as 'Tithe', 'Offering', or 'Missions' in the message field." },
-          { step: "3", icon: <CheckCircle2 className="w-5 h-5" />, title: "Confirm & Send", body: "Review the details and confirm. Save your GCash receipt. Optionally, email your reference to info@ebchristianfellowship.org." },
+          { step: "3", icon: <CheckCircle2 className="w-5 h-5" />, title: "Confirm & Send", body: `Review the details and confirm. Save your GCash receipt. Optionally, email your reference to ${churchInfo.email}.` },
         ].map(({ step, icon, title, body }) => (
           <div key={step} className="flex gap-4">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">
@@ -193,7 +194,7 @@ function BankPanel() {
           {[
             { icon: <CheckCircle2 className="w-4 h-4 text-green-600" />, text: "Send from any Philippine bank via InstaPay or PESONet" },
             { icon: <CheckCircle2 className="w-4 h-4 text-green-600" />, text: "Use your transaction reference number as your receipt" },
-            { icon: <Shield className="w-4 h-4 text-secondary" />, text: "Optionally email your reference to info@ebchristianfellowship.org" },
+            { icon: <Shield className="w-4 h-4 text-secondary" />, text: `Optionally email your reference to ${churchInfo.email}` },
           ].map(({ icon, text }, i) => (
             <div key={i} className="flex gap-3 items-start text-sm text-muted-foreground">
               <span className="flex-shrink-0 mt-0.5">{icon}</span>
@@ -406,7 +407,7 @@ export default function GivePage() {
               <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary">Giving FAQ</h2>
             </motion.div>
             <motion.div variants={fadeUp} className="bg-white rounded-2xl border border-border shadow-sm px-6">
-              {FAQ.map(({ q, a }) => <FAQItem key={q} q={q} a={a} />)}
+              {FAQ.map(({ q, a }) => <FAQItem key={q} q={q} a={a.replace("info@ebchristianfellowship.org", churchInfo.email)} />)}
             </motion.div>
           </motion.div>
         </Container>
@@ -422,8 +423,8 @@ export default function GivePage() {
             <motion.h2 variants={fadeUp} className="text-2xl md:text-3xl font-serif font-bold">Have Questions About Giving?</motion.h2>
             <motion.p variants={fadeUp} className="text-primary-foreground/80 text-sm leading-relaxed">
               Our team is happy to help. Reach out at{" "}
-              <a href="mailto:info@ebchristianfellowship.org" className="text-secondary underline underline-offset-2">
-                info@ebchristianfellowship.org
+              <a href={`mailto:${churchInfo.email}`} className="text-secondary underline underline-offset-2">
+                {churchInfo.email}
               </a>{" "}
               or visit us on Sunday at 4:00 PM.
             </motion.p>

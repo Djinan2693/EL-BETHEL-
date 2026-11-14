@@ -144,7 +144,7 @@
     ["banner", "Scrolling banner", renderBanner],
     ["home", "Home page top", renderHome],
     ["gallery", "Photo gallery", renderGallery],
-    ["contact", "Contact details", renderContact],
+    ["contact", "Contact & address", renderContact],
     ["history", "Previous versions", renderHistory],
   ];
 
@@ -504,13 +504,36 @@
 
   function renderContact() {
     const c = draft.church;
+    const mapHref = () => c.mapLink || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(c.address || "");
+    const check = h("a", { href: mapHref(), target: "_blank", rel: "noopener", class: "btn btn-ghost btn-small" }, "Check on Google Maps");
+    const syncCheck = () => { check.href = mapHref(); };
     return [
-      ...header("Contact details", "Shown in the footer, the contact page and the home page."),
+      ...header("Contact & address", "Shown on the Contact page, in the footer, on the home page and on the Give page. Change it here and it changes everywhere."),
       h("div", { class: "panel" },
+        h("h3", {}, "Phone"),
         h("div", { class: "row" },
           text("Phone number", c, "phone", { max: 40, type: "tel" }),
-          text("Email address", c, "email", { max: 120, type: "email" })),
-        text("Church address", c, "address", { max: 300, multiline: true })
+          text("Small line under it", c, "phoneNote", { max: 80, placeholder: "Mon – Fri, 9 AM – 5 PM" }))
+      ),
+      h("div", { class: "panel" },
+        h("h3", {}, "Email"),
+        h("div", { class: "row" },
+          text("Email address", c, "email", { max: 120, type: "email" }),
+          text("Small line under it", c, "emailNote", { max: 80, placeholder: "We reply within 24 hours" }))
+      ),
+      h("div", { class: "panel", oninput: syncCheck },
+        h("h3", {}, "Address"),
+        text("Full address", c, "address", { max: 300, multiline: true, hint: "Used in the footer, the home page and for the map button." }),
+        h("div", { class: "row" },
+          text("Area (big line on the Contact page)", c, "areaLine", { max: 80, placeholder: "Bel-Air, Makati City" }),
+          text("Building or floor (small line)", c, "buildingLine", { max: 120, placeholder: "Sunshine Place Jupiter, Roof Deck" })),
+        text("How to get here", c, "directions", { max: 400, multiline: true, hint: "The sentence above the map on the Contact page." }),
+        text("Google Maps link", c, "mapLink", { max: 500, type: "url", placeholder: "https://maps.app.goo.gl/…", hint: "Optional. Leave empty and the map button searches the full address. To get a link: open Google Maps, find the church, tap Share, copy the link." }),
+        h("div", {}, check)
+      ),
+      h("div", { class: "panel" },
+        h("h3", {}, "Office hours"),
+        text("Office hours", c, "officeHours", { max: 200, multiline: true, hint: "One line per day, e.g. “Sunday: After service”." })
       ),
     ];
   }

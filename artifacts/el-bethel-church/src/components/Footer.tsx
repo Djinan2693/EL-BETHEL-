@@ -6,6 +6,7 @@ import {
   Clock, Send, CheckCircle, ChevronRight,
 } from "lucide-react";
 import { churchInfo } from "@/data/church";
+import { siteContent } from "@/lib/siteContent";
 import { Container } from "./ui/container";
 import { cn } from "@/lib/utils";
 
@@ -250,7 +251,7 @@ export function Footer() {
                 <Clock size={17} aria-hidden="true" className="text-secondary shrink-0 mt-0.5" />
                 <div className="text-white/70">
                   <p className="font-semibold text-white mb-0.5">Office Hours</p>
-                  <p>Sunday: After service</p>
+                  <p className="whitespace-pre-line">{siteContent.contact.officeHours}</p>
                 </div>
               </div>
             </address>
