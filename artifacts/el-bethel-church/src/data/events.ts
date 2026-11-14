@@ -212,10 +212,19 @@ export const events: EventData[] = [
   },
 ];
 
-export const allCategories = Array.from(new Set(events.map((e) => e.category))).sort();
+export const allCategories: string[] = [];
+export const upcomingEvents: EventData[] = [];
+export const featuredEvents: EventData[] = [];
 
-export const upcomingEvents = events
-  .filter((e) => new Date(e.dateISO) >= new Date("2025-03-24"))
-  .sort((a, b) => a.dateISO.localeCompare(b.dateISO));
-
-export const featuredEvents = events.filter((e) => e.isFeatured);
+/** Rebuild the derived lists. Called at start-up and after events are loaded from /admin. */
+export function refreshEventLists() {
+  allCategories.splice(0, allCategories.length, ...Array.from(new Set(events.map((e) => e.category))).sort());
+  const today = new Date().toISOString().slice(0, 10);
+  upcomingEvents.splice(
+    0,
+    upcomingEvents.length,
+    ...events.filter((e) => e.dateISO >= today).sort((a, b) => a.dateISO.localeCompare(b.dateISO)),
+  );
+  featuredEvents.splice(0, featuredEvents.length, ...events.filter((e) => e.isFeatured));
+}
+refreshEventLists();

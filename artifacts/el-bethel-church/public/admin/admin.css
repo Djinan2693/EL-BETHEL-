@@ -226,3 +226,13 @@ input:focus, textarea:focus, select:focus { border-color: var(--navy); outline: 
   .savebar > div { width: 100%; }
   .savebar .btn { flex: 1; }
 }
+
+/* Events */
+.event-group { margin: .8rem 0 .2rem; font-size: 14px; font-weight: 600; color: var(--muted); }
+.event-card { border: 1px solid var(--line); border-radius: 12px; background: #fafbfd; }
+.event-card.open { background: var(--paper); border-color: var(--navy); }
+.event-head { display: flex; align-items: center; gap: .6rem; padding: .7rem .8rem; flex-wrap: wrap; }
+.event-toggle { flex: 1; min-width: 220px; display: grid; gap: 2px; text-align: left; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; }
+.event-toggle strong { font-size: 15px; }
+.event-date { font-size: 12px; font-weight: 600; color: var(--gold-ink); }
+.event-fields { padding: 0 .9rem 1rem; border-top: 1px solid var(--line); padding-top: 1rem; }

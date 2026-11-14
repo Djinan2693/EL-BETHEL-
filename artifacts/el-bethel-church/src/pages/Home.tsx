@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSEO } from "@/lib/seo";
 import { sermons } from "@/data/sermons";
 import { getVideoThumbnail, detectPlatform } from "@/lib/video";
-import { events } from "@/data/events";
+import { upcomingEvents as allUpcoming } from "@/data/events";
 import { churchInfo } from "@/data/church";
 import { siteContent, imageUrl, mapUrl } from "@/lib/siteContent";
 
@@ -275,7 +275,7 @@ export default function Home() {
   const [prayerDone, setPrayerDone] = useState(false);
 
   const featuredSermons = sermons.slice(0, 3);
-  const upcomingEvents = events.slice(0, 3);
+  const upcomingEvents = allUpcoming.slice(0, 3);
 
   async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -703,6 +703,9 @@ export default function Home() {
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
             className="space-y-4">
+            {upcomingEvents.length === 0 && (
+              <p className="text-muted-foreground">New events are coming soon. Join us at our weekly services in the meantime.</p>
+            )}
             {upcomingEvents.map(event => {
               const parts = event.date.split(" ");
               const month = parts[0];
@@ -719,7 +722,7 @@ export default function Home() {
                   <div className="flex-1 min-w-0">
                     <Badge variant="outline" className="mb-2 text-[10px] font-bold uppercase tracking-wider">{event.category}</Badge>
                     <h3 className="text-lg sm:text-xl font-bold mb-2 group-hover:text-secondary transition-colors">{event.title}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-1 mb-3">{event.description}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-1 mb-3">{event.excerpt || event.description}</p>
                     <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1.5"><Clock size={14} className="text-secondary" /> {event.time}</span>
                       <span className="flex items-center gap-1.5"><MapPin size={14} className="text-secondary" /> {event.location}</span>

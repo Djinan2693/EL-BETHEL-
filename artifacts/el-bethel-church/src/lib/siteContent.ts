@@ -16,6 +16,7 @@
 import { announcement, type AnnouncementConfig } from "@/data/announcement";
 import { churchInfo } from "@/data/church";
 import { siteDefaults } from "@/data/siteDefaults";
+import { events, refreshEventLists, type EventData } from "@/data/events";
 
 export interface ImageItem {
   src: string;
@@ -161,6 +162,45 @@ function apply(raw: any) {
         description: str(x.description, "", 300),
       }));
     if (list.length) siteContent.services = list;
+  }
+
+  /* Events — the whole list is replaced when the editor has saved one */
+  if (Array.isArray(raw.events)) {
+    const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const list: EventData[] = raw.events
+      .filter((e: any) => e && typeof e.title === "string" && /^\d{4}-\d{2}-\d{2}$/.test(e.dateISO) && typeof e.slug === "string")
+      .slice(0, 60)
+      .map((e: any, i: number) => {
+        const [y, m, d] = e.dateISO.split("-").map(Number);
+        const lines = (v: unknown) => (Array.isArray(v) ? v.filter((x) => typeof x === "string") : []);
+        return {
+          id: 1000 + i,
+          slug: String(e.slug).replace(/[^a-z0-9-]/g, ""),
+          title: str(e.title, "", 120),
+          category: str(e.category, "Event", 40) || "Event",
+          dateISO: e.dateISO,
+          date: `${MONTHS[m - 1]} ${d}, ${y}`,
+          time: str(e.time, "", 20),
+          endTime: str(e.endTime, "", 20),
+          isMultiDay: false,
+          location: str(e.location, "", 120),
+          address: str(e.address, "", 300),
+          organizer: "El-Bethel Christian Fellowship Church",
+          excerpt: str(e.excerpt, "", 400),
+          description: str(e.description, "", 4000),
+          whatToExpect: lines(e.whatToExpect),
+          schedule: Array.isArray(e.schedule) ? e.schedule.filter((x: any) => x && typeof x.item === "string").map((x: any) => ({ time: str(x.time, "", 20), item: str(x.item, "", 200) })) : undefined,
+          accentColor: e.accentColor === "bg-amber-600" ? "bg-amber-600" : "bg-primary",
+          isFeatured: bool(e.isFeatured, false),
+          registrationRequired: bool(e.registrationRequired, false),
+          cost: str(e.cost, "", 80),
+          tickets: Array.isArray(e.tickets) && e.tickets.length ? e.tickets.map((t: any) => ({ tier: str(t?.tier, "", 40), price: str(t?.price, "", 30) })) : undefined,
+          tags: lines(e.tags),
+          flyer: str(e.flyer, "", 200) || undefined,
+        };
+      });
+    events.splice(0, events.length, ...list);
+    refreshEventLists();
   }
 
   /* Popup announcement — merged into the existing config object */

@@ -145,6 +145,7 @@
     ["home", "Home page top", renderHome],
     ["gallery", "Photo gallery", renderGallery],
     ["services", "Service times", renderServices],
+    ["events", "Events", renderEvents],
     ["contact", "Contact & address", renderContact],
     ["history", "Previous versions", renderHistory],
   ];
@@ -159,6 +160,7 @@
       announcement: Object.assign({ enabled: false, showOnceForHours: 72, title: "" }, clone(c.announcement || d.announcement || {})),
       church: Object.assign({}, d.church, clone(c.church || {})),
       services: clone(c.services || d.services || []),
+      events: clone(c.events || d.events || []),
     };
     const cta = out.announcement.cta || {};
     out.announcement.cta = { label: cta.label || "", href: cta.href || "" };
@@ -169,7 +171,7 @@
   const dirty = () => !!draft && JSON.stringify(draft) !== JSON.stringify(saved);
   function sectionDirty(id) {
     if (!draft || !saved) return false;
-    const key = { popup: "announcement", banner: "ticker", contact: "church", services: "services" }[id];
+    const key = { popup: "announcement", banner: "ticker", contact: "church", services: "services", events: "events" }[id];
     if (key) return JSON.stringify(draft[key]) !== JSON.stringify(saved[key]);
     if (id === "home") {
       const pick = (o) => JSON.stringify([o.heroTitleLine1, o.heroTitleLine2, o.heroSubtitle, o.heroSlides, o.stats, o.storyTitle, o.storyImage]);
@@ -501,6 +503,115 @@
       ...header("Photo gallery", "The wall of photos on the home page. Add new pictures after an event, remove old ones, or change their order."),
       h("div", { class: "panel" }, text("Gallery title", m, "galleryTitle", { max: 80 })),
       h("div", { class: "panel" }, h("h3", {}, "Photos (" + m.gallery.length + ")"), h("span", { class: "hint" }, "Up to 40 photos. The description helps people using screen readers and Google."), photoGrid(m.gallery, { max: 40 })),
+    ];
+  }
+
+  /* ── Events ───────────────────────────────────────────── */
+  const to24 = (t) => {
+    const m = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(t || "");
+    if (!m) return "";
+    let hh = +m[1] % 12 + (m[3] === "PM" ? 12 : 0);
+    return String(hh).padStart(2, "0") + ":" + m[2];
+  };
+  const to12 = (v) => {
+    if (!v) return "";
+    const [hh, mm] = v.split(":").map(Number);
+    return ((hh % 12) || 12) + ":" + String(mm).padStart(2, "0") + " " + (hh >= 12 ? "PM" : "AM");
+  };
+  const today = () => new Date().toISOString().slice(0, 10);
+  const niceDate = (iso) => (iso ? new Date(iso + "T00:00:00").toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "long", year: "numeric" }) : "No date yet");
+  let openEvent = null;
+
+  function linesField(label, hint, get, set, placeholder) {
+    const ta = h("textarea", { placeholder, oninput: (e) => { set(e.target.value); changed(); } });
+    ta.value = get();
+    return h("label", {}, label, hint ? h("span", { class: "hint" }, hint) : null, ta);
+  }
+
+  function eventEditor(ev) {
+    const cats = [...new Set(draft.events.map((e) => e.category).filter(Boolean))];
+    const dl = h("datalist", { id: "event-cats" }, cats.map((c) => h("option", { value: c })));
+    const time = (label, key) => h("label", {}, label, h("input", { type: "time", value: to24(ev[key]), oninput: (e) => { ev[key] = to12(e.target.value); changed(); } }));
+    const color = h("select", { onchange: (e) => { ev.accentColor = e.target.value; changed(); } },
+      h("option", { value: "bg-primary" }, "Navy blue"), h("option", { value: "bg-amber-600" }, "Gold (special event)"));
+    color.value = ev.accentColor === "bg-amber-600" ? "bg-amber-600" : "bg-primary";
+    return h("div", { class: "fields event-fields" },
+      text("Event name", ev, "title", { max: 120 }),
+      h("div", { class: "row" },
+        h("label", {}, "Category", h("input", { list: "event-cats", value: ev.category || "", maxlength: 40, placeholder: "Special Service", oninput: (e) => { ev.category = e.target.value; changed(); } }), dl),
+        h("label", {}, "Date", h("input", { type: "date", value: ev.dateISO || "", oninput: (e) => { ev.dateISO = e.target.value; changed(); } }))),
+      h("div", { class: "row" }, time("Starts at", "time"), time("Ends at", "endTime")),
+      h("div", { class: "row" },
+        text("Venue", ev, "location", { max: 120, placeholder: "El-Bethel Main Sanctuary" }),
+        text("Address", ev, "address", { max: 300 })),
+      text("Short summary", ev, "excerpt", { max: 400, multiline: true, hint: "One or two sentences, shown in the event lists." }),
+      text("Full description", ev, "description", { max: 4000, multiline: true, hint: "Shown on the event's own page. Leave an empty line between paragraphs." }),
+      linesField("What to expect", "One point per line.", () => (ev.whatToExpect || []).join("\n"), (v) => (ev.whatToExpect = v.split("\n").map((x) => x.trim()).filter(Boolean)), "Warm welcome from our Connect Team"),
+      h("div", { class: "row" },
+        text("Price", ev, "cost", { max: 80, placeholder: "Free \u2014 all are welcome" }),
+        h("label", {}, "Colour", color)),
+      linesField("Tickets", "Only for paid events. One per line: name | price.", () => (ev.tickets || []).map((t) => t.tier + " | " + t.price).join("\n"),
+        (v) => (ev.tickets = v.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => { const i = l.indexOf("|"); return { tier: (i < 0 ? l : l.slice(0, i)).trim(), price: i < 0 ? "" : l.slice(i + 1).trim() }; })), "VIP | \u20b11,000"),
+      h("label", { class: "check" }, h("input", { type: "checkbox", checked: ev.registrationRequired, onchange: (e) => { ev.registrationRequired = e.target.checked; changed(); } }), "Registration required"),
+      h("label", { class: "check" }, h("input", { type: "checkbox", checked: ev.isFeatured, onchange: (e) => { ev.isFeatured = e.target.checked; changed(); } }), "Feature this event (big card at the top of the Events page)"),
+      h("div", {}, h("h3", { style: "margin:.4rem 0 .6rem;font-size:15px" }, "Flyer"), singlePhoto("Event flyer", "Optional. Shown on the event's page.", ev, "flyer", true))
+    );
+  }
+
+  function renderEvents() {
+    const list = draft.events;
+    const wrap = h("div", { class: "list" });
+    function draw() {
+      const now = today();
+      const sorted = list.map((ev, i) => ({ ev, i })).sort((a, b) => (a.ev.dateISO || "9").localeCompare(b.ev.dateISO || "9"));
+      const upcoming = sorted.filter((x) => !x.ev.dateISO || x.ev.dateISO >= now);
+      const past = sorted.filter((x) => x.ev.dateISO && x.ev.dateISO < now).reverse();
+      const card = ({ ev, i }) => {
+        const isOpen = openEvent === ev;
+        const del = h("button", { type: "button", class: "btn btn-ghost btn-small btn-danger" }, "Delete");
+        del.onclick = () => {
+          const yes = h("button", { type: "button", class: "btn btn-small btn-gold" }, "Yes, delete");
+          const no = h("button", { type: "button", class: "btn btn-small btn-ghost" }, "Keep it");
+          const box = h("span", { class: "confirm" }, "Delete this event?", yes, no);
+          del.replaceWith(box);
+          no.onclick = () => box.replaceWith(del);
+          yes.onclick = () => { list.splice(i, 1); if (openEvent === ev) openEvent = null; draw(); changed(); };
+        };
+        const dateEl = h("span", { class: "event-date" }, niceDate(ev.dateISO));
+        const titleEl = h("strong", {}, ev.title || "New event");
+        const metaEl = h("span", { class: "hint" }, [ev.time, ev.location].filter(Boolean).join(" \u2022 "));
+        const refreshHead = () => {
+          dateEl.textContent = niceDate(ev.dateISO);
+          titleEl.textContent = ev.title || "New event";
+          metaEl.textContent = [ev.time, ev.location].filter(Boolean).join(" \u2022 ");
+        };
+        const editor = isOpen ? eventEditor(ev) : null;
+        if (editor) { editor.addEventListener("input", refreshHead); editor.addEventListener("change", refreshHead); }
+        return h("div", { class: "event-card" + (isOpen ? " open" : "") },
+          h("div", { class: "event-head" },
+            h("button", { type: "button", class: "event-toggle", "aria-expanded": isOpen ? "true" : "false", onclick: () => { openEvent = isOpen ? null : ev; draw(); } },
+              dateEl, titleEl, metaEl),
+            h("div", { class: "item-tools" },
+              h("button", { type: "button", class: "btn btn-ghost btn-small", onclick: () => { const copy = clone(ev); copy.slug = ""; copy.title = ev.title; if (ev.dateISO) { const d = new Date(ev.dateISO + "T00:00:00"); d.setDate(d.getDate() + 7); copy.dateISO = d.toISOString().slice(0, 10); } list.push(copy); openEvent = copy; draw(); changed(); } }, "Duplicate"),
+              del)),
+          editor);
+      };
+      wrap.replaceChildren(
+        h("h3", { class: "event-group" }, "Coming up (" + upcoming.length + ")"),
+        ...(upcoming.length ? upcoming.map(card) : [h("p", { class: "empty" }, "No upcoming events. Add one below.")]),
+        ...(past.length ? [h("h3", { class: "event-group" }, "Past events (" + past.length + ")"), ...past.map(card)] : [])
+      );
+    }
+    draw();
+    return [
+      ...header("Events", "The Events page, each event's own page, and the \u201cUpcoming Events\u201d on the home page (the next 3 events). Past events move down automatically."),
+      h("div", { class: "panel" },
+        h("button", { type: "button", class: "btn btn-navy", onclick: () => {
+          if (list.length >= 60) return toast("60 events maximum. Delete some old ones first.", true);
+          const ev = { slug: "", title: "", category: "Special Service", dateISO: "", time: "4:00 PM", endTime: "6:30 PM", location: "", address: draft.church.address || "", excerpt: "", description: "", whatToExpect: [], schedule: [], accentColor: "bg-primary", isFeatured: false, registrationRequired: false, cost: "Free \u2014 all are welcome", tickets: [], tags: [] };
+          list.push(ev); openEvent = ev; draw(); changed();
+        } }, "+ Add an event"),
+        wrap),
     ];
   }
 
