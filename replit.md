@@ -122,3 +122,4 @@ A small PHP panel (in `artifacts/el-bethel-church/public/admin/`) lets the churc
 - Login comes from the `ADMIN_USER` and `ADMIN_PASSWORD` GitHub secrets; the deploy workflow writes only a bcrypt hash to `admin/secret.php`. Without the secrets the editor shows "not switched on".
 - Security: CSRF token, session cookie limited to `/admin`, 5 failed logins per 15 min, every field whitelisted server-side, images re-encoded with GD, no scripts can run in `/content/uploads/`, 25 backups in `admin/data/` (blocked from the web).
 - Edit `SUPPORT_NAME` / `SUPPORT_CONTACT` in `admin/lib.php` for the "Need something bigger?" line.
+- Two-step login: when `ADMIN_MFA_EMAIL` is defined in `admin/secret.php` (GitHub secret of the same name), a 6-digit code is emailed after the password (PHP `mail()`, from `noreply@<domain>`). Valid 10 min / 5 tries; "remember this device" = signed cookie for 30 days, revoked by changing the password.

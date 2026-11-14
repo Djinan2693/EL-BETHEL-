@@ -27,6 +27,16 @@ export interface TickerItem {
   link?: string;
 }
 
+export interface ContactExtras {
+  phoneNote: string;
+  emailNote: string;
+  areaLine: string;
+  buildingLine: string;
+  directions: string;
+  officeHours: string;
+  mapLink: string;
+}
+
 export interface SiteContent {
   ticker: {
     enabled: boolean;
@@ -44,6 +54,7 @@ export interface SiteContent {
     galleryTitle: string;
     gallery: ImageItem[];
   };
+  contact: ContactExtras;
 }
 
 const defaults: SiteContent = siteDefaults as SiteContent;
@@ -61,6 +72,14 @@ export function imageUrl(src: string): string {
   if (!src) return "";
   if (src.startsWith("/") || /^https?:\/\//i.test(src)) return src;
   return `${import.meta.env.BASE_URL}images/${src.replace(/^images\//, "")}`;
+}
+
+/** Google Maps link for the church: the custom link from /admin, or a search for the address. */
+export function mapUrl(): string {
+  return (
+    siteContent.contact.mapLink ||
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(churchInfo.address)}`
+  );
 }
 
 /* ── tiny validation helpers: never trust the JSON blindly ────────────────── */
@@ -148,6 +167,16 @@ function apply(raw: any) {
     churchInfo.phone = str(c.phone, churchInfo.phone, 40) || churchInfo.phone;
     churchInfo.email = str(c.email, churchInfo.email, 120) || churchInfo.email;
     churchInfo.address = str(c.address, churchInfo.address, 300) || churchInfo.address;
+    const dc = defaults.contact;
+    siteContent.contact = {
+      phoneNote: str(c.phoneNote, dc.phoneNote, 80),
+      emailNote: str(c.emailNote, dc.emailNote, 80),
+      areaLine: str(c.areaLine, dc.areaLine, 80),
+      buildingLine: str(c.buildingLine, dc.buildingLine, 120),
+      directions: str(c.directions, dc.directions, 400),
+      officeHours: str(c.officeHours, dc.officeHours, 200),
+      mapLink: safeLink(c.mapLink) ?? "",
+    };
   }
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */

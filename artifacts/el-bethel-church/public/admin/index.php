@@ -18,7 +18,7 @@ $logged = $configured && is_logged_in();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=2">
+<link rel="stylesheet" href="admin.css?v=3">
 </head>
 <body class="<?= $logged ? 'is-app' : 'is-gate' ?>">
 
@@ -39,6 +39,16 @@ $logged = $configured && is_logged_in();
       <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
       <p class="form-error" role="alert" hidden></p>
       <button type="submit" class="btn btn-gold btn-wide">Sign in</button>
+    </form>
+    <form id="code-form" class="gate-form" novalidate hidden>
+      <p class="code-sent">We sent a 6-digit code to <strong id="code-email"></strong>. It works for 10 minutes.</p>
+      <label>Sign-in code
+        <input name="code" class="code-input" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" required>
+      </label>
+      <label class="check"><input type="checkbox" name="remember"> Don't ask again on this device for 30 days</label>
+      <p class="form-error" role="alert" hidden></p>
+      <button type="submit" class="btn btn-gold btn-wide">Continue</button>
+      <p class="code-help">No email? Check your spam folder, or <button type="button" class="link-btn" id="resend">send a new code</button>.</p>
     </form>
   </main>
 
@@ -76,6 +86,6 @@ $logged = $configured && is_logged_in();
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <?php endif; ?>
 
-<?php if ($configured): ?><script src="admin.js?v=2"></script><?php endif; ?>
+<?php if ($configured): ?><script src="admin.js?v=3"></script><?php endif; ?>
 </body>
 </html>

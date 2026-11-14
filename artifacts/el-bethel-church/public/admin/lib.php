@@ -115,6 +115,160 @@ function start_session() {
 
 function is_logged_in() { return !empty($_SESSION['user']); }
 
+/* ── Two-step login: a 6-digit code emailed to the church ────────────────────
+ * Switched on when secret.php defines ADMIN_MFA_EMAIL. The code is valid for
+ * 10 minutes and 5 tries. "Remember this device" sets a signed cookie for
+ * 30 days; changing the password invalidates every remembered device. */
+const MFA_CODE_TTL      = 10 * 60;
+const MFA_MAX_TRIES     = 5;
+const MFA_RESEND_WAIT   = 60;
+const MFA_TRUST_DAYS    = 30;
+const MFA_TRUST_COOKIE  = 'eb_admin_device';
+
+function mfa_enabled() {
+    return defined('ADMIN_MFA_EMAIL') && filter_var(ADMIN_MFA_EMAIL, FILTER_VALIDATE_EMAIL);
+}
+
+function mfa_masked_email() {
+    $parts = explode('@', ADMIN_MFA_EMAIL);
+    $name = $parts[0];
+    $shown = strlen($name) <= 2 ? substr($name, 0, 1) : substr($name, 0, 2);
+    return $shown . str_repeat('•', max(3, strlen($name) - strlen($shown))) . '@' . $parts[1];
+}
+
+function mfa_trust_key() { return hash('sha256', ADMIN_PASSWORD_HASH . '|device-trust|' . ADMIN_MFA_EMAIL); }
+
+function mfa_device_trusted() {
+    $c = $_COOKIE[MFA_TRUST_COOKIE] ?? '';
+    if (!is_string($c) || !preg_match('/^(\d+)\.([a-f0-9]{64})$/', $c, $m)) return false;
+    if ((int)$m[1] < time()) return false;
+    return hash_equals(hash_hmac('sha256', $m[1], mfa_trust_key()), $m[2]);
+}
+
+function mfa_trust_device() {
+    $exp = time() + MFA_TRUST_DAYS * 86400;
+    setcookie(MFA_TRUST_COOKIE, $exp . '.' . hash_hmac('sha256', (string)$exp, mfa_trust_key()), [
+        'expires' => $exp, 'path' => '/admin', 'secure' => is_https(), 'httponly' => true, 'samesite' => 'Strict',
+    ]);
+}
+
+/** Create a code, keep only its hash in the session, email it. */
+function mfa_send_code() {
+    $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    $_SESSION['mfa'] = [
+        'hash'  => password_hash($code, PASSWORD_DEFAULT),
+        'exp'   => time() + MFA_CODE_TTL,
+        'tries' => 0,
+        'sent'  => time(),
+    ];
+    if (defined('MFA_DEV_LOG')) { @file_put_contents(MFA_DEV_LOG, $code); return true; } // local testing only
+
+    $host = preg_replace('/^www\./', '', explode(':', $_SERVER['HTTP_HOST'] ?? 'ebchristianfellowship.org')[0]);
+    $from = 'noreply@' . $host;
+    $when = date('M j, Y \a\t g:i A');
+    $ip   = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $subject = 'Your El-Bethel website editor code: ' . $code;
+    $body = "Hello,\r\n\r\n"
+        . "Someone signed in to the El-Bethel website editor with the correct password.\r\n\r\n"
+        . "Your sign-in code is: {$code}\r\n\r\n"
+        . "It works for 10 minutes. Sign-in time: {$when} (Manila). Address: {$ip}\r\n\r\n"
+        . "If this wasn't you, don't share this code. Someone may know the editor password:\r\n"
+        . "please ask " . SUPPORT_NAME . " to change it.\r\n\r\n"
+        . "https://{$host}/admin/\r\n";
+    if (smtp_configured()) return smtp_send(ADMIN_MFA_EMAIL, $subject, $body);
+
+    $headers = "From: El-Bethel website <{$from}>\r\n"
+        . "Reply-To: {$from}\r\n"
+        . "Content-Type: text/plain; charset=UTF-8\r\n"
+        . "X-Auto-Response-Suppress: All\r\n";
+    return @mail(ADMIN_MFA_EMAIL, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers, '-f' . $from);
+}
+
+/* ── Sending through an outside mailbox (SMTP) ───────────────────────────────
+ * Used when secret.php defines SMTP_HOST, SMTP_USER and SMTP_PASS. Optional:
+ * SMTP_PORT (465), SMTP_SECURE ('ssl' for 465, 'tls' for 587, 'none'),
+ * SMTP_FROM (defaults to SMTP_USER), SMTP_FROM_NAME. No library needed. */
+function smtp_configured() {
+    return defined('SMTP_HOST') && defined('SMTP_USER') && defined('SMTP_PASS') && SMTP_HOST !== '' && SMTP_PASS !== '';
+}
+
+function smtp_log($msg) {
+    @file_put_contents(DATA_DIR . '/smtp-errors.log', date('c') . ' ' . $msg . "\n", FILE_APPEND | LOCK_EX);
+}
+
+function smtp_send($to, $subject, $body) {
+    $port   = defined('SMTP_PORT') ? (int)SMTP_PORT : 465;
+    $secure = defined('SMTP_SECURE') ? SMTP_SECURE : ($port === 465 ? 'ssl' : ($port === 587 ? 'tls' : 'none'));
+    $from   = defined('SMTP_FROM') && SMTP_FROM !== '' ? SMTP_FROM : SMTP_USER;
+    $ctx    = stream_context_create(['ssl' => ['verify_peer' => true, 'verify_peer_name' => true, 'SNI_enabled' => true, 'peer_name' => SMTP_HOST]]);
+    $target = ($secure === 'ssl' ? 'ssl://' : 'tcp://') . SMTP_HOST . ':' . $port;
+    $fp = @stream_socket_client($target, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ctx);
+    if (!$fp) { smtp_log("connect {$target} failed: {$errstr} ({$errno})"); return false; }
+    stream_set_timeout($fp, 15);
+
+    $read = function () use ($fp) {
+        $data = '';
+        while (($line = fgets($fp, 515)) !== false) {
+            $data .= $line;
+            if (strlen($line) < 4 || $line[3] === ' ') break;
+        }
+        return $data;
+    };
+    // $label is what goes in the error log, so credentials never get written there.
+    $cmd = function ($line, $expect, $label = null) use ($fp, $read) {
+        if ($line !== null) fwrite($fp, $line . "\r\n");
+        $reply = $read();
+        if ((int)substr($reply, 0, 3) !== $expect) throw new RuntimeException(($label ?? (string)$line) . ' -> ' . trim($reply));
+        return $reply;
+    };
+
+    try {
+        $ehlo = 'EHLO ' . (preg_replace('/[^A-Za-z0-9.\-]/', '', $_SERVER['HTTP_HOST'] ?? 'localhost') ?: 'localhost');
+        $cmd(null, 220, 'greeting');
+        $cmd($ehlo, 250);
+        if ($secure === 'tls') {
+            $cmd('STARTTLS', 220);
+            if (!stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) throw new RuntimeException('STARTTLS handshake failed');
+            $cmd($ehlo, 250);
+        }
+        $cmd('AUTH LOGIN', 334);
+        $cmd(base64_encode(SMTP_USER), 334, 'username');
+        $cmd(base64_encode(SMTP_PASS), 235, 'password (wrong username/password?)');
+        $cmd('MAIL FROM:<' . $from . '>', 250);
+        $cmd('RCPT TO:<' . $to . '>', 250);
+        $cmd('DATA', 354);
+        $msgId = bin2hex(random_bytes(12)) . '@' . substr(strrchr($from, '@'), 1);
+        $headers = 'Date: ' . date('r') . "\r\n"
+            . 'From: =?UTF-8?B?' . base64_encode(defined('SMTP_FROM_NAME') ? SMTP_FROM_NAME : 'El-Bethel website') . '?= <' . $from . ">\r\n"
+            . 'To: <' . $to . ">\r\n"
+            . 'Subject: =?UTF-8?B?' . base64_encode($subject) . "?=\r\n"
+            . 'Message-ID: <' . $msgId . ">\r\n"
+            . "MIME-Version: 1.0\r\n"
+            . "Content-Type: text/plain; charset=UTF-8\r\n"
+            . "Content-Transfer-Encoding: 8bit\r\n"
+            . "X-Auto-Response-Suppress: All\r\n";
+        $data = preg_replace('/^\./m', '..', str_replace(["\r\n", "\r"], "\n", $body));
+        $data = str_replace("\n", "\r\n", $data);
+        $cmd($headers . "\r\n" . $data . "\r\n.", 250, 'message body');
+        fwrite($fp, "QUIT\r\n");
+        fclose($fp);
+        return true;
+    } catch (Throwable $e) {
+        smtp_log($e->getMessage());
+        @fclose($fp);
+        return false;
+    }
+}
+
+function complete_login() {
+    session_regenerate_id(true);
+    unset($_SESSION['mfa'], $_SESSION['pending_user']);
+    $_SESSION['user'] = ADMIN_USER;
+    $_SESSION['last'] = time();
+    $_SESSION['csrf'] = bin2hex(random_bytes(32));
+    return $_SESSION['csrf'];
+}
+
 function require_login() {
     if (!is_logged_in()) fail('Your session has expired. Please sign in again.', 401);
 }
@@ -271,9 +425,16 @@ function sanitize_content($in) {
         ],
         'announcement' => $popup,
         'church' => [
-            'phone'   => clean_text($c['phone'] ?? '', 40),
-            'email'   => $email,
-            'address' => clean_text($c['address'] ?? '', 300),
+            'phone'        => clean_text($c['phone'] ?? '', 40),
+            'phoneNote'    => clean_text($c['phoneNote'] ?? '', 80),
+            'email'        => $email,
+            'emailNote'    => clean_text($c['emailNote'] ?? '', 80),
+            'address'      => clean_text($c['address'] ?? '', 300),
+            'areaLine'     => clean_text($c['areaLine'] ?? '', 80),
+            'buildingLine' => clean_text($c['buildingLine'] ?? '', 120),
+            'directions'   => clean_text($c['directions'] ?? '', 400),
+            'officeHours'  => clean_text($c['officeHours'] ?? '', 200),
+            'mapLink'      => preg_match('#^https://#i', clean_link($c['mapLink'] ?? '')) ? clean_link($c['mapLink']) : '',
         ],
     ];
 }

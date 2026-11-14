@@ -23,9 +23,10 @@ function adminDefaults() {
         fileName: "admin/defaults.json",
         source: JSON.stringify(
           {
-            ...siteDefaults,
+            ticker: siteDefaults.ticker,
+            home: siteDefaults.home,
             announcement: { id: announcement.id, ...popup },
-            church: { phone: churchInfo.phone, email: churchInfo.email, address: churchInfo.address },
+            church: { phone: churchInfo.phone, email: churchInfo.email, address: churchInfo.address, ...siteDefaults.contact },
           },
           null,
           2,

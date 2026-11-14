@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { useSEO } from "@/lib/seo";
+import { siteContent, mapUrl } from "@/lib/siteContent";
 import { Container } from "@/components/ui/container";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -43,27 +44,32 @@ const stagger = {
 };
 
 /* ── Static data ──────────────────────────────────────── */
-const QUICK_CONTACTS = [
+/* Values as written in the code, so FAQ answers can swap in the ones edited from /admin. */
+const CODE_ADDRESS = churchInfo.address;
+const CODE_EMAIL = churchInfo.email;
+
+/* Built at render time so edits from /admin (phone, email, address) show up. */
+const getQuickContacts = () => [
   {
     icon: Phone,
     label: "Call Us",
     value: churchInfo.phone,
-    href: `tel:${churchInfo.phone}`,
-    sub: "Mon – Fri, 9 AM – 5 PM",
+    href: `tel:${churchInfo.phone.replace(/[^+\d]/g, "")}`,
+    sub: siteContent.contact.phoneNote,
   },
   {
     icon: Mail,
     label: "Email Us",
     value: churchInfo.email,
     href: `mailto:${churchInfo.email}`,
-    sub: "We reply within 24 hours",
+    sub: siteContent.contact.emailNote,
   },
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "Salcedo Village, Makati City",
-    href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(churchInfo.address)}`,
-    sub: "7th Floor, KMC Armstrong Corporate Center",
+    value: siteContent.contact.areaLine,
+    href: mapUrl(),
+    sub: siteContent.contact.buildingLine,
   },
 ];
 
@@ -173,7 +179,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function Contact() {
   useSEO({
     title:       "Contact Us",
-    description: "Get in touch with El-Bethel Christian Fellowship Church in Makati City. Call, email, visit our Salcedo Village location, or send a message — we'd love to hear from you.",
+    description: `Get in touch with El-Bethel Christian Fellowship Church. Call, email, visit us in ${siteContent.contact.areaLine}, or send a message — we'd love to hear from you.`,
     canonical:   "/contact",
   });
 
@@ -257,7 +263,7 @@ export default function Contact() {
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
             className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/60"
           >
-            {QUICK_CONTACTS.map(({ icon: Icon, label, value, href, sub }) => (
+            {getQuickContacts().map(({ icon: Icon, label, value, href, sub }) => (
               <motion.a
                 key={label}
                 href={href}
@@ -295,13 +301,12 @@ export default function Contact() {
               <motion.div variants={fadeUp}>
                 <SectionHeading title="Find Us in Makati" subtitle="Our Location" />
                 <p className="text-muted-foreground leading-relaxed mt-3 mb-6">
-                  We are located in the heart of Salcedo Village — easily accessible by MRT, Grab, or car from
-                  all across Metro Manila.
+                  {siteContent.contact.directions}
                 </p>
 
                 {/* Map placeholder */}
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(churchInfo.address)}`}
+                  href={mapUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block relative rounded-2xl overflow-hidden shadow-md border border-border/60 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
@@ -332,7 +337,7 @@ export default function Contact() {
                         </div>
                         <div className="bg-white rounded-xl shadow-lg px-4 py-2 text-center border border-border/40">
                           <p className="font-bold text-sm text-primary">El-Bethel Church</p>
-                          <p className="text-xs text-muted-foreground">Salcedo Village, Makati City</p>
+                          <p className="text-xs text-muted-foreground">{siteContent.contact.areaLine}</p>
                         </div>
                         <div className="w-2 h-2 rounded-full bg-primary/40 mt-0.5" />
                       </div>
@@ -598,7 +603,7 @@ export default function Contact() {
 
             <motion.div variants={fadeUp} className="max-w-3xl mx-auto bg-white rounded-3xl border border-border shadow-sm px-8 py-2">
               {FAQS.map(({ q, a }) => (
-                <FAQItem key={q} q={q} a={a} />
+                <FAQItem key={q} q={q} a={a.replace(CODE_ADDRESS, churchInfo.address).replace(CODE_EMAIL, churchInfo.email)} />
               ))}
             </motion.div>
           </motion.div>
