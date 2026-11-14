@@ -42,6 +42,9 @@ const LOGIN_WINDOW     = 15 * 60;         // …per 15 minutes per IP
 date_default_timezone_set('Asia/Manila');
 
 if (is_file(__DIR__ . '/secret.php')) require __DIR__ . '/secret.php';
+// Server-only settings (SMTP for the sign-in emails). Created by hand in cPanel,
+// never part of the build, so deploys never overwrite it.
+if (is_file(__DIR__ . '/secret.local.php')) require __DIR__ . '/secret.local.php';
 
 /* ── Response helpers ────────────────────────────────────────────────────── */
 function send_security_headers() {

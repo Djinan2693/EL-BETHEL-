@@ -52,3 +52,4 @@ Thumbs.db
 artifacts/el-bethel-church/public/admin/secret.php
 artifacts/el-bethel-church/public/admin/data/
 artifacts/el-bethel-church/public/content/
+artifacts/el-bethel-church/public/admin/secret.local.php
