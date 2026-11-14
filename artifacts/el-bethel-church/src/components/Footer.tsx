@@ -19,10 +19,12 @@ const QUICK_LINKS = [
   { name: "Contact Us",        path: "/contact" },
 ];
 
-const SERVICE_TIMES = [
-  { day: "Sunday",    times: ["4:00 PM – 6:30 PM — Worship Service"] },
-  { day: "Wednesday", times: ["7:00 PM – 8:30 PM — Prayer Night · Online"] },
-];
+/* Service times come from the editor (/admin → Service times). */
+const getServiceTimes = () =>
+  siteContent.services.map((svc) => ({
+    day: svc.day || svc.name,
+    times: [[svc.time, svc.name].filter(Boolean).join(" — ") + (svc.online ? " · Online" : "")],
+  }));
 
 function TikTokIcon({ size = 16 }: { size?: number }) {
   return (
@@ -261,8 +263,8 @@ export function Footer() {
           <div>
             <FooterHeading>Service Schedule</FooterHeading>
             <div className="space-y-4">
-              {SERVICE_TIMES.map(({ day, times }) => (
-                <div key={day} className="bg-white/5 rounded-xl p-4 border border-white/10">
+              {getServiceTimes().map(({ day, times }) => (
+                <div key={day + times[0]} className="bg-white/5 rounded-xl p-4 border border-white/10">
                   <p className="font-semibold text-white text-sm mb-2 flex items-center gap-2">
                     <Clock size={13} aria-hidden="true" className="text-secondary" />
                     {day}

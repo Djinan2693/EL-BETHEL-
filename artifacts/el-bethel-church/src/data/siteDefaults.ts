@@ -54,4 +54,22 @@ export const siteDefaults = {
     officeHours: "Sunday: After service",
     mapLink: "",
   },
+  services: [
+    {
+      day: "Sunday",
+      name: "Sunday Worship Service",
+      time: "4:00 PM – 6:30 PM",
+      place: "KMC Armstrong Corporate Center, Makati",
+      online: false,
+      description: "Live praise & worship, expository teaching, and fellowship. Come as you are — all are welcome.",
+    },
+    {
+      day: "Wednesday",
+      name: "Prayer Night",
+      time: "7:00 PM – 8:30 PM",
+      place: "Online",
+      online: true,
+      description: "Corporate prayer, intercession, and midweek spiritual refreshing — join us from anywhere.",
+    },
+  ],
 };

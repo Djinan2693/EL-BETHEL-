@@ -25,6 +25,7 @@ function adminDefaults() {
           {
             ticker: siteDefaults.ticker,
             home: siteDefaults.home,
+            services: siteDefaults.services,
             announcement: { id: announcement.id, ...popup },
             church: { phone: churchInfo.phone, email: churchInfo.email, address: churchInfo.address, ...siteDefaults.contact },
           },

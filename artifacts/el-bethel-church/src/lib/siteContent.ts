@@ -37,6 +37,15 @@ export interface ContactExtras {
   mapLink: string;
 }
 
+export interface ServiceItem {
+  day: string;
+  name: string;
+  time: string;
+  place: string;
+  online: boolean;
+  description: string;
+}
+
 export interface SiteContent {
   ticker: {
     enabled: boolean;
@@ -55,6 +64,7 @@ export interface SiteContent {
     gallery: ImageItem[];
   };
   contact: ContactExtras;
+  services: ServiceItem[];
 }
 
 const defaults: SiteContent = siteDefaults as SiteContent;
@@ -136,6 +146,22 @@ function apply(raw: any) {
     galleryTitle: str(h.galleryTitle, d.galleryTitle, 80),
     gallery: images(h.gallery, d.gallery),
   };
+
+  /* Service times */
+  if (Array.isArray(raw.services)) {
+    const list = raw.services
+      .filter((x: any) => x && typeof x.name === "string" && x.name.trim())
+      .slice(0, 4)
+      .map((x: any) => ({
+        day: str(x.day, "", 30),
+        name: str(x.name, "", 80),
+        time: str(x.time, "", 60),
+        place: str(x.place, "", 120),
+        online: bool(x.online, false),
+        description: str(x.description, "", 300),
+      }));
+    if (list.length) siteContent.services = list;
+  }
 
   /* Popup announcement — merged into the existing config object */
   const a = raw.announcement;

@@ -22,6 +22,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { churchInfo } from "@/data/church";
+import { siteContent } from "@/lib/siteContent";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55 } } };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
@@ -426,7 +427,7 @@ export default function GivePage() {
               <a href={`mailto:${churchInfo.email}`} className="text-secondary underline underline-offset-2">
                 {churchInfo.email}
               </a>{" "}
-              or visit us on Sunday at 4:00 PM.
+              or visit us on {siteContent.services[0]?.day} at {siteContent.services[0]?.time.split("–")[0].trim()}.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button size="lg" className="bg-secondary text-primary hover:bg-secondary/90 rounded-full font-semibold" asChild>

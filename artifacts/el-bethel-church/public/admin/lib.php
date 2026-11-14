@@ -406,6 +406,22 @@ function sanitize_content($in) {
 
     $storyImage = clean_image($h['storyImage'] ?? '');
 
+    $services = [];
+    foreach (array_slice((array)($in['services'] ?? []), 0, 4) as $sv) {
+        if (!is_array($sv)) continue;
+        $name = clean_text($sv['name'] ?? '', 80);
+        if ($name === '') continue;
+        $services[] = [
+            'day'         => clean_text($sv['day'] ?? '', 30),
+            'name'        => $name,
+            'time'        => clean_text($sv['time'] ?? '', 60),
+            'place'       => clean_text($sv['place'] ?? '', 120),
+            'online'      => !empty($sv['online']),
+            'description' => clean_text($sv['description'] ?? '', 300),
+        ];
+    }
+    if (!$services) fail('Please keep at least one service (with a name) in Service times.');
+
     return [
         'ticker' => [
             'enabled' => !empty($t['enabled']) && count($items) > 0,
@@ -423,6 +439,7 @@ function sanitize_content($in) {
             'galleryTitle'   => clean_text($h['galleryTitle'] ?? '', 80),
             'gallery'        => clean_images($h['gallery'] ?? [], 40, 1),
         ],
+        'services' => $services,
         'announcement' => $popup,
         'church' => [
             'phone'        => clean_text($c['phone'] ?? '', 40),

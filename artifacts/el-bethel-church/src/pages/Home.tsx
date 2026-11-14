@@ -539,55 +539,40 @@ export default function Home() {
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            className={`grid grid-cols-1 gap-6 mx-auto ${siteContent.services.length === 1 ? "max-w-md" : siteContent.services.length === 2 ? "md:grid-cols-2 max-w-3xl" : "md:grid-cols-2 lg:grid-cols-" + Math.min(siteContent.services.length, 4) + " max-w-6xl"}`}>
 
-            {/* Sunday */}
-            <motion.div variants={fadeUp}
+            {siteContent.services.map((svc, i) => (
+            <motion.div key={svc.name + i} variants={fadeUp}
               className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group text-center">
               <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mb-6 group-hover:bg-secondary group-hover:text-primary transition-colors duration-300 mx-auto">
-                <BookOpen size={26} />
+                {i === 0 ? <BookOpen size={26} /> : <Heart size={26} />}
               </div>
-              <span className="text-secondary text-xs font-bold uppercase tracking-widest">Sunday</span>
-              <h3 className="text-xl font-bold text-white mt-1 mb-1">Sunday Worship Service</h3>
-              <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">4:00 PM – 6:30 PM</p>
-              <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
-                <MapPin size={14} className="text-secondary" /> {siteContent.contact.areaLine}
-              </div>
+              {svc.day && <span className="text-secondary text-xs font-bold uppercase tracking-widest">{svc.day}</span>}
+              <h3 className="text-xl font-bold text-white mt-1 mb-1">{svc.name}</h3>
+              {svc.time && <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">{svc.time}</p>}
+              {svc.place && (
+                <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
+                  {svc.online ? <Globe size={14} className="text-secondary" /> : <MapPin size={14} className="text-secondary" />} {svc.place}
+                </div>
+              )}
               <GoldDivider />
-              <p className="text-white/60 text-sm mt-3 leading-relaxed">
-                Live praise &amp; worship, expository teaching, and fellowship. Come as you are — all are welcome.
-              </p>
+              {svc.description && (
+                <p className="text-white/60 text-sm mt-3 leading-relaxed">{svc.description}</p>
+              )}
             </motion.div>
-
-            {/* Wednesday */}
-            <motion.div variants={fadeUp}
-              className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-secondary/40 transition-all duration-300 group text-center">
-              <div className="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center text-secondary mb-6 group-hover:bg-secondary group-hover:text-primary transition-colors duration-300 mx-auto">
-                <Heart size={26} />
-              </div>
-              <span className="text-secondary text-xs font-bold uppercase tracking-widest">Wednesday</span>
-              <h3 className="text-xl font-bold text-white mt-1 mb-1">Prayer Night</h3>
-              <p className="text-2xl font-sans text-secondary/90 font-semibold mb-3 tracking-tight">7:00 PM – 8:30 PM</p>
-              <div className="flex items-center justify-center gap-2 text-white/50 text-sm mb-4">
-                <Globe size={14} className="text-secondary" /> Online
-              </div>
-              <GoldDivider />
-              <p className="text-white/60 text-sm mt-3 leading-relaxed">
-                Corporate prayer, intercession, and midweek spiritual refreshing — join us from anywhere.
-              </p>
-            </motion.div>
+            ))}
 
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="text-center mt-12">
-            <Link href="/contact">
+            <a href={mapUrl()} target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8">
                 <MapPin className="mr-2 h-4 w-4 text-secondary" />
                 Get Directions
               </Button>
-            </Link>
+            </a>
           </motion.div>
         </Container>
       </section>
